@@ -1,0 +1,200 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0; 
+    font-family: 'Inter', sans-serif;
+    list-style-type: none;
+
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+header h2 {
+    color: blue;
+    align-self: center;
+    padding: 10px;
+    font-size: 1.7em
+}
+
+
+header ul{
+    display: flex;
+}
+
+header ul li {
+    align-content: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+header ul li a {
+    color: dimgrey;
+}
+
+header ul li:hover {
+    background-color: #8692aa;
+}
+
+.login-or-create {
+    display: flex;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+.login-button {
+    color: blue;
+    margin: 10px;
+}
+
+.signup-button {
+    background-color: blue;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.signup-button a {
+    color: aliceblue;
+}
+
+main {
+    height: 95vh;
+    display: flex;
+    background-color: #eff4ff;
+}
+
+.title {
+    flex: 2;
+    align-content: center;
+    margin: 100px;
+}
+
+.title h1 {
+    margin-bottom: 10px;
+    font-size: 4em;
+}
+
+.title p {
+    line-height: 1.7;
+}
+
+.get-started {
+    margin-top: 25px;
+}
+
+.get-started a {
+    padding: 10px;
+    background-color: blue;
+    color: aliceblue;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.image {
+    flex: 2;
+    margin: 40px 40px 40px 0px;
+    align-content: center;
+    text-align: center;
+}
+
+/* Why Choose Our Platform Section */
+
+section {
+    height: 50vh;
+    background-color: rgba(0, 47, 100, 0.705);
+    align-content: center;
+    padding: 10px;
+}
+
+section h2 {
+    text-align: center;
+    font-weight: bolder;
+    font-size: 2em;
+    color: aliceblue;
+}
+
+.reasons {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.reasons div {
+    flex: 1;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    align-content: center;
+    text-align: center;
+}
+
+/* Footer */
+
+footer {
+    background-color: #8692aa;
+    padding: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    color: aliceblue;
+
+}
+
+footer h3 {
+    font-size: 1em;
+}
+
+footer p {
+    font-size: 0.9em;
+}
+footer a {
+    color: aliceblue;
+    font-size: small;
+    font-weight: 400;
+}
+
+.contacts img {
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.social-media img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-top: 8px;
+}
+
+/* Update the contacts section styling */
+.contacts h3 {
+    margin-left: 4px;
+}
+
+.contacts .email,
+.contacts .telephone {
+    display: flex;
+    align-items: center;
+}
+
+.contacts img {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+.contacts a {
+    display: inline-block;
+}
