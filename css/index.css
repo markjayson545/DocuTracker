@@ -119,7 +119,7 @@ a {
 
 /* Main section */
 main {
-    min-height: 85vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     background: linear-gradient(135deg, #f5f7ff 0%, #e9efff 100%);
@@ -132,7 +132,7 @@ main {
 }
 
 .title h1 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 3.5em;
     font-weight: 700;
     line-height: 1.2;
@@ -361,19 +361,66 @@ footer a:hover {
     .title h1 {
         font-size: 2.8em;
     }
+    header h2 {
+        font-size: 1.4em;
+    }
+
+    header ul li {
+        padding: 12px;
+    }
+    
+    header ul li a {
+        font-size: 0.8em;
+    }
+    .title p {
+        font-size: 1em;
+    }
+    .get-started a {
+        font-size: 1em;
+    }
+    section h2 {
+        font-size: 2.2em;
+    }
+    .reasons div {
+        padding: 30px 20px;
+    }
+    .reasons div h3 {
+        font-size: 1.2em;
+    }
+    .reasons div p {
+        font-size: 0.9em;
+    }
+    footer h3 {
+        font-size: 1em;
+    }
+    footer p {
+        font-size: 0.8em;
+    }
+    footer a {
+        font-size: 0.8em;
+    }
+    .contacts .email i, .contacts .telephone i {
+        font-size: 0.9em;
+    }
 }
 
 @media screen and (max-width: 768px) {
     header {
-        flex-direction: column;
-        padding: 15px;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
     }
-    
+
     header h2 {
-        margin-bottom: 15px;
+        font-size: 1.3em;
+    }
+
+    .login-button, .signup-button {
+        font-size: 0.8em;
     }
     
     header ul {
+        display: none;
         margin-bottom: 15px;
         flex-wrap: wrap;
         justify-content: center;
@@ -390,7 +437,10 @@ footer a:hover {
     }
     
     .title h1 {
-        font-size: 2.2em;
+        font-size: 2em;
+    }
+    .title p {
+        font-size: 0.9em;
     }
     
     section {

@@ -45,12 +45,12 @@
             <div class="welcome-container">
                 <h2>Welcome to DocuTrack</h2>
                 <p>Join our community today and start requesting your official documents securely</p>
-                <lottie-player src="/assets/sign-up/sign-up-animation.json" background="transparent" speed="2" loop
+                <lottie-player src="assets/sign-up/sign-up-animation.json" background="transparent" speed="2" loop
                     autoplay></lottie-player>
             </div>
 
             <div class="form-container">
-                <form id="signup-form" action="create-user.php" method="POST">
+                <form id="signup-form" action="php/create-user.php" method="POST">
                     <h2 class="title">Create Account</h2>
                     <p class="subtitle">Join our community today</p>
                     <div class="form-group">
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="login-link">
-                        Already have an account? <a href="#">Log in</a>
+                        Already have an account? <a href="lo">Log in</a>
                     </div>
                     <div id="message" style="margin: 10px 0; padding: 10px; border-radius: 5px; display: none;"></div>
                     <button type="submit" class="submit-btn">
@@ -112,7 +112,8 @@
             </div>
         </div>
 
-        <script src="/js/sign-up/sign-up.js"></script>
+        <!-- Fix the path by removing the leading slash -->
+        <script src="js/sign-up/sign-up.js"></script>
 
     </main>
 
