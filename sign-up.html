@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="css/sign-up.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+</head>
+
+<body>
+    <header>
+        <h2>
+            <i class="fas fa-file-invoice"></i> DocuTrack
+        </h2>
+        <ul>
+            <li>
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+                <a href="HowitWorks"><i class="fas fa-cogs"></i> How it Works</a>
+            </li>
+            <li>
+                <a href="FAQ"><i class="fas fa-question-circle"></i> FAQ</a>
+            </li>
+            <li>
+                <a href="Contact"><i class="fas fa-envelope"></i> Contact</a>
+            </li>
+        </ul>
+        <div class="login-or-create">
+            <div class="login-button">
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+            <div class="signup-button">
+                <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="main-container">
+            <div class="welcome-container">
+                <h2>Welcome to DocuTrack</h2>
+                <p>Join our community today and start requesting your official documents securely</p>
+                <lottie-player src="/assets/sign-up/sign-up-animation.json" background="transparent" speed="2" loop
+                    autoplay></lottie-player>
+            </div>
+
+            <div class="form-container">
+                <form id="signup-form" action="create-user.php" method="POST">
+                    <h2 class="title">Create Account</h2>
+                    <p class="subtitle">Join our community today</p>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">
+                            Phone Number
+                        </label>
+                        <div class="input-group">
+                            <i class="fas fa-phone" style="transform: scaleX(-1);"></i>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" required>
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirm-password" name="confirm-password" required>
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="login-link">
+                        Already have an account? <a href="#">Log in</a>
+                    </div>
+                    <div id="message" style="margin: 10px 0; padding: 10px; border-radius: 5px; display: none;"></div>
+                    <button type="submit" class="submit-btn">
+                        <span>Sign Up</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <script src="/js/sign-up/sign-up.js"></script>
+
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
