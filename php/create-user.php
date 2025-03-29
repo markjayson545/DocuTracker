@@ -11,8 +11,6 @@ error_reporting(E_ALL);
 // Always set Content-Type header for JSON
 header('Content-Type: application/json');
 
-include 'create-tables.php';
-
 // Function to safely write logs
 function safeLogError($message)
 {
@@ -104,9 +102,6 @@ try {
     $password = "";
     $dbname = "docutracker";
 
-    // Don't try to create logs directory automatically anymore
-    // Instead use the safeLogError function which tries multiple locations
-
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     // Check connection
@@ -133,46 +128,12 @@ try {
         exit;
     }
 
-    // Check if we need to alter the password column
-    $checkPasswordColumn = "SELECT CHARACTER_MAXIMUM_LENGTH 
-                                FROM INFORMATION_SCHEMA.COLUMNS 
-                                WHERE TABLE_SCHEMA = '$dbname' 
-                                AND TABLE_NAME = 'User' 
-                                AND COLUMN_NAME = 'password'";
-
-    $result = $conn->query($checkPasswordColumn);
-    if ($result && $row = $result->fetch_assoc()) {
-        $maxLength = (int) $row['CHARACTER_MAXIMUM_LENGTH'];
-        if ($maxLength < 255) {
-            // Alter the table to increase password column size
-            $alterTable = "ALTER TABLE User MODIFY password VARCHAR(255) NOT NULL";
-            if (!$conn->query($alterTable)) {
-                echo json_encode(createErrorDump("Error altering password column", $conn->error));
-                exit;
-            }
-            safeLogError("Password column size increased from $maxLength to 255");
-        }
-    }
-
     // Get POST Data
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
     $confirmpassword = isset($_POST['confirm-password']) ? $_POST['confirm-password'] : '';
-
-    // Dump received data for debugging (remove in production)
-    $requestDump = [
-        "post_data" => $_POST,
-        "sanitized_data" => [
-            "username" => $username,
-            "phone" => $phone,
-            "email" => $email,
-            "password" => "REDACTED",
-            "confirm_password" => "REDACTED"
-        ]
-    ];
-    safeLogError(json_encode($requestDump));
 
     // Sanitize and validate inputs
     $username = htmlspecialchars($username);
@@ -239,23 +200,7 @@ try {
         exit;
     }
 
-    // Hash the password with controlled length
-    // Using PASSWORD_DEFAULT which is currently bcrypt (produces ~60 char hash)
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Check hash length as a safeguard
-    if (strlen($hashed_password) > 255) {
-        echo json_encode(createErrorDump("Password hash too long", [
-            "hash_length" => strlen($hashed_password),
-            "max_column_length" => 255
-        ]));
-        exit;
-    }
-
-    // Log hash length for debugging
-    safeLogError("Password hash length: " . strlen($hashed_password));
-
-    // Insert user with prepared statement
+    // Insert user with prepared statement - using plain password (no hashing)
     $sql = "INSERT INTO User (username, phone, email, password) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
@@ -263,22 +208,12 @@ try {
         exit;
     }
 
-    $stmt->bind_param("ssss", $username, $phone, $email, $hashed_password);
+    $stmt->bind_param("ssss", $username, $phone, $email, $password);
 
     if ($stmt->execute()) {
         echo json_encode(["success" => true, "message" => "User created successfully! Redirecting to login..."]);
     } else {
-        // Special handling for data too long error
-        if ($stmt->errno == 1406) {
-            echo json_encode(createErrorDump("Password hash too long for database column", [
-                "error_code" => $stmt->errno,
-                "error_message" => $stmt->error,
-                "hash_length" => strlen($hashed_password),
-                "solution" => "The database column needs to be altered to VARCHAR(255)"
-            ]));
-        } else {
-            echo json_encode(createErrorDump("Error creating account", $stmt->error));
-        }
+        echo json_encode(createErrorDump("Error creating account", $stmt->error));
         exit;
     }
 
