@@ -69,6 +69,7 @@ header ul li a {
 
 header ul li:hover {
     background-color: rgba(67, 97, 238, 0.1);
+    transform: translateY(5px);
 }
 
 header ul li:hover a {

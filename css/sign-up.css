@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 :root {
     --primary-color: #4361ee;
     --accent-color: #4cc9f0;
@@ -89,7 +91,6 @@ header ul li:hover {
 header ul li:hover a {
     color: var(--primary-color);
 }
-
 .login-or-create {
     display: flex;
     align-items: center;
@@ -103,16 +104,22 @@ a {
     margin: 0 15px;
 }
 
-.login-button a {
+.login-button button {
     color: var(--primary-color);
     font-weight: 600;
-    transition: var(--transition);
+    font-size: 1em;
+    border: none;
+    padding: 15px 0px 15px 15px;
+    background: none;
+    cursor: pointer;
 }
 
-.login-button a:hover {
+.login-button button:hover {
     color: var(--secondary-color);
-    text-decoration: underline;
+    transition: all 0.3s ease;
+    transform: translateY(-3px);
 }
+
 
 .signup-button {
     background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
@@ -122,22 +129,26 @@ a {
     transition: var(--transition);
 }
 
+.signup-button button{
+    font-size: 1em;
+    color: white;
+    background-color: transparent;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .signup-button:hover {
     transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
-}
-
-.signup-button a {
-    color: white;
-    font-weight: 600;
 }
 
 main {
     width: 100%;
     min-height: calc(100vh - 80px);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: space-evenly;
     padding: 40px 20px;
 }
 
@@ -457,8 +468,10 @@ footer a:hover {
     color: var(--accent-color);
 }
 
-.contacts .email i, .contacts .telephone i {
+.contacts .email i,
+.contacts .telephone i {
     margin-right: 3px;
+    color: var(--text-color-footer);
 }
 
 .social-media {
@@ -485,6 +498,12 @@ footer a:hover {
     margin-bottom: 10px;
 }
 
+.contacts .email:hover,
+.contacts .telephone:hover {
+    padding-left: 5px;
+    transition: var(--transition);
+}
+
 .quick-links ul li {
     margin-bottom: 10px;
 }
@@ -498,6 +517,7 @@ footer a:hover {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -509,6 +529,7 @@ footer a:hover {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -533,7 +554,7 @@ footer a:hover {
         max-width: 700px;
         width: 100%;
     }
-    
+
     lottie-player {
         width: 350px;
         height: 350px;
@@ -544,35 +565,35 @@ footer a:hover {
     header {
         padding: 10px 4%;
     }
-    
+
     header h2 {
         font-size: 1.5em;
     }
-    
-    .login-or-create {
+
+    header ul li {
         display: none;
     }
-    
+
     .welcome-container h2 {
         font-size: 2em;
     }
-    
+
     .welcome-container p {
         font-size: 1em;
     }
-    
+
     #signup-form {
         padding: 30px 20px;
     }
-    
+
     .form-row {
         flex-direction: column;
         gap: 0;
     }
-    
+
     lottie-player {
-        width: 250px;
-        height: 250px;
+        width: 450px;
+        height: 450px;
     }
 
     footer {
@@ -601,6 +622,11 @@ footer a:hover {
     .contacts .telephone {
         justify-content: center;
     }
+
+    .login-or-create .login-button a,
+    .login-or-create .signup-button button {
+        font-size: 0.9em;
+    }
 }
 
 @media screen and (max-width: 576px) {
@@ -608,26 +634,26 @@ footer a:hover {
         margin-top: 60px;
         padding: 20px 10px;
     }
-    
+
     .form-container {
         transform: none;
     }
-    
+
     .title {
         font-size: 24px;
     }
-    
+
     .subtitle {
         font-size: 14px;
     }
-    
+
     .form-group input {
         padding: 10px 10px 10px 35px;
         font-size: 14px;
     }
-    
+
     lottie-player {
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
     }
 }

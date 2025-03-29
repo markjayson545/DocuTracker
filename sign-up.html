@@ -32,10 +32,16 @@
         </ul>
         <div class="login-or-create">
             <div class="login-button">
-                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <button onclick="window.location.href='login.html'">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
             </div>
             <div class="signup-button">
-                <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                <button onclick=scrollToElement()>
+                    <i class="fas fa-user-plus"></i>
+                    Sign Up
+                </button>
             </div>
         </div>
     </header>
@@ -49,7 +55,20 @@
                     autoplay></lottie-player>
             </div>
 
-            <div class="form-container">
+            <script>
+                function scrollToElement() {
+                    const element = document.getElementById("sign-up-form");
+                    if (element) {
+                        const elementRect = element.getBoundingClientRect();
+                        const elementHeight = elementRect.height;
+                        const windowHeight = window.innerHeight;
+                        const offset = elementRect.top + window.pageYOffset - (windowHeight - elementHeight) / 2;
+                        window.scrollTo({ top: offset, behavior: 'smooth' });
+                    }
+                }
+            </script>
+
+            <div class="form-container" id="sign-up-form">
                 <form id="signup-form" action="php/create-user.php" method="POST">
                     <h2 class="title">Create Account</h2>
                     <p class="subtitle">Join our community today</p>
@@ -101,7 +120,7 @@
                         </div>
                     </div>
                     <div class="login-link">
-                        Already have an account? <a href="lo">Log in</a>
+                        Already have an account? <a href="login.html">Log in</a>
                     </div>
                     <div id="message" style="margin: 10px 0; padding: 10px; border-radius: 5px; display: none;"></div>
                     <button type="submit" class="submit-btn">

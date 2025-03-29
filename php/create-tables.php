@@ -1,0 +1,180 @@
+<?php
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "docutracker";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Define log file path
+define('LOG_FILE', dirname(__FILE__) . '/database_setup.log');
+
+// Function to write logs to file
+function writeLog($message) {
+    $timestamp = date('Y-m-d H:i:s');
+    $logMessage = "[$timestamp] $message" . PHP_EOL;
+    
+    // Write log to file
+    file_put_contents(LOG_FILE, $logMessage, FILE_APPEND);
+}
+
+// Complete the createTable function
+function createTable($conn, $sql) {
+    // Extract table name from SQL for better logging
+    preg_match('/CREATE TABLE IF NOT EXISTS ([^\(]+)/i', $sql, $matches);
+    $tableName = trim($matches[1] ?? 'Unknown');
+    
+    if ($conn->query($sql) === TRUE) {
+        $message = "Table '$tableName' created or already exists";
+        writeLog($message);
+    } else {
+        $message = "Error creating table '$tableName': " . $conn->error;
+        writeLog($message);
+    }
+}
+
+// User Credentials
+$userSql = "CREATE TABLE IF NOT EXISTS User(
+            id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(30) NOT NULL UNIQUE,
+            phone VARCHAR(15) NOT NULL UNIQUE,
+            email VARCHAR(50) NOT NULL UNIQUE,
+            role VARCHAR(255) DEFAULT 'client',
+            is_verified BOOLEAN DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            password VARCHAR(255) NOT NULL
+        )";
+
+// Applicant Verification Table
+$applicationSql = "CREATE TABLE IF NOT EXISTS Application(
+            application_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED UNIQUE,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            document_type VARCHAR(50) NOT NULL,
+            document_path TEXT,
+            status VARCHAR(50) DEFAULT 'pending',
+            admin_notes TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )";
+
+
+// Client Profile Table
+$clientProfileSql = "CREATE TABLE IF NOT EXISTS ClientProfile(
+            client_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED UNIQUE,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            first_name VARCHAR(30) NOT NULL,
+            middle_name VARCHAR(30),
+            last_name VARCHAR(30) NOT NULL,application_type VARCHAR(50) NOT NULL,
+            qualifier VARCHAR(30),
+            sex VARCHAR(10) NOT NULL,
+            civil_status VARCHAR(20) NOT NULL,
+            birthdate DATE NOT NULL,
+            birthplace VARCHAR(50) NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )";
+
+// Contact Address Table
+$contactAddressSql = "CREATE TABLE IF NOT EXISTS ContactAddress(
+            contact_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED UNIQUE,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            house_number_building_name VARCHAR(50),
+            street_name VARCHAR(50) NOT NULL,
+            subdivision_barangay VARCHAR(50) NOT NULL,
+            city_municipality VARCHAR(50) NOT NULL,
+            province VARCHAR(50) NOT NULL
+            )";
+
+// Contact Address Table
+$userDetailsSql = "CREATE TABLE IF NOT EXISTS UserDetails(
+            details_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED UNIQUE,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            height DECIMAL(4,2) NOT NULL,
+            weight DECIMAL(4,2) NOT NULL,
+            complexion VARCHAR(20) NOT NULL,
+            blood_type VARCHAR(5) NOT NULL,
+            religion VARCHAR(20) NOT NULL,
+            educational_attainment VARCHAR(50) NOT NULL,
+            occupation VARCHAR(50) NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )";
+
+// Document Request Table
+$requestSql = "CREATE TABLE IF NOT EXISTS Request(
+            request_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            document_type VARCHAR(50) NOT NULL,
+            document_path TEXT,
+            status VARCHAR(50) DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )";
+
+
+// Payments Table
+$paymentSql = "CREATE TABLE IF NOT EXISTS Payment(
+            payment_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            request_id INT(6) UNSIGNED,
+            FOREIGN KEY (request_id) REFERENCES Request(request_id),
+            mode_of_payment VARCHAR(50) NOT NULL,
+            amount DECIMAL(10,2) NOT NULL,
+            status VARCHAR(50) DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )";
+
+// Audit Log Table
+$auditLogSql = "CREATE TABLE IF NOT EXISTS AuditLog(
+            log_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            action VARCHAR(50) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )";
+
+// Notifications Table
+$notificationSql = "CREATE TABLE IF NOT EXISTS Notification(
+            notification_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            message TEXT NOT NULL,
+            status VARCHAR(50) DEFAULT 'unread',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )";
+
+
+$systemNotificationSql = "CREATE TABLE IF NOT EXISTS SystemNotification(
+            system_notification_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            message TEXT NOT NULL,
+            status VARCHAR(50) DEFAULT 'unread',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )";
+
+        try {
+            createTable($conn, $userSql);
+            createTable($conn, $applicationSql);
+            createTable($conn, $clientProfileSql);
+            createTable($conn, $contactAddressSql);
+            createTable($conn, $userDetailsSql);
+            createTable($conn, $requestSql);
+            createTable($conn, $paymentSql);
+            createTable($conn, $auditLogSql);
+            createTable($conn, $notificationSql);
+            createTable($conn, $systemNotificationSql);
+        } catch (\Throwable $th) {
+            writeLog("Error creating tables: " . $th->getMessage());
+        }
+
+?>
