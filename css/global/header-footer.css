@@ -19,6 +19,13 @@
     --text-color-footer: #e6e6f0;
 }
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
 header {
     display: flex;
     width: 100%;

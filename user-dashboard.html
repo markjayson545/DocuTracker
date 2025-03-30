@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        DocuTracker: User Dashboard
+    </title>
+    <link rel="stylesheet" href="css/user-dashboard.css">
+    <link rel="stylesheet" href="css/global/header-footer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search">
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-actions">
+            <button class="notification-button">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+            <div class="user-profile">
+                <button class="profile-button">
+                    <img src="images/profile-placeholder.jpg" alt="John Doe" class="avatar">
+                    <div class="profile-name">
+                        John Doe
+                        <div class="email">
+                            example@email.com
+                        </div>
+                    </div>
+                    
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="profile-dropdown">
+                    <a href="#"><i class="fas fa-user"></i> My Profile</a>
+                    <a href="#"><i class="fas fa-cog"></i> Account Settings</a>
+                    <a href="#"><i class="fas fa-question-circle"></i> Help Center</a>
+                    <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <button class="dashboard-button">
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+            </button>
+            <ul>
+                <li>
+                    <button class="active dashboard-home">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-file-invoice"></i> Request Document
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-envelope"></i> Request History
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-credit-card"></i> Payment History
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="dashboard-body">
+            <div class="dashboard-title">
+                <div class="greetings">
+                    <h2>
+                        Welcome Back, John Doe!
+                    </h2>
+                    <p>
+                        Here's your dashboard overview.
+                    </p>
+                </div>
+
+                <button>
+                    <i class="fa-solid fa-square-plus"></i>
+                    Submit New Request
+                </button>
+            </div>
+            <div class="dashboard-cards">
+                <div class="card active-requests">
+                    <h3>
+                        Total Requests
+                    </h3>
+                    <h3>
+                        3
+                    </h3>
+                    <p class="pending">
+                        +2 pending approval
+                    </p>
+                </div>
+                <div class="card completed-requests">
+                    <h3>
+                        Completed Requests
+                    </h3>
+                    <h3>
+                        1
+                    </h3>
+                    <p class="approved">
+                        1 approved
+                    </p>
+                </div>
+                <div class="card recent-payments">
+                    <h3>
+                        Recent Payments
+                    </h3>
+                    <h3>
+                        Php 1.00
+                    </h3>
+                    <p class="duration">
+                        Last 30 days
+                    </p>
+                </div>
+            </div>
+            <div class="recent-activities">
+                <h3>
+                    Recent Activities
+                </h3>
+                <div class="activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="activity-details">
+                        <h4>
+                            Requested Birth Certificate
+                        </h4>
+                        <p>
+                            2 days ago
+                        </p>
+                    </div>
+                </div>
+                <div class="activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="activity-details">
+                        <h4>
+                            Requested Marriage Certificate
+                        </h4>
+                        <p>
+                            5 days ago
+                        </p>
+                    </div>
+                </div>
+                <div class="activity">
+                    <div class="activity-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div class="activity-details">
+                        <h4>
+                            Requested Death Certificate
+                        </h4>
+                        <p>
+                            1 week ago
+                        </p>
+                    </div>
+                </div>
+
+                <div class="no-activities">
+                    <i class="fas fa-solid fa-circle-xmark"></i>
+                    <h3>
+                        No recent activities
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
