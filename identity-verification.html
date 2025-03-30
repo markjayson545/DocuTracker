@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuTracker: Verify your Identity</title>
+    <link rel="stylesheet" href="css/identity-verification.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <ul>
+            <li>
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+                <a href="HowitWorks"><i class="fas fa-cogs"></i> How it Works</a>
+            </li>
+            <li>
+                <a href="FAQ"><i class="fas fa-question-circle"></i> FAQ</a>
+            </li>
+            <li>
+                <a href="Contact"><i class="fas fa-envelope"></i> Contact</a>
+            </li>
+        </ul>
+        <div class="user-logged-in">
+            <div class="user-profile">
+                <i class="fas fa-user-circle">
+                </i>
+                <p>John Doe</p>
+            </div>
+            <div class="logout-button">
+                <button onclick="window.location.href='login.html'">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="status">
+            <div class="step personal-details active">
+                <i class="fas fa-address-book"></i>
+                <h3>Personal Information</h3>
+                <p>Basic Information</p>
+                <div class="step-indicator"></div>
+            </div>
+            <hr class="progress-line active">
+            <div class="step verify-identity">
+                <i class="fas fa-user-check"></i>
+                <h3>Verify Identity</h3>
+                <p>Upload Identification Documents</p>
+                <div class="step-indicator"></div>
+            </div>
+            <hr class="progress-line">
+            <div class="step processing">
+                <i class="fas fa-cogs"></i>
+                <h3>Processing</h3>
+                <p>Review and Approval</p>
+                <div class="step-indicator"></div>
+            </div>
+        </div>
+
+        <div class="personal-details-form">
+            <div class="welcome-message">
+                <h2>Welcome to DocuTracker</h2>
+                <p>Let's get started with your personal information</p>
+            </div>
+            <form id="personal-info-form">
+
+                <div class="personal-details-group">
+                    <fieldset class="personal-details">
+                        <legend>Personal Information</legend>
+                        <div class="form-animation">
+                            <lottie-player src="assets/verification-process/personal-details.json"
+                                background="transparent" speed="1" style="width: 200px; height: 200px" loop autoplay>
+                            </lottie-player>
+                            <p class="animation-text">Please complete your personal information below</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" name="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" name="last-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name">Middle Name</label>
+                            <input type="text" id="middle-name" name="middle-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="qualifier">Qualifier</label>
+                            <select name="qualifier" id="qualifier" required>
+                                <option value="" disabled selected>Select a qualifier</option>
+                                <option value="none">None</option>
+                                <option value="jr">Jr</option>
+                                <option value="sr">Sr</option>
+                                <option value="ii">II</option>
+                                <option value="iii">III</option>
+                                <option value="iv">IV</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                    <fieldset class="contact-address">
+                        <legend>Contact Address</legend>
+                        <div class="form-animation">
+                            <lottie-player src="assets/verification-process/contact-address.json"
+                                background="transparent" speed="1" loop autoplay>
+                            </lottie-player>
+                            <p class="animation-text">Where can we reach you?</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="street">Street</label>
+                            <input type="text" id="street" name="street" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="barangay">Barangay</label>
+                            <input type="text" id="barangay" name="barangay" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="province">Province</label>
+                            <input type="text" id="province" name="province" required>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>More Information</legend>
+                        <div class="form-group">
+                            <label for="sex">Sex</label>
+                            <select name="sex" id="sex">
+                                <option value="" selected disabled>Select Sex</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="civil-status">Civil Status</label>
+                            <select name="civil-status" id="civil-status">
+                                <option value="" selected disabled>Select Civil Status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="widowed">Widowed</option>
+                                <option value="separated">Separated</option>
+                                <option value="divorced">Divorced</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="birth-place">Birth Place</label>
+                            <input type="text" id="birth-place" name="birth-place" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height</label>
+                            <input type="text" id="height" name="height" required>
+                            <label for="weight">Weight</label>
+                            <input type="text" id="weight" name="weight" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality">Nationality</label>
+                            <select name="nationality" id="nationality">
+                                <option value="" selected disabled>Select Nationality</option>
+                                <option value="filipino">Filipino</option>
+                                <option value="american">American</option>
+                                <option value="british">British</option>
+                                <option value="australian">Australian</option>
+                                <option value="japanese">Japanese</option>
+                                <option value="chinese">Chinese</option>
+                                <option value="korean">Korean</option>
+                                <option value="indian">Indian</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="complexion">Complexion</label>
+                            <select name="complexion" id="complexion">
+                                <option value="" selected disabled>Select Complexion</option>
+                                <option value="fair">Fair</option>
+                                <option value="light">Light</option>
+                                <option value="medium">Medium</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="blood-type">Blood Type</label>
+                            <select name="blood-type" id="blood-type">
+                                <option value="" selected disabled>Select Blood Type</option>
+                                <option value="unknown">Unknown</option>
+                                <option value="a+">A+</option>
+                                <option value="a-">A-</option>
+                                <option value="b+">B+</option>
+                                <option value="b-">B-</option>
+                                <option value="ab+">AB+</option>
+                                <option value="ab-">AB-</option>
+                                <option value="o+">O+</option>
+                                <option value="o-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="religion">Religion</label>
+                            <select name="religion" id="religion">
+                                <option value="" selected disabled>Select Religion</option>
+                                <option value="roman-catholic">Roman Catholic</option>
+                                <option value="protestant">Protestant</option>
+                                <option value="islam">Islam</option>
+                                <option value="buddhism">Buddhism</option>
+                                <option value="hinduism">Hinduism</option>
+                                <option value="judaism">Judaism</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="education">Education</label>
+                            <select name="education" id="education">
+                                <option value="" selected disabled>Select Education</option>
+                                <option value="elementary">Elementary</option>
+                                <option value="high-school">High School</option>
+                                <option value="high-school-undergraduate">High School Undergraduate</option>
+                                <option value="college">College</option>
+                                <option value="college-undergraduate">College Undergraduate</option>
+                                <option value="masters">Masters</option>
+                                <option value="doctorate">Doctorate</option>
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="occupation">Occupation</label>
+                            <select name="occupation" id="occupation">
+                                <option value="" selected disabled>Select Occupation</option>
+                                <option value="student">Student</option>
+                                <option value="employed">Employed</option>
+                                <option value="unemployed">Unemployed</option>
+                                <option value="self-employed">Self-Employed</option>
+                                <option value="retired">Retired</option>
+                                <option value="housewife">Housewife</option>
+                                <option value="ofw">OFW</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                </div>
+                <button type="submit" class="next-button">
+                    <i class="fas fa-arrow-right"></i> Next Step
+                </button>
+            </form>
+        </div>
+
+        <div class="upload-verification-document">
+            <h3>
+                Identity Verification
+            </h3><lottie-player src="assets/verification-process/identity-verification.json" background="transparent"
+                speed="1" loop autoplay>
+            </lottie-player>
+            <p>
+                Please upload a valid identification document to verify your identity.
+            </p>
+
+            <form action="">
+                <label for="document-type">Select Document Type</label>
+                <select name="document-type" id="document-type">
+                    <option value="drivers-license">Drivers License</option>
+                    <option value="passport">Passport</option>
+                    <option value="national-id">National ID</option>
+                </select>
+                <fieldset class="upload-document-container">
+                    <label for="verification-document">Upload Document</label>
+                <input type="file" name="verification-document" id="verification-document" required>
+                </fieldset>
+                
+                <button type="submit">
+                    <i class="fas fa-upload"></i> Upload Document
+                </button>
+            </form>
+
+        </div>
+
+        <div class="processing-status">
+            <h2>
+                Application Submitted Sucessfully
+            </h2>
+            <p>
+                Your application has been submitted successfully. Please wait for the approval of your application.
+            </p>
+            <div class="process-steps">
+                <div class="step-process submitted">
+                    <i class="fas fa-check active"></i>
+                    <p>Submitted</p>
+                </div>
+                <hr class="progress-line">
+                <div class="step-process under-review">
+                    <i class="fas fa-search"></i>
+                    <p>Under Review</p>
+                </div>
+                <hr class="progress-line">
+                <div class="step-process verified">
+                    <i class="fas fa-user-check"></i>
+                    <p>Verified</p>
+                </div>
+            </div>
+            <div class="process-info">
+                <div class="submitted-info">
+                    <h3>Submitted</h3>
+                    <p>Your application has been submitted successfully.</p>
+                </div>
+                <div class="under-review-info">
+                    <h3>Under Review</h3>
+                    <p>Your application is currently under review. Please wait for the approval of your application.</p>
+                </div>
+                <div class="verified-info">
+                    <h3>Verified</h3>
+                    <p>Your application has been approved. You can now access the services of DocuTracker.</p>
+                </div>
+                <div class="application-details">
+                    <h3>Application Details</h3>
+                    <div class="application-details-group">
+                        <div class="application-detail">
+                            <p>Application ID</p>
+                            <p id="application-id">123456789</p>
+                        </div>
+                        <div class="application-detail">
+                            <p>Submission Date</p>
+                            <p id="application-date">October 1, 2021</p>
+                        </div>
+                        <div class="application-detail">
+                            <p>Status</p>
+                            <p id="application-status">Under Review</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
