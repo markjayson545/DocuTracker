@@ -510,6 +510,227 @@ main {
     color: var(--light-text);
 }
 
+.document-request-form {
+    margin-top: 30px;
+    animation: fadeIn 0.8s ease;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background-color: white;
+}
+
+.document-request-form .title {
+    padding: 25px;
+}
+
+.document-request-form h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.5em;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.document-request-form h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 80px;
+    height: 2px;
+    background: var(--accent-color);
+}
+
+.select-doc-type {
+    margin-bottom: 25px;
+}
+
+.select-doc-type label {
+    display: block;
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.select-doc-type select {
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    max-width: 400px;
+    transition: var(--transition);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234361ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l6 6 6-6'%3e%3c/path%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 15px;
+}
+
+.select-doc-type select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.payment {
+    background-color: #f9fafd;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.payment-method label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    display: block;
+}
+
+.payment-method .form-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.payment-method .form-group .type {
+    flex: 1;
+    min-width: 180px;
+    padding: 18px;
+    border-radius: 12px;
+    background-color: white;
+    border: 2px solid transparent;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.payment-method .form-group .type:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.payment-method .form-group .type input[type="radio"] {
+    accent-color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+.payment-method .form-group .type i {
+    font-size: 1.5em;
+    color: var(--primary-color);
+}
+
+.payment-method .form-group .type.credit-card i {
+    color: #3a56d4;
+}
+
+.payment-method .form-group .type.gcash i {
+    color: #007EF2;
+}
+
+.payment-method .form-group .type label {
+    font-weight: 500;
+    margin: 0;
+}
+
+.method {
+    margin-top: 20px;
+
+    animation: fadeIn 0.5s ease;
+}
+
+.method input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0 15px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1em;
+    transition: var(--transition);
+}
+
+.method input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.order-summary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.order-summary h4 {
+    margin: 0 0 20px 0;
+    color: var(--text-color);
+    font-size: 1.2em;
+}
+
+.order-details {
+    margin-bottom: 25px;
+}
+
+.order-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.order-detail p {
+    margin: 0;
+}
+
+.order-detail p:first-child {
+    color: var(--light-text);
+}
+
+.total-amount {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: var(--shadow);
+}
+
+.total-amount .total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.total-amount button {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.total-amount button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+}
+
 
 @media (max-width: 992px) {
     main {

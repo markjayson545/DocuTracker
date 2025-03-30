@@ -37,7 +37,7 @@
                             example@email.com
                         </div>
                     </div>
-                    
+
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="profile-dropdown">
@@ -191,7 +191,101 @@
                         No recent activities
                     </h3>
                 </div>
+            </div>
 
+            <div class="document-request-form">
+                <div class="title">
+                    <h3>
+                        Submit New Request
+                    </h3>
+                    <div class="select-doc-type">
+                        <label for="document-type">Document Type</label>
+                        <select name="document-type" id="document-type">
+                            <option value="" selected disabled>Select Document</option>
+                            <option value="police-clearance">Police Clearance</option>
+                        </select>
+                    </div>
+
+                    <div class="payment">
+                        <div class="payment-method">
+                            <label for="payment-method">Payment Method</label>
+                            <br>
+                            <div class="form-group">
+                                <div class="type credit-card">
+                                    <input type="radio" name="pay-method" id="pay-method">
+                                    <i class="fas fa-credit-card"></i>
+                                    <label for="credit-card">Credit Card</label>
+                                </div>
+                                <div class="type gcash">
+                                    <input type="radio" name="pay-method" id="pay-method">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <label for="gcash">GCash</label>
+                                </div>
+                            </div>
+                            <div class="method credit-card">
+                                <label for="credit-card-number">Credit Card Number</label>
+                                <input type="text" name="credit-card-number" id="credit-card-number">
+                                <label for="credit-card-name">Cardholder Name</label>
+                                <input type="text" name="credit-card-name" id="credit-card-name">
+                                <label for="credit-card-expiry">Expiry Date</label>
+                                <input type="text" name="credit-card-expiry" id="credit-card-expiry">
+                                <label for="credit-card-cvv">CVV</label>
+                                <input type="text" name="credit-card-cvv" id="credit-card-cvv">
+                            </div>
+                            <div class="method gcash">
+                                <label for="gcash-number">GCash Number</label>
+                                <input type="text" name="gcash-number" id="gcash-number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-summary">
+                        <h4>
+                            Order Summary
+                        </h4>
+                        <div class="order-details">
+                            <div class="order-detail">
+                                <p>
+                                    Document Type
+                                </p>
+                                <p>
+                                    Police Clearance
+                                </p>
+                            </div>
+                            <div class="order-detail">
+                                <p>
+                                    Payment Method
+                                </p>
+                                <p>
+                                    GCash
+                                </p>
+                            </div>
+                            <div class="order-detail">
+                                <p>
+                                    Total Amount
+                                </p>
+                                <p>
+                                    Php 1.00
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="total-amount">
+                            <div class="total">
+                                <p>
+                                    Total Amount
+                                </p>
+                                <p>
+                                    Php 1.00
+                                </p>
+                            </div>
+                            <button>
+                                <i class="fas fa-credit-card"></i>
+                                Pay Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
