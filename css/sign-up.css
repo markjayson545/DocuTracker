@@ -13,7 +13,11 @@
     --border-color: #cacbcc;
     --shadow-color: rgba(0, 0, 0, 0.05);
     --success-color: #4CAF50;
+    --success-color-light: #d4edda;
     --error-color: #f44336;
+    --error-color-light: #f8d7da;
+    --warning-color: #FFC107;
+    --warning-color-light: #fff3cd;
     --transition: all 0.3s ease;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.123);
     --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -47,6 +51,7 @@ main {
     align-items: center;
     justify-content: space-evenly;
     padding: 40px 20px;
+
 }
 
 .main-container {
@@ -55,7 +60,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 40px;
+    gap: 50px;
 }
 
 .welcome-container {
@@ -407,6 +412,33 @@ footer a:hover {
 
 .quick-links ul li a:hover {
     padding-left: 5px;
+}
+
+#system-message {
+    display: none;
+    flex-direction: row;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: var(--shadow);
+    align-items: center;
+    justify-content: center;
+}
+
+#system-message .fas {
+    font-size: 2em;
+    margin-right: 10px;
+}
+
+#system-message p {
+    font-size: 0.8em;
+    color: var(--text-color);
+}
+
+.error-fields {
+    color: var(--error-color);
+    font-size: 0.8em;
+    position: absolute;
+    margin-left: 5px;
 }
 
 @keyframes formFadeIn {

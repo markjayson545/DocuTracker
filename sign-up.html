@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/sign-up.css">
     <link rel="stylesheet" href="css/global/header-footer.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+    <script src="js/sign-up/sign-up.js"></script>
 </head>
 
 <body>
@@ -72,7 +72,7 @@
             </script>
 
             <div class="form-container" id="sign-up-form">
-                <form id="signup-form" action="php/create-user.php" method="POST">
+                <form id="signup-form">
                     <h2 class="title">Create Account</h2>
                     <p class="subtitle">Join our community today</p>
                     <div class="form-group">
@@ -81,6 +81,7 @@
                             <i class="fas fa-user"></i>
                             <input type="text" id="username" name="username" required>
                         </div>
+                        <p class="error-fields" id="username-error"></p>
                     </div>
 
                     <div class="form-group">
@@ -88,9 +89,10 @@
                             Phone Number
                         </label>
                         <div class="input-group">
-                            <i class="fas fa-phone" style="transform: scaleX(-1);"></i>
+                            <i class="fas fa-phone"></i>
                             <input type="tel" id="phone" name="phone" required>
                         </div>
+                        <p class="error-fields" id="phone-error"></p>
                     </div>
 
                     <div class="form-group">
@@ -99,6 +101,7 @@
                             <i class="fas fa-envelope"></i>
                             <input type="email" id="email" name="email" required>
                         </div>
+                        <p class="error-fields" id="email-error"></p>
                     </div>
 
                     <div class="form-group">
@@ -106,10 +109,11 @@
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility" id="toggle-password1">
                                 <i class="fas fa-eye-slash" id="toggle-password-icon1"></i>
                             </button>
                         </div>
+                        <p class="error-fields" id="password-error"></p>
                     </div>
 
                     <div class="form-group">
@@ -117,10 +121,11 @@
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
                             <input type="password" id="confirm-password" name="confirm-password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="showConfirmPassword()">
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility" id="toggle-password2">
                                 <i class="fas fa-eye-slash" id="toggle-password-icon2"></i>
                             </button>
                         </div>
+                        <p class="error-fields" id="confirm-password-error"></p>
                     </div>
                     <div class="login-link">
                         Already have an account? <a href="login.html">Log in</a>
@@ -130,13 +135,16 @@
                         <span>Sign Up</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
+                    <div id="system-message">
+                        <i class="fas fa-regular fa-circle-exclamation" id="system-message-icon"></i>
+                        <div id="system-message-content-container">
+                            <h3 id="system-message-title">Title</h3>
+                            <p id="system-message-content">Content</p>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
-
-        <!-- Fix the path by removing the leading slash -->
-        <script src="js/sign-up/sign-up.js"></script>
-
     </main>
 
     <footer>

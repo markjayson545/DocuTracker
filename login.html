@@ -71,11 +71,12 @@
             <div class="welcome-container">
                 <h2>Welcome Back!</h2>
                 <p>Sign in to your account to access your documents and requests</p>
-                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_mjlh3hcy.json" background="transparent" speed="1" loop autoplay></lottie-player>
+                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_mjlh3hcy.json"
+                    background="transparent" speed="1" loop autoplay></lottie-player>
             </div>
 
             <div class="form-container">
-                <form id="login-form" action="php/validate-user.php" method="POST">
+                <form id="login-form">
                     <h2 class="title">Sign In</h2>
                     <p class="subtitle">Access your DocuTrack account</p>
 
@@ -86,13 +87,23 @@
                             <input type="email" id="email" name="email" required>
                         </div>
                     </div>
-
+                    <script>
+                        function showPassword() {
+                            var x = document.getElementById("password");
+                            if (x.type === "password") {
+                                x.type = "text";
+                            } else {
+                                x.type = "password";
+                            }
+                        }
+                    </script>
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"
+                                onclick=showPassword()>
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
