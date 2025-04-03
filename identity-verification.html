@@ -76,7 +76,6 @@
                 <p>Let's get started with your personal information</p>
             </div>
             <form id="personal-info-form">
-
                 <div class="personal-details-group">
                     <fieldset class="personal-details">
                         <legend>Personal Information</legend>
@@ -120,6 +119,10 @@
                             <p class="animation-text">Where can we reach you?</p>
                         </div>
                         <div class="form-group">
+                            <label for="house-num">House no.</label>
+                            <input type="house-num" id="house-num" name="house-num" required>
+                        </div>
+                        <div class="form-group">
                             <label for="street">Street</label>
                             <input type="text" id="street" name="street" required>
                         </div>
@@ -136,7 +139,7 @@
                             <input type="text" id="province" name="province" required>
                         </div>
                     </fieldset>
-                    <fieldset>
+                    <fieldset class="more-info">
                         <legend>More Information</legend>
                         <div class="form-group">
                             <label for="sex">Sex</label>
@@ -281,9 +284,9 @@
                 </select>
                 <fieldset class="upload-document-container">
                     <label for="verification-document">Upload Document</label>
-                <input type="file" name="verification-document" id="verification-document" required>
+                    <input type="file" name="verification-document" id="verification-document" required>
                 </fieldset>
-                
+
                 <button type="submit">
                     <i class="fas fa-upload"></i> Upload Document
                 </button>

@@ -10,6 +10,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
     <script src="js/sign-up/sign-up.js"></script>
+    <script>
+        function scrollToElement() {
+            const element = document.getElementById("sign-up-form");
+            if (element) {
+                const elementRect = element.getBoundingClientRect();
+                const elementHeight = elementRect.height;
+                const windowHeight = window.innerHeight;
+                const offset = elementRect.top + window.pageYOffset - (windowHeight - elementHeight) / 2;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -58,18 +70,7 @@
                     autoplay></lottie-player>
             </div>
 
-            <script>
-                function scrollToElement() {
-                    const element = document.getElementById("sign-up-form");
-                    if (element) {
-                        const elementRect = element.getBoundingClientRect();
-                        const elementHeight = elementRect.height;
-                        const windowHeight = window.innerHeight;
-                        const offset = elementRect.top + window.pageYOffset - (windowHeight - elementHeight) / 2;
-                        window.scrollTo({ top: offset, behavior: 'smooth' });
-                    }
-                }
-            </script>
+
 
             <div class="form-container" id="sign-up-form">
                 <form id="signup-form">

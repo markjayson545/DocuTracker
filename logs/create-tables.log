@@ -1,0 +1,88 @@
+[2025-04-02 17:50:40] Table 'User' created or already exists
+[2025-04-02 17:50:40] Table 'Application' created or already exists
+[2025-04-02 17:50:40] Table 'ClientProfile' created or already exists
+[2025-04-02 17:50:40] Table 'ContactAddress' created or already exists
+[2025-04-02 17:50:40] Table 'UserDetails' created or already exists
+[2025-04-02 17:50:40] Table 'Request' created or already exists
+[2025-04-02 17:50:40] Table 'Payment' created or already exists
+[2025-04-02 17:50:40] Table 'AuditLog' created or already exists
+[2025-04-02 17:50:40] Table 'Notification' created or already exists
+[2025-04-02 17:50:40] Table 'SystemNotification' created or already exists
+[2025-04-02 17:50:40] Error creating tables: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'UNSIGNED,
+                FOREIGN KEY (user_id) REFERENCES User(id),
+        ...' at line 3
+[2025-04-02 17:50:45] Table 'User' created or already exists
+[2025-04-02 17:50:45] Table 'Application' created or already exists
+[2025-04-02 17:50:45] Table 'ClientProfile' created or already exists
+[2025-04-02 17:50:45] Table 'ContactAddress' created or already exists
+[2025-04-02 17:50:45] Table 'UserDetails' created or already exists
+[2025-04-02 17:50:45] Table 'Request' created or already exists
+[2025-04-02 17:50:45] Table 'Payment' created or already exists
+[2025-04-02 17:50:45] Table 'AuditLog' created or already exists
+[2025-04-02 17:50:45] Table 'Notification' created or already exists
+[2025-04-02 17:50:45] Table 'SystemNotification' created or already exists
+[2025-04-02 17:50:45] Error creating tables: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'UNSIGNED,
+                FOREIGN KEY (user_id) REFERENCES User(id),
+        ...' at line 3
+[2025-04-02 17:50:46] Table 'User' created or already exists
+[2025-04-02 17:50:46] Table 'Application' created or already exists
+[2025-04-02 17:50:46] Table 'ClientProfile' created or already exists
+[2025-04-02 17:50:46] Table 'ContactAddress' created or already exists
+[2025-04-02 17:50:46] Table 'UserDetails' created or already exists
+[2025-04-02 17:50:46] Table 'Request' created or already exists
+[2025-04-02 17:50:46] Table 'Payment' created or already exists
+[2025-04-02 17:50:46] Table 'AuditLog' created or already exists
+[2025-04-02 17:50:46] Table 'Notification' created or already exists
+[2025-04-02 17:50:46] Table 'SystemNotification' created or already exists
+[2025-04-02 17:50:46] Error creating tables: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'UNSIGNED,
+                FOREIGN KEY (user_id) REFERENCES User(id),
+        ...' at line 3
+[2025-04-02 17:50:46] Table 'User' created or already exists
+[2025-04-02 17:50:46] Table 'Application' created or already exists
+[2025-04-02 17:50:46] Table 'ClientProfile' created or already exists
+[2025-04-02 17:50:46] Table 'ContactAddress' created or already exists
+[2025-04-02 17:50:46] Table 'UserDetails' created or already exists
+[2025-04-02 17:50:46] Table 'Request' created or already exists
+[2025-04-02 17:50:46] Table 'Payment' created or already exists
+[2025-04-02 17:50:46] Table 'AuditLog' created or already exists
+[2025-04-02 17:50:46] Table 'Notification' created or already exists
+[2025-04-02 17:50:46] Table 'SystemNotification' created or already exists
+[2025-04-02 17:50:46] Error creating tables: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'UNSIGNED,
+                FOREIGN KEY (user_id) REFERENCES User(id),
+        ...' at line 3
+[2025-04-02 17:50:46] Table 'User' created or already exists
+[2025-04-02 17:50:46] Table 'Application' created or already exists
+[2025-04-02 17:50:46] Table 'ClientProfile' created or already exists
+[2025-04-02 17:50:46] Table 'ContactAddress' created or already exists
+[2025-04-02 17:50:46] Table 'UserDetails' created or already exists
+[2025-04-02 17:50:46] Table 'Request' created or already exists
+[2025-04-02 17:50:46] Table 'Payment' created or already exists
+[2025-04-02 17:50:46] Table 'AuditLog' created or already exists
+[2025-04-02 17:50:46] Table 'Notification' created or already exists
+[2025-04-02 17:50:46] Table 'SystemNotification' created or already exists
+[2025-04-02 17:50:46] Error creating tables: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'UNSIGNED,
+                FOREIGN KEY (user_id) REFERENCES User(id),
+        ...' at line 3
+[2025-04-02 17:51:41] Table 'User' created or already exists
+[2025-04-02 17:51:41] Table 'Application' created or already exists
+[2025-04-02 17:51:41] Table 'ClientProfile' created or already exists
+[2025-04-02 17:51:41] Table 'ContactAddress' created or already exists
+[2025-04-02 17:51:41] Table 'UserDetails' created or already exists
+[2025-04-02 17:51:41] Table 'Request' created or already exists
+[2025-04-02 17:51:41] Table 'Payment' created or already exists
+[2025-04-02 17:51:41] Table 'AuditLog' created or already exists
+[2025-04-02 17:51:41] Table 'Notification' created or already exists
+[2025-04-02 17:51:41] Table 'SystemNotification' created or already exists
+[2025-04-02 17:51:41] Error creating tables: Can't create table `docutracker`.`Session` (errno: 150 "Foreign key constraint is incorrectly formed")
+[2025-04-02 17:52:39] Table 'User' created or already exists
+[2025-04-02 17:52:39] Table 'Application' created or already exists
+[2025-04-02 17:52:39] Table 'ClientProfile' created or already exists
+[2025-04-02 17:52:39] Table 'ContactAddress' created or already exists
+[2025-04-02 17:52:39] Table 'UserDetails' created or already exists
+[2025-04-02 17:52:39] Table 'Request' created or already exists
+[2025-04-02 17:52:39] Table 'Payment' created or already exists
+[2025-04-02 17:52:39] Table 'AuditLog' created or already exists
+[2025-04-02 17:52:39] Table 'Notification' created or already exists
+[2025-04-02 17:52:39] Table 'SystemNotification' created or already exists
+[2025-04-02 17:52:39] Table 'Session' created or already exists
+[2025-04-02 17:52:39] Tables created successfully

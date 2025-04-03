@@ -1,31 +1,22 @@
 <?php
 
 require 'open-db.php';
+include 'logger.php';
 
-// Define log file path
-define('LOG_FILE', dirname(__FILE__) . '/database_setup.log');
-
-// Function to write logs to file
-function writeLog($message) {
-    $timestamp = date('Y-m-d H:i:s');
-    $logMessage = "[$timestamp] $message" . PHP_EOL;
-    
-    // Write log to file
-    file_put_contents(LOG_FILE, $logMessage, FILE_APPEND);
-}
-
+writeLog("Creating tables...", "create-tables.log");
 // Complete the createTable function
-function createTable($conn, $sql) {
+function createTable($conn, $sql)
+{
     // Extract table name from SQL for better logging
     preg_match('/CREATE TABLE IF NOT EXISTS ([^\(]+)/i', $sql, $matches);
     $tableName = trim($matches[1] ?? 'Unknown');
-    
+
     if ($conn->query($sql) === TRUE) {
         $message = "Table '$tableName' created or already exists";
-        writeLog($message);
+        writeLog($message, "create-tables.log");
     } else {
         $message = "Error creating table '$tableName': " . $conn->error;
-        writeLog($message);
+        writeLog($message, "create-tables.log");
     }
 }
 
@@ -153,19 +144,19 @@ $systemNotificationSql = "CREATE TABLE IF NOT EXISTS SystemNotification(
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
-        try {
-            createTable($conn, $userSql);
-            createTable($conn, $applicationSql);
-            createTable($conn, $clientProfileSql);
-            createTable($conn, $contactAddressSql);
-            createTable($conn, $userDetailsSql);
-            createTable($conn, $requestSql);
-            createTable($conn, $paymentSql);
-            createTable($conn, $auditLogSql);
-            createTable($conn, $notificationSql);
-            createTable($conn, $systemNotificationSql);
-        } catch (\Throwable $th) {
-            writeLog("Error creating tables: " . $th->getMessage());
-        }
 
-?>
+try {
+    createTable($conn, $userSql);
+    createTable($conn, $applicationSql);
+    createTable($conn, $clientProfileSql);
+    createTable($conn, $contactAddressSql);
+    createTable($conn, $userDetailsSql);
+    createTable($conn, $requestSql);
+    createTable($conn, $paymentSql);
+    createTable($conn, $auditLogSql);
+    createTable($conn, $notificationSql);
+    createTable($conn, $systemNotificationSql);
+    writeLog("Tables created successfully", "create-tables.log");
+} catch (\Throwable $th) {
+    writeLog("Error creating tables: " . $th->getMessage(), "create-tables.log");
+}
