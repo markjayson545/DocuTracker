@@ -7,9 +7,11 @@
     <title>DocuTracker - Secure Document Request System</title>
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/global/header-footer.css">
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/services/logout.js"></script>
     <meta name="description" content="Request and track your official documents securely with DocuTracker">
-    <script src="js/check-session.js"></script>
+    <script src="js/services/check-session.js"></script>
 </head>
 
 <body>
@@ -33,7 +35,7 @@
                 <a href="#Contact"><i class="fas fa-envelope"></i> Contact</a>
             </li>
         </ul>
-        <div class="login-or-create">
+        <div class="login-or-create" id="login-or-create">
             <div class="login-button">
                 <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
             </div>
@@ -41,6 +43,57 @@
                 <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
             </div>
         </div>
+
+        <div class="user-info" id="user-info">
+            <div class="user-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <p class="user-name" id="user-name">John Doe</p>
+                <p class="user-email" id="user-email">example@email.com</p>
+            </div>
+            <div class="user-dropdown">
+                <div class="user-info-dropdown">
+                    <div class="user-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name" id="user-name">John Doe</p>
+                        <p class="user-email" id="user-email">markjayson545@gmail.com</p>
+                    </div>
+                </div>
+                <hr>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="user-dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <button id="logout-button" class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+            <button id="dropdown-button" class="dropdown-button">
+                <i class="fa-solid fa-caret-down"></i>
+            </button>
+        </div>
+
     </header>
 
     <main>

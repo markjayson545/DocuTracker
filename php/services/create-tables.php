@@ -36,7 +36,7 @@ $userSql = "CREATE TABLE IF NOT EXISTS User(
 // Applicant Verification Table
 $applicationSql = "CREATE TABLE IF NOT EXISTS Application(
             application_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED UNIQUE,
+            user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             document_type VARCHAR(50) NOT NULL,
             document_path TEXT,
@@ -50,11 +50,11 @@ $applicationSql = "CREATE TABLE IF NOT EXISTS Application(
 // Client Profile Table
 $clientProfileSql = "CREATE TABLE IF NOT EXISTS ClientProfile(
             client_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED UNIQUE,
+            user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             first_name VARCHAR(30) NOT NULL,
             middle_name VARCHAR(30),
-            last_name VARCHAR(30) NOT NULL,application_type VARCHAR(50) NOT NULL,
+            last_name VARCHAR(30) NOT NULL,
             qualifier VARCHAR(30),
             sex VARCHAR(10) NOT NULL,
             civil_status VARCHAR(20) NOT NULL,
@@ -66,7 +66,7 @@ $clientProfileSql = "CREATE TABLE IF NOT EXISTS ClientProfile(
 // Contact Address Table
 $contactAddressSql = "CREATE TABLE IF NOT EXISTS ContactAddress(
             contact_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED UNIQUE,
+            user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             house_number_building_name VARCHAR(50),
             street_name VARCHAR(50) NOT NULL,
@@ -78,12 +78,12 @@ $contactAddressSql = "CREATE TABLE IF NOT EXISTS ContactAddress(
 // Contact Address Table
 $userDetailsSql = "CREATE TABLE IF NOT EXISTS UserDetails(
             details_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED UNIQUE,
+            user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
-            height DECIMAL(4,2) NOT NULL,
-            weight DECIMAL(4,2) NOT NULL,
+            height DECIMAL(15) NOT NULL,
+            weight DECIMAL(15) NOT NULL,
             complexion VARCHAR(20) NOT NULL,
-            blood_type VARCHAR(5) NOT NULL,
+            blood_type VARCHAR(10) NOT NULL,
             religion VARCHAR(20) NOT NULL,
             educational_attainment VARCHAR(50) NOT NULL,
             occupation VARCHAR(50) NOT NULL,
@@ -93,7 +93,7 @@ $userDetailsSql = "CREATE TABLE IF NOT EXISTS UserDetails(
 // Document Request Table
 $requestSql = "CREATE TABLE IF NOT EXISTS Request(
             request_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED,
+            user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             document_type VARCHAR(50) NOT NULL,
             document_path TEXT,
@@ -106,7 +106,7 @@ $requestSql = "CREATE TABLE IF NOT EXISTS Request(
 // Payments Table
 $paymentSql = "CREATE TABLE IF NOT EXISTS Payment(
             payment_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED,
+            user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             request_id INT(6) UNSIGNED,
             FOREIGN KEY (request_id) REFERENCES Request(request_id),
@@ -120,7 +120,7 @@ $paymentSql = "CREATE TABLE IF NOT EXISTS Payment(
 // Audit Log Table
 $auditLogSql = "CREATE TABLE IF NOT EXISTS AuditLog(
             log_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED,
+            user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             action VARCHAR(50) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -129,7 +129,7 @@ $auditLogSql = "CREATE TABLE IF NOT EXISTS AuditLog(
 // Notifications Table
 $notificationSql = "CREATE TABLE IF NOT EXISTS Notification(
             notification_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id INT(6) UNSIGNED,
+            user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             message TEXT NOT NULL,
             status VARCHAR(50) DEFAULT 'unread',
@@ -144,6 +144,16 @@ $systemNotificationSql = "CREATE TABLE IF NOT EXISTS SystemNotification(
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
+$sessionTokensSql = "CREATE TABLE IF NOT EXISTS SessionTokens(
+            token_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(6) UNSIGNED NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES User(id),
+            token VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at DATETIME NOT NULL,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )";
+
 
 try {
     createTable($conn, $userSql);
@@ -156,7 +166,9 @@ try {
     createTable($conn, $auditLogSql);
     createTable($conn, $notificationSql);
     createTable($conn, $systemNotificationSql);
+    createTable($conn, $sessionTokensSql);
     writeLog("Tables created successfully", "create-tables.log");
+    mysqli_close($conn);
 } catch (\Throwable $th) {
     writeLog("Error creating tables: " . $th->getMessage(), "create-tables.log");
 }

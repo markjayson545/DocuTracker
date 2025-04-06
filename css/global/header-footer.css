@@ -83,7 +83,10 @@ header ul li:hover a {
 
 .login-or-create {
     display: flex;
+    height: auto;
+    justify-content: center;
     align-items: center;
+    ;
 }
 
 a {

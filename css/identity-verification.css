@@ -217,6 +217,12 @@ a {
     font-weight: 600;
 }
 
+.step.completed .fas {
+    background-color: var(--success-color);
+    color: var(--light-text);
+    box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+}
+
 .progress-line {
     width: 10%;
     height: 4px;
@@ -230,8 +236,7 @@ a {
 }
 
 .progress-line.completed {
-    background-color: var(--primary-color);
-    animation: growLine 0.8s ease-in-out forwards;
+    border: var(--success-color) 2px solid;
 }
 
 @keyframes growLine {
@@ -242,7 +247,7 @@ a {
         border: var(--primary-color) 2px solid;
     }
     100% {
-        border: white 2px solid;
+        border: var(--primary-color) 2px solid;
     }
 }
 
@@ -441,6 +446,7 @@ button.next-button {
     display: block;
     width: 100%;
     padding: 15px;
+    margin-top: 20px;
     background-color: var(--primary-color);
     color: var(--light-text);
     border: none;
@@ -482,7 +488,6 @@ button.next-button:active {
 /* Upload document section */
 
 .upload-verification-document {
-    display: flex;
     display: none;
     flex-direction: column;
     align-items: center;
@@ -492,6 +497,27 @@ button.next-button:active {
     box-shadow: var(--shadow);
     padding: 40px;
     animation: fadeIn 0.8s ease-in-out;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+
+#back-button {
+    top: 15px;
+    left: 50px;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+}
+#back-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
 }
 
 .upload-verification-document h3 {

@@ -165,6 +165,9 @@ section h2::after {
 }
 
 
+/* User Info Section */
+
+
 
 /* Animations */
 @keyframes fadeInUp {
@@ -247,10 +250,6 @@ section h2::after {
 
     header h2 {
         font-size: 1.3em;
-    }
-
-    .login-button, .signup-button {
-        font-size: 0.8em;
     }
     
     header ul {

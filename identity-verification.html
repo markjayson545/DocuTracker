@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="css/identity-verification.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/logout.js"></script>
+    <script src="js/identity-verification/identity-verification.js"></script>
+    <script src="js/identity-verification/fetch-personal-info-contact-address.js"></script>
+    <script src="js/identity-verification/save-personal-info-contact-address.js"></script>
+    <script src="js/identity-verification/validate-inputs.js"></script>
 </head>
 
 <body>
@@ -31,38 +38,85 @@
                 <a href="Contact"><i class="fas fa-envelope"></i> Contact</a>
             </li>
         </ul>
-        <div class="user-logged-in">
-            <div class="user-profile">
-                <i class="fas fa-user-circle">
-                </i>
-                <p>John Doe</p>
+
+        <div class="login-or-create" id="login-or-create">
+            <div class="login-button">
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
             </div>
-            <div class="logout-button">
-                <button onclick="window.location.href='login.html'">
+            <div class="signup-button">
+                <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+        </div>
+
+        <div class="user-info" id="user-info">
+            <div class="user-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <p class="user-name" id="user-name">John Doe</p>
+                <p class="user-email" id="user-email">example@email.com</p>
+            </div>
+            <div class="user-dropdown">
+                <div class="user-info-dropdown">
+                    <div class="user-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name" id="user-name">John Doe</p>
+                        <p class="user-email" id="user-email">markjayson545@gmail.com</p>
+                    </div>
+                </div>
+                <hr>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="user-dashboard.html">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html">
+                            <i class="fas fa-user"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="settings.html">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <button id="logout-button" class="logout-button">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
                 </button>
             </div>
+            <button id="dropdown-button" class="dropdown-button">
+                <i class="fa-solid fa-caret-down"></i>
+            </button>
         </div>
+
     </header>
 
     <main>
         <div class="status">
-            <div class="step personal-details active">
+            <div class="step personal-details active" id="personal-details-step-class">
                 <i class="fas fa-address-book"></i>
                 <h3>Personal Information</h3>
                 <p>Basic Information</p>
                 <div class="step-indicator"></div>
             </div>
-            <hr class="progress-line active">
-            <div class="step verify-identity">
+            <hr class="progress-line active" id="progress-line-step-0">
+            <div class="step verify-identity" id="verify-identity-step-class">
                 <i class="fas fa-user-check"></i>
                 <h3>Verify Identity</h3>
                 <p>Upload Identification Documents</p>
                 <div class="step-indicator"></div>
             </div>
-            <hr class="progress-line">
-            <div class="step processing">
+            <hr class="progress-line" id="progress-line-step-1">
+            <div class="step processing" id="processing-step-class">
                 <i class="fas fa-cogs"></i>
                 <h3>Processing</h3>
                 <p>Review and Approval</p>
@@ -70,7 +124,7 @@
             </div>
         </div>
 
-        <div class="personal-details-form">
+        <div class="personal-details-form" id="personal-details-form">
             <div class="welcome-message">
                 <h2>Welcome to DocuTracker</h2>
                 <p>Let's get started with your personal information</p>
@@ -265,19 +319,25 @@
             </form>
         </div>
 
-        <div class="upload-verification-document">
+        <div class="upload-verification-document" id="upload-verification-document">
+            <button id="back-button">
+                <i class="fa-solid fa-arrow-left"></i>
+                Previous Step
+            </button>
             <h3>
                 Identity Verification
-            </h3><lottie-player src="assets/verification-process/identity-verification.json" background="transparent"
+            </h3>
+            <lottie-player src="assets/verification-process/identity-verification.json" background="transparent"
                 speed="1" loop autoplay>
             </lottie-player>
             <p>
                 Please upload a valid identification document to verify your identity.
             </p>
 
-            <form action="">
+            <form id="upload-verification-form">
                 <label for="document-type">Select Document Type</label>
-                <select name="document-type" id="document-type">
+                <select name="document-type" id="document-type" required>
+                    <option value="" disabled selected>Select Document Type</option>
                     <option value="drivers-license">Drivers License</option>
                     <option value="passport">Passport</option>
                     <option value="national-id">National ID</option>
@@ -286,7 +346,6 @@
                     <label for="verification-document">Upload Document</label>
                     <input type="file" name="verification-document" id="verification-document" required>
                 </fieldset>
-
                 <button type="submit">
                     <i class="fas fa-upload"></i> Upload Document
                 </button>

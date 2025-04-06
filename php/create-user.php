@@ -1,7 +1,7 @@
 <?php
 // Make sure output buffering is on to prevent headers already sent errors
-require 'open-db.php';
-include 'logger.php';
+require 'services/open-db.php';
+include 'services/logger.php';
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
