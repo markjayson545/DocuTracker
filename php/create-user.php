@@ -63,6 +63,7 @@ try {
 
         if ($isError === false) {
             // Hash the password
+            $passwordHash = password_hash($password, PASSWORD_BCRYPT);
 
             // Prepare Statement
             $sql = "INSERT INTO User (username, phone, email, password) VALUES (?, ?, ?, ?)";
