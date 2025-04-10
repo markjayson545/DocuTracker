@@ -136,7 +136,7 @@ $notificationSql = "CREATE TABLE IF NOT EXISTS Notification(
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
-
+// System Notifications Table
 $systemNotificationSql = "CREATE TABLE IF NOT EXISTS SystemNotification(
             system_notification_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             message TEXT NOT NULL,
@@ -144,6 +144,7 @@ $systemNotificationSql = "CREATE TABLE IF NOT EXISTS SystemNotification(
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
+// Session Tokens Table
 $sessionTokensSql = "CREATE TABLE IF NOT EXISTS SessionTokens(
             token_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT(6) UNSIGNED NOT NULL,

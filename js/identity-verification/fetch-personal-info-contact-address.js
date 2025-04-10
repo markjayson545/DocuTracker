@@ -12,7 +12,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const backButton = document.getElementById('back-button');
 
-    backButton.addEventListener('click', previousStep);
+    // Use the navigation function from the main file
+    if (backButton) {
+        backButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (window.previousStep) {
+                window.previousStep();
+            }
+        });
+    }
 
     // Helper function to safely set field values
     const setFieldValue = (selector, value) => {
@@ -22,84 +30,66 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    function nextStep() {
-        personalDetailsForm.style.display = 'none';
-        uploadVerificationForm.style.display = 'flex';
-
-        personalInfoStep.classList.remove('active');
-        personalInfoStep.classList.add('completed');
-
-        verifyIdentityStep.classList.add('active');
-
-        progressLine.classList.remove('active');
-        progressLine.classList.add('completed');
-        progressLine1.classList.add('active');
-    }
-
-    function previousStep() {
-        personalDetailsForm.style.display = 'block';
-        uploadVerificationForm.style.display = 'none';
-
-        personalInfoStep.classList.remove('completed');
-        personalInfoStep.classList.add('active');
-
-        verifyIdentityStep.classList.remove('active');
-
-        progressLine1.classList.remove('active');
-        progressLine.classList.remove('completed');
-        progressLine.classList.add('active');
-    }
+    // Function to fetch personal information from the server
+    window.fetchPersonalInfo = function() {
+        fetch('php/get-personal-information.php')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Fetched personal info:', data);
+                var profileExists = false;
+                var contactExists = false;
+                var detailsExists = false;
+                
+                if (data.exists == true) {
+                    if (data.has_profile && data.profile_data != null) {
+                        const profileData = data.profile_data;
+                        // Set input values if they exist
+                        window.setFieldValue('input[name="first-name"]', profileData.first_name);
+                        window.setFieldValue('input[name="middle-name"]', profileData.middle_name);
+                        window.setFieldValue('input[name="last-name"]', profileData.last_name);
+                        window.setFieldValue('select[name="qualifier"]', profileData.qualifier);
+                        window.setFieldValue('select[name="sex"]', profileData.sex);
+                        window.setFieldValue('select[name="civil-status"]', profileData.civil_status);
+                        window.setFieldValue('input[name="dob"]', profileData.birthdate);
+                        window.setFieldValue('input[name="birth-place"]', profileData.birthplace);
+                        profileExists = true;
+                    }
+                    
+                    if (data.has_contact && data.contact_data != null) {
+                        const contactData = data.contact_data;
+                        window.setFieldValue('input[name="house-num"]', contactData.house_number_building_name);
+                        window.setFieldValue('input[name="street"]', contactData.street_name);
+                        window.setFieldValue('input[name="barangay"]', contactData.subdivision_barangay);
+                        window.setFieldValue('input[name="city"]', contactData.city_municipality);
+                        window.setFieldValue('input[name="province"]', contactData.province);
+                        contactExists = true;
+                    }
+                    
+                    if (data.has_details && data.details_data != null) {
+                        const detailsData = data.details_data;
+                        window.setFieldValue('input[name="height"]', detailsData.height);
+                        window.setFieldValue('input[name="weight"]', detailsData.weight);
+                        window.setFieldValue('select[name="nationality"]', detailsData.nationality);
+                        window.setFieldValue('select[name="complexion"]', detailsData.complexion);
+                        window.setFieldValue('select[name="blood-type"]', detailsData.blood_type);
+                        window.setFieldValue('select[name="religion"]', detailsData.religion);
+                        window.setFieldValue('select[name="education"]', detailsData.educational_attainment);
+                        window.setFieldValue('select[name="occupation"]', detailsData.occupation);
+                        detailsExists = true;
+                    }
+                    
+                    // If all data exists, go to next step
+                    if (profileExists && contactExists && detailsExists) {
+                        window.nextStep();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching personal information:', error);
+            });
+    };
 
     // Fetch personal information from the server
-    fetch('php/get-personal-information.php')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            var profileExists = false;
-            var contactExists = false;
-            var detailsExists = false;
-            if (data.exists == true) {
-                if (data.has_profile && data.profile_data != null) {
-                    const profileData = data.profile_data;
-                    // Set input values if they exist and if the input elements exist
-                    setFieldValue('input[name="first-name"]', profileData.first_name);
-                    setFieldValue('input[name="middle-name"]', profileData.middle_name);
-                    setFieldValue('input[name="last-name"]', profileData.last_name);
-                    setFieldValue('select[name="qualifier"]', profileData.qualifier);
-                    setFieldValue('select[name="sex"]', profileData.sex);
-                    setFieldValue('select[name="civil-status"]', profileData.civil_status);
-                    setFieldValue('input[name="dob"]', profileData.birthdate);
-                    setFieldValue('input[name="birth-place"]', profileData.birthplace);
-                    profileExists = true;
-                }
-                if (data.has_contact && data.contact_data != null) {
-                    const contactData = data.contact_data;
-                    setFieldValue('input[name="house-num"]', contactData.house_number_building_name);
-                    setFieldValue('input[name="street"]', contactData.street_name);
-                    setFieldValue('input[name="barangay"]', contactData.subdivision_barangay);
-                    setFieldValue('input[name="city"]', contactData.city_municipality);
-                    setFieldValue('input[name="province"]', contactData.province);
-                    contactExists = true;
-                }
-                if (data.has_details && data.details_data != null) {
-                    const detailsData = data.details_data;
-                    setFieldValue('input[name="height"]', detailsData.height);
-                    setFieldValue('input[name="weight"]', detailsData.weight);
-                    setFieldValue('select[name="nationality"]', detailsData.nationality);
-                    setFieldValue('select[name="complexion"]', detailsData.complexion);
-                    setFieldValue('select[name="blood-type"]', detailsData.blood_type);
-                    setFieldValue('select[name="religion"]', detailsData.religion);
-                    setFieldValue('select[name="education"]', detailsData.educational_attainment);
-                    setFieldValue('select[name="occupation"]', detailsData.occupation);
-                    detailsExists = true;
-                }
-            }
-            if (profileExists && contactExists && detailsExists) {
-                nextStep();
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    fetchPersonalInfo();
 
 });

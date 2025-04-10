@@ -9,16 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
     <link rel="stylesheet" href="css/global/user-dropdown.css">
+    
     <script src="js/services/check-session.js"></script>
     <script src="js/services/logout.js"></script>
     <script src="js/identity-verification/identity-verification.js"></script>
-    <script src="js/utils/core.js"></script>
-    <script src="js/validation/form-validator.js"></script>
-    <!-- 
-    <script src="js/identity-verification/validate-inputs.js"></script>
-    <script src="js/identity-verification/save-personal-info-contact-address.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
     <script src="js/identity-verification/fetch-personal-info-contact-address.js"></script>
-    -->
+    <script src="js/identity-verification/save-personal-info-contact-address.js"></script>
+    <script src="js/identity-verification/validate-inputs.js"></script>
+    <script src="js/identity-verification/upload-verification-document.js"></script>
 </head>
 
 <body>
@@ -60,7 +59,7 @@
                 <p class="user-name" id="user-name">John Doe</p>
                 <p class="user-email" id="user-email">example@email.com</p>
             </div>
-            <div class="user-dropdown">
+            <div class="user-dropdown" id="user-dropdown">
                 <div class="user-info-dropdown">
                     <div class="user-icon">
                         <i class="fas fa-user-circle"></i>
@@ -324,46 +323,61 @@
         </div>
 
         <div class="upload-verification-document" id="upload-verification-document">
-            <button id="back-button">
+            <!-- <button id="back-button">
                 <i class="fa-solid fa-arrow-left"></i>
                 Previous Step
-            </button>
-            <h3>
-                Identity Verification
-            </h3>
-            <lottie-player src="assets/verification-process/identity-verification.json" background="transparent"
-                speed="1" loop autoplay>
-            </lottie-player>
-            <p>
-                Please upload a valid identification document to verify your identity.
-            </p>
+            </button> -->
 
-            <form id="upload-verification-form">
-                <label for="document-type">Select Document Type</label>
-                <select name="document-type" id="document-type" required>
-                    <option value="" disabled selected>Select Document Type</option>
-                    <option value="drivers-license">Drivers License</option>
-                    <option value="passport">Passport</option>
-                    <option value="national-id">National ID</option>
-                </select>
-                <fieldset class="upload-document-container">
-                    <label for="verification-document">Upload Document</label>
-                    <input type="file" name="verification-document" id="verification-document" required>
-                </fieldset>
-                <button type="submit">
-                    <i class="fas fa-upload"></i> Upload Document
-                </button>
-            </form>
+            <div class="verification-container">
+                <div class="verification-info">
+                    <h3>Identity Verification</h3>
+                    <lottie-player src="assets/verification-process/identity-verification.json" background="transparent"
+                        speed="1" loop autoplay>
+                    </lottie-player>
+                    <p>Please upload a valid identification document to verify your identity.</p>
+                </div>
 
+                <div class="verification-form-container">
+                    <form id="upload-verification-form">
+                        <div class="document-type-container">
+                            <label for="document-type">Select Document Type</label>
+                            <select name="document-type" id="document-type" required>
+                                <option value="" disabled selected>Select Document Type</option>
+                                <option value="drivers-license">Driver's License</option>
+                                <option value="passport">Passport</option>
+                                <option value="national-id">National ID</option>
+                            </select>
+                        </div>
+                        <fieldset class="upload-document-container">
+                            <label for="verification-document">Upload Document</label>
+                            <input type="file" name="verification-document" id="verification-document" required>
+                            <div class="drag-drop-indicator">
+                                <span><i class="fas fa-cloud-upload-alt"></i> Drop file here</span>
+                            </div>
+                        </fieldset>
+                        <div id="document-preview-container" class="document-preview-container" style="display: none;">
+                        </div>
+                        <div class="upload-progress-container">
+                            <div class="upload-progress-bar"></div>
+                        </div>
+                        <button type="submit">
+                            <i class="fas fa-upload"></i> Upload Document
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div class="processing-status">
-            <h2>
-                Application Submitted Sucessfully
-            </h2>
-            <p>
-                Your application has been submitted successfully. Please wait for the approval of your application.
-            </p>
+            <div class="status-title-container">
+                <h2 class="status-title">
+                    Application Submitted Sucessfully
+                </h2>
+                <p class="status-message">
+                    Your application has been submitted successfully. Please wait for the approval of your application.
+                </p>
+            </div>
+
             <div class="process-steps">
                 <div class="step-process submitted">
                     <i class="fas fa-check active"></i>
@@ -409,6 +423,10 @@
                             <p id="application-status">Under Review</p>
                         </div>
                     </div>
+                    <!-- <button id="edit-application-button">
+                        <i class="fas fa-edit"></i>
+                        Edit Application
+                    </button> -->
                 </div>
             </div>
         </div>

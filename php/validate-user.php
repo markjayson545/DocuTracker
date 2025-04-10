@@ -7,7 +7,7 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
-        $remember = isset($_POST['remember']) ? $_POST['remember'] : false;
+        $remember = $_POST['remember-me'] ?? false;
         if (empty($email) || empty($password)) {
             echo json_encode([
                 'success' => false,

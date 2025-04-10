@@ -164,6 +164,16 @@ a {
     flex: 1;
     transition: var(--transition);
     text-align: center;
+    cursor: pointer;
+}
+
+.step:hover .fas {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(67, 97, 238, 0.4);
+}
+
+.step:hover h3 {
+    color: var(--primary-color);
 }
 
 .status .fas {
@@ -490,7 +500,6 @@ button.next-button:active {
 .upload-verification-document {
     display: none;
     flex-direction: column;
-    align-items: center;
     margin-top: 40px;
     background-color: white;
     border-radius: var(--border-radius);
@@ -499,66 +508,170 @@ button.next-button:active {
     animation: fadeIn 0.8s ease-in-out;
     margin-bottom: 40px;
     position: relative;
+    max-width: 1000px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-
-#back-button {
-    top: 15px;
-    left: 50px;
+.verification-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
     align-items: center;
-    margin-bottom: 30px;
-    padding: 10px 15px;
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: var(--transition);
+    margin-top: 20px;
+}
+
+.verification-info {
     display: flex;
-}
-#back-button:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-2px);
+    flex-direction: column;
+    align-items: center;
 }
 
-.upload-verification-document h3 {
+.verification-info h3 {
     color: var(--primary-color);
-    margin-bottom: 15px;
-    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-align: center;
 }
 
-.upload-verification-document p {
+.verification-info lottie-player {
+    max-width: 280px;
+    max-height: 280px;
+    margin: 0 auto 20px;
+}
+
+.verification-info p {
     color: var(--gray-text);
     text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.verification-form-container {
+    background-color: var(--light-bg);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.verification-form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+#back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 10;
+}
+
+#back-button:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+    transform: translateX(-5px);
+}
+
+#back-button i {
+    margin-right: 8px;
+}
+
+.document-type-container {
     margin-bottom: 25px;
 }
 
-.upload-verification-document form {
-    display: flex;
-    flex-direction: column;
+.document-type-container label {
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--dark-text);
+    display: block;
+}
+
+#upload-verification-form select {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: white;
+}
+
+#upload-verification-form select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
 }
 
 .upload-document-container {
     display: flex;
     flex-direction: column;
-    padding: 100px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    border: 2px dashed #dee2e6;
+    padding: 25px;
+    border-radius: 12px;
+    background-color: white;
+    transition: var(--transition);
+    position: relative;
+    text-align: center;
+    min-height: 150px;
 }
 
-.upload-verification-document label {
-    margin-bottom: 10px;
+.upload-document-container:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.05);
+    transform: translateY(-3px);
+}
+
+.upload-document-container::before {
+    content: '\f0ee';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 3rem;
+    color: var(--primary-light);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.upload-document-container label {
+    position: relative;
+    z-index: 1;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
     font-weight: 500;
 }
 
-.upload-verification-document select,
-.upload-verification-document input[type="file"] {
-    margin-bottom: 20px;
-    padding: 12px;
+/* Improve file input styling */
+.upload-document-container input[type="file"] {
+    position: relative;
+    z-index: 1;
+    padding: 15px;
+    background-color: white;
     border-radius: 8px;
-    border: 1px solid #dee2e6;
+    width: 100%;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
 }
 
-
-.upload-verification-document button {
+#upload-verification-form button[type="submit"] {
+    width: 100%;
     padding: 15px;
     background-color: var(--primary-color);
     color: white;
@@ -566,63 +679,414 @@ button.next-button:active {
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 1.05rem;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    margin-top: 10px;
 }
 
-.upload-verification-document button:hover {
+#upload-verification-form button[type="submit"]:hover {
     background-color: var(--secondary-color);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
 }
 
-.upload-verification-document button i {
-    font-size: 1.2rem;
-}
-
-/* File input styling */
-input[type="file"] {
+/* Document preview container styling */
+.document-preview-container {
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: var(--border-radius);
     background-color: white;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
     position: relative;
 }
 
-input[type="file"]::file-selector-button {
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    background-color: var(--gray-text);
-    color: white;
-    margin-right: 15px;
+.document-preview-container h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.document-preview-container h4::before {
+    content: '\f15c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/* File upload progress styles */
+.upload-progress-container {
+    height: 8px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    display: none;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 900px) {
+    .verification-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .verification-info lottie-player {
+        max-width: 220px;
+        max-height: 220px;
+    }
+    
+    .verification-form-container {
+        padding: 25px;
+    }
+    
+    #back-button {
+        position: static;
+        margin-bottom: 20px;
+        align-self: flex-start;
+    }
+    
+    .upload-document-container {
+        padding: 20px;
+        min-height: 120px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .upload-verification-document {
+        padding: 25px 15px;
+    }
+    
+    .verification-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .verification-info lottie-player {
+        max-width: 180px;
+        max-height: 180px;
+    }
+    
+    .upload-document-container {
+        padding: 15px;
+    }
+    
+    .upload-document-container::before {
+        font-size: 2rem;
+    }
+}
+
+/* Upload document section - Improved layout */
+.upload-verification-document {
+    display: none;
+    flex-direction: column;
+    margin-top: 40px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 40px;
+    animation: fadeIn 0.8s ease-in-out;
+    margin-bottom: 40px;
+    position: relative;
+    max-width: 1000px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.verification-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.verification-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.verification-info h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.verification-info lottie-player {
+    max-width: 280px;
+    max-height: 280px;
+    margin: 0 auto 20px;
+}
+
+.verification-info p {
+    color: var(--gray-text);
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.verification-form-container {
+    background-color: var(--light-bg);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.verification-form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+#back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 8px;
+    font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
+    z-index: 10;
 }
 
-input[type="file"]::file-selector-button:hover {
-    background-color: var(--dark-text);
+#back-button:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+    transform: translateX(-5px);
 }
 
-/* Document upload area */
-.document-upload-area {
+#back-button i {
+    margin-right: 8px;
+}
+
+.document-type-container {
+    margin-bottom: 25px;
+}
+
+.document-type-container label {
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: var(--dark-text);
+    display: block;
+}
+
+#upload-verification-form select {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: white;
+}
+
+#upload-verification-form select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    outline: none;
+}
+
+.upload-document-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
     border: 2px dashed #dee2e6;
+    padding: 25px;
     border-radius: 12px;
-    padding: 30px;
+    background-color: white;
+    transition: var(--transition);
+    position: relative;
     text-align: center;
-    margin-bottom: 20px;
+    min-height: 150px;
+}
+
+.upload-document-container:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.05);
+    transform: translateY(-3px);
+}
+
+.upload-document-container::before {
+    content: '\f0ee';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 3rem;
+    color: var(--primary-light);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.upload-document-container label {
+    position: relative;
+    z-index: 1;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Improve file input styling */
+.upload-document-container input[type="file"] {
+    position: relative;
+    z-index: 1;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+#upload-verification-form button[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    margin-top: 10px;
+}
+
+#upload-verification-form button[type="submit"]:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+}
+
+/* Document preview container styling */
+.document-preview-container {
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    background-color: white;
+    box-shadow: var(--shadow);
     transition: var(--transition);
     position: relative;
 }
 
-.document-upload-area:hover {
-    border-color: var(--primary-color);
-    background-color: rgba(67, 97, 238, 0.05);
+.document-preview-container h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.document-preview-container h4::before {
+    content: '\f15c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+/* File upload progress styles */
+.upload-progress-container {
+    height: 8px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    display: none;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 900px) {
+    .verification-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .verification-info lottie-player {
+        max-width: 220px;
+        max-height: 220px;
+    }
+    
+    .verification-form-container {
+        padding: 25px;
+    }
+    
+    #back-button {
+        position: static;
+        margin-bottom: 20px;
+        align-self: flex-start;
+    }
+    
+    .upload-document-container {
+        padding: 20px;
+        min-height: 120px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .upload-verification-document {
+        padding: 25px 15px;
+    }
+    
+    .verification-info h3 {
+        font-size: 1.5rem;
+    }
+    
+    .verification-info lottie-player {
+        max-width: 180px;
+        max-height: 180px;
+    }
+    
+    .upload-document-container {
+        padding: 15px;
+    }
+    
+    .upload-document-container::before {
+        font-size: 2rem;
+    }
 }
 
 /* Verification Process Styles */
 
 .processing-status {
-    display: flex;
     display: none;
     flex-direction: column;
     align-items: center;
@@ -649,6 +1113,7 @@ input[type="file"]::file-selector-button:hover {
 .processing-status h2::after {
     content: '';
     position: absolute;
+    border: 2px solid var(--primary-color);
     bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
@@ -743,7 +1208,7 @@ input[type="file"]::file-selector-button:hover {
     background-color: var(--light-bg);
     padding: 25px;
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
+    box-shadow: var (--shadow);
     transition: var(--transition);
 }
 
@@ -783,6 +1248,23 @@ input[type="file"]::file-selector-button:hover {
 
 .under-review-info h3::before {
     content: "\f002";
+}
+
+.status-message {
+    color: var(--gray-text);
+    font-size: 1rem;
+    margin-top: 10px;
+    text-align: center;
+    align-self: center;
+}
+
+.status-title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .verified-info h3::before {
@@ -897,7 +1379,7 @@ footer a:hover {
     color: var(--accent-color);
 }
 
-.contacts .email i,
+contacts .email i,
 .contacts .telephone i {
     margin-right: 3px;
     color: var(--text-color-footer);
@@ -1004,4 +1486,102 @@ footer a:hover {
         justify-content: center;
 
     }
+}
+
+/* Document preview styles */
+.document-preview-container {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    background-color: var(--light-bg);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.document-preview-container h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 5px;
+}
+
+.document-preview-img {
+    max-width: 100%;
+    max-height: 300px;
+    display: block;
+    margin: 0 auto 15px;
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.pdf-preview i {
+    font-size: 3rem;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+.pdf-preview p {
+    word-break: break-all;
+    text-align: center;
+    font-weight: 500;
+}
+
+.file-info {
+    background-color: white;
+    padding: 15px;
+    border-radius: var(--border-radius-sm);
+    margin-top: 15px;
+}
+
+.file-info p {
+    margin-bottom: 8px;
+    color: var(--dark-text);
+}
+
+/* Personal information details styling */
+.personal-info-details {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.personal-info-details h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.personal-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.personal-details-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.personal-details-table td {
+    padding: 8px;
+    line-height: 1.4;
+}
+
+.personal-details-table .detail-label {
+    font-weight: 600;
+    color: #34495e;
+    width: 40%;
+}
+
+.personal-details-table .detail-value {
+    color: #2c3e50;
 }

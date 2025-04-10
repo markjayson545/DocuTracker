@@ -1,0 +1,66 @@
+<?php
+require 'services/open-db.php';
+include 'services/logger.php';
+session_start();
+
+try {
+    if (!isset($_SESSION['user_id'])) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'User not authenticated'
+        ]);
+        exit;
+    }
+
+    $userId = $_SESSION['user_id'];
+    
+    // Query the database for user's application
+    $stmt = $conn->prepare("SELECT * FROM Application WHERE user_id = ?");
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $application = $result->fetch_assoc();
+        
+        // Just check if personal details exist without fetching all the data
+        $profileStmt = $conn->prepare("SELECT 1 FROM ClientProfile WHERE user_id = ? LIMIT 1");
+        $profileStmt->bind_param("i", $userId);
+        $profileStmt->execute();
+        $hasPersonalDetails = ($profileStmt->get_result()->num_rows > 0);
+        
+        // Format the response
+        echo json_encode([
+            'status' => 'success',
+            'has_application' => true,
+            'application' => [
+                'id' => $application['application_id'] ?? null,
+                'document_type' => $application['document_type'] ?? null,
+                'document_path' => $application['document_path'] ?? null,
+                'status' => $application['status'] ?? 'Under Review',
+                'submission_date' => $application['created_at'] ?? date('F j, Y'),
+                'last_updated' => $application['updated_at'] ?? date('F j, Y'),
+            ],
+            'has_personal_details' => $hasPersonalDetails
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'success',
+            'has_application' => false
+        ]);
+    }
+    
+    // Close connections
+    if (isset($profileStmt)) {
+        $profileStmt->close();
+    }
+    $stmt->close();
+    $conn->close();
+    
+} catch (\Throwable $th) {
+    writeLog("Error getting uploaded document: " . $th->getMessage(), "application-status.log");
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'An error occurred while retrieving the document.',
+    ]);
+}
