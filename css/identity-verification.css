@@ -152,7 +152,6 @@ a {
     box-shadow: var(--shadow);
     transition: var(--transition);
     justify-content: space-between;
-    position: relative;
 }
 
 .step {

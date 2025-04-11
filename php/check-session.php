@@ -37,7 +37,7 @@ try {
                     [
                         'status' => 'success',
                         'message' => 'Session valid',
-                        'data' => $_SESSION
+                        'data' => $userData
                     ]
                 );
             }

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="css/user-dashboard.css">
     <link rel="stylesheet" href="css/global/header-footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
+    <script src="js/services/check-session.js"></script>
 </head>
 
 <body>
@@ -28,25 +30,72 @@
                 <i class="fas fa-bell"></i>
                 <span class="notification-badge">3</span>
             </button>
-            <div class="user-profile">
-                <button class="profile-button">
-                    <img src="images/profile-placeholder.jpg" alt="John Doe" class="avatar">
-                    <div class="profile-name">
-                        John Doe
-                        <div class="email">
-                            example@email.com
-                        </div>
-                    </div>
 
-                    <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="profile-dropdown">
-                    <a href="#"><i class="fas fa-user"></i> My Profile</a>
-                    <a href="#"><i class="fas fa-cog"></i> Account Settings</a>
-                    <a href="#"><i class="fas fa-question-circle"></i> Help Center</a>
-                    <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
                 </div>
             </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">markjayson545@gmail.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="dropdown-menu">
+                        <li id="user-dashboard-btn">
+                            <a href="user-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+
         </div>
     </header>
 
@@ -56,6 +105,9 @@
                 <h3>
                     <i class="fa-solid fa-table-columns"></i> Dashboard
                 </h3>
+                <!-- <button class="dashboard-button">
+                    <i class="fas fa-arrow-down"></i>
+                </button> -->
             </button>
             <ul>
                 <li>

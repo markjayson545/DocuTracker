@@ -59,7 +59,8 @@ try {
             echo json_encode([
                 'success' => true,
                 'message' => 'Login successful redirecting...',
-                'data' => $user
+                'data' => $user,
+
             ]);
         } else {
             writeLog("Failed login attempt for $email", "sign-in.log");

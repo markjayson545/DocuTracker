@@ -78,6 +78,7 @@ try {
                     'message' => 'User created successfully',
                     'data' => $_POST
                 ]
+                
             );
         } else {
             echo json_encode(
