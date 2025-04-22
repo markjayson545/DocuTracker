@@ -122,6 +122,7 @@ $auditLogSql = "CREATE TABLE IF NOT EXISTS AuditLog(
             log_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
+            title VARCHAR(255) NOT NULL,
             action VARCHAR(50) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
@@ -155,6 +156,13 @@ $sessionTokensSql = "CREATE TABLE IF NOT EXISTS SessionTokens(
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )";
 
+// Document Types Table
+$documentTypesSql = "CREATE TABLE IF NOT EXISTS DocumentTypes(
+            document_type_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            document_type VARCHAR(50) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )";
 
 try {
     createTable($conn, $userSql);
@@ -168,6 +176,7 @@ try {
     createTable($conn, $notificationSql);
     createTable($conn, $systemNotificationSql);
     createTable($conn, $sessionTokensSql);
+    createTable($conn, $documentTypesSql);
     writeLog("Tables created successfully", "create-tables.log");
     mysqli_close($conn);
 } catch (\Throwable $th) {

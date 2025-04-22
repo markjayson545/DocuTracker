@@ -1,5 +1,4 @@
 <?php
-// Make sure output buffering is on to prevent headers already sent errors
 require 'services/open-db.php';
 include 'services/logger.php';
 
