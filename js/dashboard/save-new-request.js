@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Save response:', data);
             if (data.status == 'success') {
                 alert('Request submitted successfully!');
+                location.reload();
             } else{
                 alert('Error: ' + data.stack_trace);
             }

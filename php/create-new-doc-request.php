@@ -10,12 +10,22 @@ try {
 
         $doc_type = $_POST['document-type'];
         $mode_of_payment = 'credit-card';
-        if ($_POST['gcash'] == true) {
+        if ($_POST['payment-method'] === 'gcash') {
             $mode_of_payment = 'gcash';
         }
         
         $amount = $_POST['amount-to-pay'];
         $status = 'pending';
+
+        $document_type_name = null;
+        // Get Document Type Name by ID
+        $sqlDocType = "SELECT document_type FROM DocumentTypes WHERE document_type_id = ?";
+        $stmtDocType = mysqli_prepare($conn, $sqlDocType);
+        mysqli_stmt_bind_param($stmtDocType, "s", $doc_type);
+        mysqli_stmt_execute($stmtDocType);
+        mysqli_stmt_bind_result($stmtDocType, $document_type_name);
+        mysqli_stmt_fetch($stmtDocType);
+        mysqli_stmt_close($stmtDocType);
 
         // Check Pending Requests and refuse if ther are any
         $sqlCheckPending = "SELECT COUNT(*) FROM Request WHERE user_id = ? AND document_type_id = ? AND status = 'pending'";
@@ -61,10 +71,28 @@ try {
             writeLog("Failed to retrieve request_id for user_id: $userId and document_type: $doc_type", "create-new-doc-request.log");
             throw new Exception("Failed to retrieve request_id for user_id: $userId and document_type: $doc_type");
         }
+
+        // Log the successful request creation
+        $sqlLogInsert = "INSERT INTO AuditLog (user_id, title, action) VALUES (?, ?, ?)";
+        $stmtLog = mysqli_prepare($conn, $sqlLogInsert);
+        $title = "New Document Request Created";
+        $action = sprintf(
+            "Created new request #%d for document: %s. Payment method: %s, Amount: %.2f",
+            $request_id,
+            $document_type_name,
+            ucfirst($mode_of_payment),
+            floatval($amount)
+        );
+        mysqli_stmt_bind_param($stmtLog, "sss", $userId, $title, $action);
+        mysqli_stmt_execute($stmtLog);
+        mysqli_stmt_close($stmtLog);
+        writeLog("Audit log created for user_id: $userId, action: $action", "create-new-doc-request.log");
+
         echo json_encode(
             [
                 "status" => "success", 
                 "message" => "Request created successfully.",
+                "document_type" => $document_type_name,
                 "request_id" => $request_id,
                 "mode_of_payment" => $mode_of_payment,
                 "amount" => $amount

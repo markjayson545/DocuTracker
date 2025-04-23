@@ -124,7 +124,7 @@ $auditLogSql = "CREATE TABLE IF NOT EXISTS AuditLog(
             user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             title VARCHAR(255) NOT NULL,
-            action VARCHAR(50) NOT NULL,
+            action VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const totalRequest = document.getElementById("total-request");
     const pendingRequest = document.getElementById("pending-requests");
     const completedRequest = document.getElementById("completed-requests");
+    const approvedRequest = document.getElementById("approved-requests");
     const recentPayments = document.getElementById("recent-payments");
 
     const recentActivitiesContainer = document.getElementById("activities-container");
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    function addActivityCard(title, date, icon) {
+    function addActivityCard(title, action, date, icon) {
         let activityTemplate =
             `<div class="activity">
                         <div class="activity-icon">
@@ -54,9 +55,10 @@ document.addEventListener("DOMContentLoaded", function () {
                             <h4>
                                 ${title}
                             </h4>
-                            <p>
-                                ${date}
-                            </p>
+                            <p>${action}</p>
+                            <div class="activity-info">
+                                <p><i class="fas fa-calendar-alt"></i> ${date}</p>
+                            </div>
                         </div>
                     </div>`;
         recentActivitiesContainer.innerHTML += activityTemplate;
@@ -83,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
             totalRequest.innerText = data.total_requests;
             pendingRequest.innerText = data.pending_requests;
             completedRequest.innerText = data.completed_requests;
+            approvedRequest.innerText = data.completed_requests;
             recentPayments.innerText = data.recent_payments ?? "0.00";
 
             // Set recent activities
@@ -90,9 +93,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 noRecentActivities.style.display = "none";
                 recentActivitiesContainer.style.display = "flex";
                 data.recent_activities.forEach((activity) => {
+
+                    const createdDate = new Date(activity.created_at);
+                    const now = new Date();
+                    const diffTime = Math.abs(now - createdDate);
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    const diffHours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    let timeAgo;
+                    if (diffDays > 0) {
+                        timeAgo = diffDays + (diffDays === 1 ? " day ago" : " days ago");
+                    } else if (diffHours > 0) {
+                        timeAgo = diffHours + (diffHours === 1 ? " hour ago" : " hours ago");
+                    } else if (diffMinutes > 0) {
+                        timeAgo = diffMinutes + (diffMinutes === 1 ? " minute ago" : " minutes ago");
+                    } else {
+                        timeAgo = "just now";
+                    }
+                    
                     addActivityCard(
                         activity.title,
-                        activity.date,
+                        activity.action,
+                        timeAgo,
                         'fa-file-invoice'
                     );
                 });

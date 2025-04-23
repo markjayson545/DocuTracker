@@ -14,9 +14,6 @@ try {
 
     $fetchedData = [];
 
-    // TODO: Add a system settings table that will hold the system settings and configurations
-    // Such as the document types, payment methods, amounts, etc.
-
     $sql = "SELECT document_type_id, document_type, price FROM DocumentTypes";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -105,7 +102,7 @@ try {
     }
 
     // Recent User Activities
-    $recentActivitiesSql = "SELECT title, created_at FROM AuditLog WHERE user_id = ? ORDER BY created_at DESC LIMIT 5";
+    $recentActivitiesSql = "SELECT title, action, created_at FROM AuditLog WHERE user_id = ? ORDER BY created_at DESC LIMIT 5";
     $stmt = $conn->prepare($recentActivitiesSql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -114,6 +111,7 @@ try {
     while ($row = $result->fetch_assoc()) {
         $recentActivities[] = [
             'title' => $row['title'],
+            'action' => $row['action'],
             'created_at' => $row['created_at']
         ];
     }
@@ -121,6 +119,9 @@ try {
 
     if ($recentActivities) {
         $fetchedData['recent_activities'] = $recentActivities;
+        writeLog('Recent activities fetched successfully.', 'dashboard.log');
+    } else {
+        writeLog('No recent activities found.', 'dashboard.log');
     }
 
     writeLog('Dashboard data fetched successfully.', 'dashboard.log');
