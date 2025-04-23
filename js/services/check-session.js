@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const getStartedButton = document.getElementById("get-started-a");
 
+  // TODO: Add a admin mode and client mode session check implementation
+
   window.getUserInfo = function () {
     fetch("php/check-session.php")
       .then((response) => response.json())

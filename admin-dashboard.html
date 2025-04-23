@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/global/header-footer.css">
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-actions">
+            <div class="notification">
+                <button class="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <!-- <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item">
+                            <p>Your request for a birth certificate has been approved.</p>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your payment for the marriage certificate is successful.</p>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your request for a death certificate is pending.</p>
+                            <span class="notification-time">3 days ago</span>
+                        </div>
+                    </div>
+
+                </div> -->
+
+            </div>
+
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">markjayson545@gmail.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="dropdown-menu">
+                        <li id="user-dashboard-btn">
+                            <a href="user-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="active dashboard-home">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-envelope"></i> User Applications
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-credit-card"></i> Document Requests
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user-circle"></i> Manage Users
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dashboard-body">
+            <div class="dashboard-title">
+                <h3>
+                    Dashboard Overview
+                </h3>
+                <p>
+                    Welcome back, <span id="admin-username">Admin</span>
+                </p>
+            </div>
+
+            <div class="status-cards">
+                <div class="card total-requests">
+                    <h4>
+                        Total Requests
+                    </h4>
+                    <h2>
+                        10
+                    </h2>
+                    <p>
+                        +100 from last month
+                    </p>
+                </div>
+                <div class="card pending-approval">
+                    <h4>
+                        Pending approval
+                    </h4>
+                    <h2>
+                        64
+                    </h2>
+                    <p>
+                        +6 new request
+                    </p>
+                </div>
+                <div class="card revenue">
+                    <h4>
+                        Revenue
+                    </h4>
+                    <h2>
+                        Php48,000
+                    </h2>
+                    <p>
+                        +32% this month
+                    </p>
+                </div>
+                <div class="card total-users">
+                    <h4>
+                        Total Users
+                    </h4>
+                    <h2>
+                        21
+                    </h2>
+                    <p>
+                        +5.2 this month
+                    </p>
+                </div>
+                <div class="card pending-applications">
+                    <h4>
+                        Pending Applications
+                    </h4>
+                    <h2>
+                        64
+                    </h2>
+                    <p>
+                        +5.2% this month
+                    </p>
+                </div>
+                <div class="card verified-users">
+                    <h4>
+                        Verified Users
+                    </h4>
+                    <h2>
+                        892
+                    </h2>
+                    <p>
+                        +5.2% users
+                    </p>
+                </div>
+            </div>
+
+            <div class="system-notification">
+                <h2>
+                    System Notifications
+                </h2>
+                <div class="system-notification-container">
+                    <div class="notification urgent-notif">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="title-description">
+                            <h3>
+                                System Maintainance
+                            </h3>
+                            <p>
+                                Scheduled mainainance on Jan 20, 2025
+                            </p>
+                        </div>
+                    </div>
+                    <div class="notification warn-notif">
+                        <i class="fas fa-info-circle"></i>
+                        <div class="title-description">
+                            <h3>
+                                High Request Volume
+                            </h3>
+                            <p>
+                                Request processing may take longer than usual
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-requests">
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

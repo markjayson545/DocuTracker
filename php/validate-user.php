@@ -60,7 +60,6 @@ try {
                 'success' => true,
                 'message' => 'Login successful redirecting...',
                 'data' => $user,
-
             ]);
         } else {
             writeLog("Failed login attempt for $email", "sign-in.log");

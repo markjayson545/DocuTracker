@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 console.log(data.data);
-                if (data.success == true) {
+                if (data.success == true && data.data.role === 'client') {
                     systemMessage.style.display = 'flex';
                     systemMessageTitle.innerText = 'Success';
                     systemMessageText.innerText = data.message;
@@ -31,6 +31,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         } else {
                             window.location.href = 'identity-verification.html';
                         }
+                    }, 2000);
+                } else if (data.success == true && data.data.role === 'admin') {
+                    systemMessage.style.display = 'flex';
+                    systemMessageTitle.innerText = 'Success';
+                    systemMessageText.innerText = data.message + 'Admin mode';
+                    systemMessage.style.backgroundColor = 'var(--success-color-light)';
+                    systemMessageIcon.classList.remove('fa-circle-check');
+                    systemMessageIcon.style.color = 'var(--success-color)';
+                    systemMessageIcon.classList.add('fa-circle-check');
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
                     }, 2000);
                 }
                 else {
