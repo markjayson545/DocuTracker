@@ -10,6 +10,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarMenu = document.getElementById('sidebar-menu');
     const methodContainer = document.getElementById('method-container');
+    const creditCardBtn = document.getElementById('credit-card-payment-method');
+    const gcashBtn = document.getElementById('gcash-payment-method');
+
+    creditCardBtn.addEventListener('click', function () {
+        creditCardRadio.checked = true;
+        methodContainer.innerHTML = creditCardTemplate;
+        updatePaymentMethodText('Credit Card');
+    });
+
+    gcashBtn.addEventListener('click', function () {
+        gcashRadio.checked = true;
+        methodContainer.innerHTML = gcashTemplate;
+        updatePaymentMethodText('GCash');
+    });
 
     const creditCardTemplate = `
                                 <div class="method credit-card">
@@ -30,8 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <input type="text" name="gcash-number" id="gcash-number" required>
                             </div>
     `;
-
-    
 
     if (openRequestFormBtn && formWrapper) {
         // Show the form when button is clicked
@@ -69,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (creditCardRadio) {
         creditCardRadio.addEventListener('click', function () {
-            if(this.checked) {
+            if (this.checked) {
                 methodContainer.innerHTML = creditCardTemplate;
                 updatePaymentMethodText('Credit Card');
             }
@@ -78,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (gcashRadio) {
         gcashRadio.addEventListener('click', function () {
-            if(this.checked) {
+            if (this.checked) {
                 methodContainer.innerHTML = gcashTemplate;
                 updatePaymentMethodText('GCash');
             }

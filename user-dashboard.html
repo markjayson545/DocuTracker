@@ -310,7 +310,6 @@
                                 <label for="document-type">Document Type</label>
                                 <select name="document-type" id="document-type" required>
                                     <option value="" selected disabled>Select Document</option>
-                                    <option value="police-clearance">Police Clearance</option>
                                 </select>
                             </div>
 
@@ -319,20 +318,20 @@
                                     <label for="payment-method">Payment Method</label>
                                     <br>
                                     <div class="form-group">
-                                        <div class="type credit-card">
+                                        <div class="type credit-card" id="credit-card-payment-method">
                                             <input type="radio" name="payment-method" id="credit-card"
                                                 value="credit-card" checked>
                                             <i class="fas fa-credit-card"></i>
                                             <label for="credit-card">Credit Card</label>
                                         </div>
-                                        <div class="type gcash">
+                                        <div class="type gcash" id="gcash-payment-method">
                                             <input type="radio" name="payment-method" id="gcash" value="gcash">
                                             <i class="fas fa-mobile-alt"></i>
                                             <label for="gcash">GCash</label>
                                         </div>
                                     </div>
                                     <div id="method-container">
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -362,8 +361,9 @@
                                         <p>
                                             Total Amount
                                         </p>
+                                        <input type="number" id="amount-to-pay" name="amount-to-pay" style="display: none;">
                                         <p>
-                                            Php 1.00
+                                            Php <span id="summary-amount-to-pay">1.00</span>
                                         </p>
                                     </div>
                                 </div>
@@ -374,7 +374,7 @@
                                             Total Amount
                                         </p>
                                         <p>
-                                            Php 1.00
+                                            Php <span id="total-amount-to-pay">1.00</span>
                                         </p>
                                     </div>
                                     <button type="submit" id="submit-btn">

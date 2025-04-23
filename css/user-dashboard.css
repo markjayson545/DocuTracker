@@ -814,6 +814,10 @@ main {
     box-shadow: var(--shadow-hover);
 }
 
+.payment-method .form-group .type label {
+    cursor: pointer;
+}
+
 .payment-method .form-group .type input[type="radio"] {
     accent-color: var(--primary-color);
     transform: scale(1.2);

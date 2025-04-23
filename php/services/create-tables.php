@@ -95,7 +95,8 @@ $requestSql = "CREATE TABLE IF NOT EXISTS Request(
             request_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
-            document_type VARCHAR(50) NOT NULL,
+            document_type_id INT(6) UNSIGNED NOT NULL,
+            FOREIGN KEY (document_type_id) REFERENCES DocumentTypes(document_type_id),
             document_path TEXT,
             status VARCHAR(50) DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -160,6 +161,7 @@ $sessionTokensSql = "CREATE TABLE IF NOT EXISTS SessionTokens(
 $documentTypesSql = "CREATE TABLE IF NOT EXISTS DocumentTypes(
             document_type_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             document_type VARCHAR(50) NOT NULL,
+            price DECIMAL(10,2) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )";
@@ -170,14 +172,21 @@ try {
     createTable($conn, $clientProfileSql);
     createTable($conn, $contactAddressSql);
     createTable($conn, $userDetailsSql);
+    createTable($conn, $documentTypesSql);
     createTable($conn, $requestSql);
     createTable($conn, $paymentSql);
     createTable($conn, $auditLogSql);
     createTable($conn, $notificationSql);
     createTable($conn, $systemNotificationSql);
     createTable($conn, $sessionTokensSql);
-    createTable($conn, $documentTypesSql);
+
     writeLog("Tables created successfully", "create-tables.log");
+    echo json_encode(
+        [
+            "status" => "success",
+            "message" => "Tables created successfully."
+        ]
+    );
     mysqli_close($conn);
 } catch (\Throwable $th) {
     writeLog("Error creating tables: " . $th->getMessage(), "create-tables.log");

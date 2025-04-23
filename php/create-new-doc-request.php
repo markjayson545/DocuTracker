@@ -13,13 +13,12 @@ try {
         if ($_POST['gcash'] == true) {
             $mode_of_payment = 'gcash';
         }
-
-        // TODO: Add a non hardcoded amount
-        $amount = 150.00;
+        
+        $amount = $_POST['amount-to-pay'];
         $status = 'pending';
 
         // Check Pending Requests and refuse if ther are any
-        $sqlCheckPending = "SELECT COUNT(*) FROM Request WHERE user_id = ? AND document_type = ? AND status = 'pending'";
+        $sqlCheckPending = "SELECT COUNT(*) FROM Request WHERE user_id = ? AND document_type_id = ? AND status = 'pending'";
         $stmtCheckPending = mysqli_prepare($conn, $sqlCheckPending);
         mysqli_stmt_bind_param($stmtCheckPending, "ss", $userId, $doc_type);
         mysqli_stmt_execute($stmtCheckPending);
@@ -32,7 +31,7 @@ try {
         }
 
         // Insert to requests table
-        $sqlRequestInsert = "INSERT INTO Request (user_id, document_type, status) VALUES (?, ?, ?)";
+        $sqlRequestInsert = "INSERT INTO Request (user_id, document_type_id, status) VALUES (?, ?, ?)";
         $stmtRequest = mysqli_prepare($conn, $sqlRequestInsert);
         mysqli_stmt_bind_param($stmtRequest, "sss", $userId, $doc_type, $status);
         mysqli_stmt_execute($stmtRequest);

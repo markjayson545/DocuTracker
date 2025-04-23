@@ -17,6 +17,24 @@ try {
     // TODO: Add a system settings table that will hold the system settings and configurations
     // Such as the document types, payment methods, amounts, etc.
 
+    $sql = "SELECT document_type_id, document_type, price FROM DocumentTypes";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $documentTypes = [];
+    while ($row = $result->fetch_assoc()) {
+        $documentTypes[] = [
+            'document_type_id' => $row['document_type_id'],
+            'document_type' => $row['document_type'],
+            'price' => $row['price']
+        ];
+    }
+    $stmt->close();
+
+    if ($documentTypes) {
+        $fetchedData['document_types'] = $documentTypes;
+    }
+
     // Fetch User Data
     $sql = "SELECT first_name, last_name, qualifier FROM ClientProfile WHERE user_id = ?";
     $stmt = $conn->prepare($sql);

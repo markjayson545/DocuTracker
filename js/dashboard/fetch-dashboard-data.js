@@ -8,6 +8,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const recentActivitiesContainer = document.getElementById("activities-container");
     const noRecentActivities = document.getElementById("no-activities");
 
+    const documentTypeSelector = document.getElementById("document-type");
+
+    const summaryAmountValue = document.getElementById("summary-amount-to-pay");
+    const totalAmountValue = document.getElementById("total-amount-to-pay");
+    const amountToPay = document.getElementById("amount-to-pay");
+
+    let documentTypes = [];
+
+    documentTypeSelector.addEventListener('change', function(){
+        const selectedType = documentTypeSelector.value;
+        console.log(selectedType);
+        const selectedDocumentType = documentTypes.find(type => type.document_type_id == selectedType);
+        console.log(selectedDocumentType);
+        if (selectedDocumentType) {
+            summaryAmountValue.innerText = selectedDocumentType.price;
+            totalAmountValue.innerText = selectedDocumentType.price;
+            amountToPay.value = selectedDocumentType.price;
+        } else {
+            summaryAmountValue.innerText = "0.00";
+            totalAmountValue.innerText = "0.00";
+            amountToPay.value = "0.00";
+        }
+    });
+
     function addActivityCard(title, date, icon) {
         let activityTemplate =
             `<div class="activity">
@@ -63,6 +87,18 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 noRecentActivities.style.display = "flex";
                 recentActivitiesContainer.style.display = "none";
+            }
+
+            documentTypes = data.document_types;
+
+            if(data.document_types) {
+                data.document_types.forEach((type) => {
+                    let option = document.createElement("option");
+                    option.value = type.document_type_id;
+                    option.textContent = type.document_type;
+                    documentTypeSelector.appendChild(option);
+                    console.log(type.document_type);
+                });
             }
 
         })

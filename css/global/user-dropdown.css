@@ -1,3 +1,10 @@
+:root {
+    --dark-text: #212529;
+    --transition: all 0.3s ease;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
 .user-info {
     display: none;
     align-items: center;
