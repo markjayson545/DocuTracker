@@ -676,7 +676,7 @@ main {
 \*------------------------------------*/
 /* Modal Wrapper */
 .form-wrapper {
-    display: none;
+    display: block;
     position: fixed;
     z-index: 1000;
     top: 0;
@@ -771,8 +771,35 @@ main {
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
 }
 
+.select-document-first-info {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 0;
+    border-radius: 12px;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--bg-color);
+    padding: 50px;
+}
+
+.select-document-first-info i {
+    font-size: 2em;
+    color: var(--primary-color);
+}
+
+.select-document-first-info p {
+    color: var(--light-text);
+    text-align: center;
+    margin: 0;
+    font-weight: 500;
+    max-width: 400px;
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
 /* Payment Section */
 .payment {
+    display: none;
     background-color: #f9fafd;
     padding: 30px;
     border-radius: 12px;
@@ -865,6 +892,7 @@ main {
 
 /* Order Summary */
 .order-summary {
+    display: none;
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
     border-radius: 12px;
     padding: 25px;

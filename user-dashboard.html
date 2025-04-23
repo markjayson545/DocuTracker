@@ -299,7 +299,7 @@
             <div class="form-wrapper" id="form-wrapper">
                 <form id="submit-document-request-form" method="post">
                     <div class="document-request-form">
-                        <div class="title">
+                        <div class="title" id="document-request-form-title">
                             <h3>
                                 Submit New Request
                                 <button type="button" class="close-form" id="close-request-form" title="Close">
@@ -313,7 +313,14 @@
                                 </select>
                             </div>
 
-                            <div class="payment">
+                            <div class="select-document-first-info" id="select-document-first-info">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>
+                                    Please select a document type to proceed with the request.
+                                </p>
+                            </div>
+
+                            <div class="payment" id="payment">
                                 <div class="payment-method">
                                     <label for="payment-method">Payment Method</label>
                                     <br>
@@ -336,7 +343,7 @@
                                 </div>
                             </div>
 
-                            <div class="order-summary">
+                            <div class="order-summary" id="order-summary">
                                 <h4>
                                     Order Summary
                                 </h4>
@@ -345,8 +352,8 @@
                                         <p>
                                             Document Type
                                         </p>
-                                        <p>
-                                            Police Clearance
+                                        <p id="document-type-selected">
+                                            Select Document
                                         </p>
                                     </div>
                                     <div class="order-detail">
@@ -354,14 +361,15 @@
                                             Payment Method
                                         </p>
                                         <p id="payment-method-selected">
-                                            GCash
+                                            Credit Card
                                         </p>
                                     </div>
                                     <div class="order-detail">
                                         <p>
                                             Total Amount
                                         </p>
-                                        <input type="number" id="amount-to-pay" name="amount-to-pay" style="display: none;">
+                                        <input type="number" id="amount-to-pay" name="amount-to-pay"
+                                            style="display: none;">
                                         <p>
                                             Php <span id="summary-amount-to-pay">1.00</span>
                                         </p>
@@ -382,6 +390,7 @@
                                         Pay Now
                                     </button>
                                 </div>
+
                             </div>
                         </div>
                     </div>

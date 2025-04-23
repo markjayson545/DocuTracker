@@ -12,7 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const summaryAmountValue = document.getElementById("summary-amount-to-pay");
     const totalAmountValue = document.getElementById("total-amount-to-pay");
+    const documentTypeSelectedValue = document.getElementById("document-type-selected");
     const amountToPay = document.getElementById("amount-to-pay");
+
+    const selectDocumentTypeFirstInfo = document.getElementById("select-document-first-info");
+    const paymentInputDetails = document.getElementById("payment");
+    const orderSummary = document.getElementById("order-summary");
 
     let documentTypes = [];
 
@@ -24,11 +29,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (selectedDocumentType) {
             summaryAmountValue.innerText = selectedDocumentType.price;
             totalAmountValue.innerText = selectedDocumentType.price;
+            documentTypeSelectedValue.innerText = selectedDocumentType.document_type;
             amountToPay.value = selectedDocumentType.price;
+            selectDocumentTypeFirstInfo.style.display = "none";
+            paymentInputDetails.style.display = "block";
+            orderSummary.style.display = "block";
         } else {
             summaryAmountValue.innerText = "0.00";
             totalAmountValue.innerText = "0.00";
             amountToPay.value = "0.00";
+            selectDocumentTypeFirstInfo.style.display = "none";
+            orderSummary.style.display = "block";
+            paymentInputDetails.style.display = "block";
         }
     });
 
