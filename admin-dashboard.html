@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="css/global/header-footer.css">
     <link rel="stylesheet" href="css/global/user-dropdown.css">
     <link rel="stylesheet" href="css/admin-dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />  
+    <script src="js/admin-dashboard/fetch-dashboard-data.js"></script>
+    <script src="js/services/check-session.js"></script>    
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <script src="js/services/logout.js"></script>
 </head>
 
 <body>
@@ -23,12 +28,12 @@
             <button title="submit" type="submit"><i class="fas fa-search"></i></button>
         </div>
         <div class="header-actions">
-            <div class="notification">
+            <!-- <div class="notification">
                 <button class="notification-button">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </button>
-                <!-- <div class="notification-dropdown" id="notification-dropdown">
+                <div class="notification-dropdown" id="notification-dropdown">
                     <div class="notification-header">
                         <h3>Notifications</h3>
                         <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
@@ -47,10 +52,8 @@
                             <span class="notification-time">3 days ago</span>
                         </div>
                     </div>
-
-                </div> -->
-
-            </div>
+                </div>
+            </div> -->
 
             <div class="login-or-create" id="login-or-create">
                 <div class="login-button">
@@ -165,87 +168,107 @@
         <div class="dashboard-body">
             <div class="dashboard-title">
                 <h3>
-                    Dashboard Overview
+                    <i class="fas fa-chart-line"></i> Admin Dashboard Overview
                 </h3>
                 <p>
-                    Welcome back, <span id="admin-username">Admin</span>
+                    <i class="fas fa-user-shield"></i> Welcome back, <span id="admin-username">Admin</span>
                 </p>
             </div>
 
             <div class="status-cards">
                 <div class="card total-requests">
+                    <div class="card-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
                     <h4>
                         Total Requests
                     </h4>
-                    <h2>
+                    <h2 id="total-requests-count">
                         10
                     </h2>
                     <p>
-                        +100 from last month
+                        <i class="fas fa-check-circle"></i> <span id="approved-count">100</span> approved
                     </p>
                 </div>
                 <div class="card pending-approval">
+                    <div class="card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
                     <h4>
                         Pending approval
                     </h4>
-                    <h2>
+                    <h2 id="pending-approval-count">
                         64
                     </h2>
                     <p>
-                        +6 new request
+                        <i class="fas fa-arrow-up"></i> +6 new request
                     </p>
                 </div>
                 <div class="card revenue">
+                    <div class="card-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
                     <h4>
                         Revenue
                     </h4>
                     <h2>
-                        Php48,000
+                        ₱
+                        <span id="total-revenue-value">48,000</span>
                     </h2>
                     <p>
-                        +32% this month
+                        <i class="fas fa-chart-line"></i> +32% this month
                     </p>
                 </div>
                 <div class="card total-users">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <h4>
                         Total Users
                     </h4>
-                    <h2>
+                    <h2 id="total-users-count">
                         21
                     </h2>
                     <p>
-                        +5.2 this month
+                        <i class="fas fa-user-plus"></i> +5.2 this month
                     </p>
                 </div>
                 <div class="card pending-applications">
+                    <div class="card-icon">
+                        <i class="fas fa-file-import"></i>
+                    </div>
                     <h4>
                         Pending Applications
                     </h4>
-                    <h2>
+                    <h2 id="pending-applications-count">
                         64
                     </h2>
                     <p>
-                        +5.2% this month
+                        <i class="fas fa-percentage"></i> +5.2% this month
                     </p>
                 </div>
                 <div class="card verified-users">
+                    <div class="card-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
                     <h4>
                         Verified Users
                     </h4>
-                    <h2>
+                    <h2 id="verified-users-count">
                         892
                     </h2>
                     <p>
-                        +5.2% users
+                        <i class="fas fa-users"></i> +5.2% users
                     </p>
                 </div>
             </div>
 
             <div class="system-notification">
                 <h2>
+                    <i class="fas fa-bell"></i>
                     System Notifications
                 </h2>
-                <div class="system-notification-container">
+                <div class="system-notification-container" id="system-notification-container">
                     <div class="notification urgent-notif">
                         <i class="fas fa-exclamation-triangle"></i>
                         <div class="title-description">
@@ -272,7 +295,65 @@
             </div>
 
             <div class="recent-requests">
-
+                <h2>
+                    Recent Requests
+                </h2>
+                <div class="recent-requests-container">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>User</th>
+                                <th>Document Type</th>
+                                <th>Status</th>
+                                <th>Updated On</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-requests-table-body">
+                            <tr>
+                                <td>REQ-001</td>
+                                <td>Jane Smith</td>
+                                <td>Birth Certificate</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td>2023-10-01</td>
+                                <td>2023-09-28</td>
+                            </tr>
+                            <tr>
+                                <td>REQ-002</td>
+                                <td>John Doe</td>
+                                <td>Marriage Certificate</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>2023-10-02</td>
+                                <td>2023-09-30</td>
+                            </tr>
+                            <tr>
+                                <td>REQ-003</td>
+                                <td>Emily Davis</td>
+                                <td>Death Certificate</td>
+                                <td><span class="status-badge status-rejected">Rejected</span></td>
+                                <td>2023-10-03</td>
+                                <td>2023-09-29</td>
+                            </tr>
+                            <tr>
+                                <td>REQ-004</td>
+                                <td>Michael Brown</td>
+                                <td>Property Deed</td>
+                                <td><span class="status-badge status-approved">Approved</span></td>
+                                <td>2023-10-04</td>
+                                <td>2023-10-01</td>
+                            </tr>
+                            <tr>
+                                <td>REQ-005</td>
+                                <td>Sarah Wilson</td>
+                                <td>Business Permit</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>2023-10-05</td>
+                                <td>2023-10-03</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>

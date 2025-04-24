@@ -1,0 +1,341 @@
+.sidebar {
+    flex: 0 0 280px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 20px 20px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    animation: fadeIn 0.8s ease;
+}
+
+#toggle-icon {
+    display: none;
+}
+
+.sidebar .dashboard-button {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    color: #333;
+    justify-content: center;
+}
+
+.sidebar h3 {
+    margin: 0px;
+    font-size: 1.3em;
+    color: var(--primary-color);
+    font-weight: 700;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 15px 10px;
+    padding-bottom: 5px;
+    margin: 0;
+    border-radius: 15px;
+    background-color: #ececec5c;
+}
+
+.sidebar ul li {
+    margin-bottom: 12px;
+}
+
+.sidebar ul li button {
+    width: 100%;
+    padding: 14px 18px;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    color: var(--text-color);
+}
+
+.sidebar ul li button.active {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+}
+
+.sidebar ul li button:hover:not(.active) {
+    background-color: rgba(67, 97, 238, 0.08);
+    border-left: var(--primary-color) 4px solid;
+    transform: translateX(5px);
+}
+
+.sidebar ul li button .fas {
+    margin-right: 12px;
+    font-size: 1.1em;
+    width: 24px;
+    text-align: center;
+}
+
+@media (min-width: 1200px) {
+    .status-cards .card {
+        flex: 1 1 calc(33.333% - 24px);
+    }
+}
+
+/* Desktop (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .status-cards .card {
+        flex: 1 1 calc(50% - 24px);
+    }
+
+    .status-cards {
+        gap: 20px;
+    }
+}
+
+/* Tablet (768px to 991px) */
+@media (max-width: 991px) {
+
+    /* Header Responsive Styles */
+    header {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .search-container {
+        order: 3;
+        flex: 1 0 100%;
+    }
+
+    /* Main Layout Responsive */
+    main {
+        flex-direction: column;
+        /* Stack vertically on tablet/mobile */
+        padding: 15px;
+        gap: 15px;
+    }
+
+    /* Dashboard body in mobile */
+    .dashboard-body {
+        width: 100%;
+    }
+
+    /* Sidebar Responsive Styles */
+    .sidebar {
+        position: static;
+        width: 100%;
+        flex-basis: 0;
+    }
+
+    .sidebar ul {
+        padding: 0;
+    }
+
+    #sidebar-toggle {
+        display: block;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 0;
+        padding: 10px 15px;
+    }
+
+    #sidebar-menu {
+        display: none;
+        background-color: white;
+        box-shadow: var(--shadow);
+        margin-top: 10px;
+        padding: 20px;
+    }
+
+    #toggle-icon {
+        display: block;
+        position: absolute;
+        text-align: center;
+        font-size: 1.5em;
+        color: var(--primary-color);
+    }
+
+    .dashboard-title {
+        padding: 15px 20px;
+    }
+
+    .dashboard-title h3 {
+        font-size: 1.6em;
+    }
+
+    .status-cards .card {
+        flex: 1 1 calc(50% - 15px);
+        min-width: 180px;
+        padding: 20px;
+    }
+
+    .status-cards {
+        gap: 15px;
+    }
+}
+
+/* Mobile Large (576px to 767px) */
+@media (max-width: 767px) {
+    main {
+        padding: 12px;
+        gap: 15px;
+    }
+
+    .dashboard-title {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-title h3 {
+        font-size: 1.4em;
+    }
+
+    .status-cards {
+        gap: 15px;
+    }
+
+    .status-cards .card {
+        flex: 1 1 100%;
+        min-width: 100%;
+        padding: 20px;
+    }
+
+    .system-notification {
+        padding: 15px;
+    }
+
+    .system-notification h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+
+    .system-notification .notification {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .system-notification .notification i {
+        font-size: 1.3em;
+    }
+
+    .recent-requests {
+        padding: 15px;
+    }
+
+    .recent-requests h2 {
+        font-size: 1.2em;
+    }
+
+    /* Improve header on mobile */
+    header {
+        padding: 12px 15px;
+    }
+
+    header h2 {
+        font-size: 1.3em;
+    }
+
+    .notification-button .fas {
+        font-size: 1.6em;
+    }
+}
+
+/* Mobile Small (below 576px) */
+@media (max-width: 575px) {
+    .sidebar {
+        padding: 15px;
+    }
+
+    main {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .dashboard-title {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+
+    .dashboard-title h3 {
+        font-size: 1.3em;
+    }
+
+    .dashboard-title p {
+        font-size: 0.9em;
+    }
+
+    .status-cards {
+        gap: 12px;
+    }
+
+    .status-cards .card {
+        padding: 15px;
+    }
+
+    .status-cards .card h2 {
+        font-size: 1.7em;
+    }
+
+    .status-cards .card h4 {
+        font-size: 0.95em;
+    }
+
+    .status-cards .card p {
+        font-size: 0.85em;
+    }
+
+    .system-notification {
+        padding: 12px;
+    }
+
+    .system-notification h2 {
+        font-size: 1.1em;
+    }
+
+    .system-notification .notification {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .system-notification .notification .title-description h3 {
+        font-size: 1em;
+    }
+
+    .system-notification .notification .title-description p {
+        font-size: 0.85em;
+    }
+
+    /* User info dropdown adjustments */
+    .user-info .user-details {
+        display: none;
+    }
+
+    .user-dropdown {
+        right: -15px;
+    }
+
+    /* Header */
+    .header-actions {
+        gap: 10px;
+    }
+
+    .notification-badge {
+        top: 10px;
+        right: -5px;
+    }
+}

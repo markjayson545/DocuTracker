@@ -19,6 +19,7 @@
     <script src="js/services/logout.js"></script>
     <script src="js/dashboard/fetch-dashboard-data.js"></script>
     <script src="js/dashboard/dashboard.js"></script>
+    <script src="js/services/sidebar.js"></script>
     <script src="js/dashboard/save-new-request.js"></script>
 </head>
 
@@ -188,6 +189,9 @@
             </div>
             <div class="dashboard-cards">
                 <div class="card active-requests">
+                    <div class="card-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
                     <h3>
                         Total Requests
                     </h3>
@@ -195,10 +199,13 @@
                         <span id="total-request">3</span>
                     </h3>
                     <p class="pending">
-                        <span id="pending-requests">2</span> pending approval
+                        <i class="fas fa-clock"></i> <span id="pending-requests">2</span> pending approval
                     </p>
                 </div>
                 <div class="card completed-requests">
+                    <div class="card-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
                     <h3>
                         Completed Requests
                     </h3>
@@ -206,10 +213,13 @@
                         <span id="completed-requests">1</span>
                     </h3>
                     <p class="approved">
-                        <span id="approved-requests">1</span> approved
+                        <i class="fas fa-thumbs-up"></i> <span id="approved-requests">1</span> approved
                     </p>
                 </div>
                 <div class="card recent-payments">
+                    <div class="card-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
                     <h3>
                         Recent Payments
                     </h3>
@@ -217,7 +227,7 @@
                         Php <span id="recent-payments">1.00</span>
                     </h3>
                     <p class="duration">
-                        Last 30 days
+                        <i class="fas fa-calendar-alt"></i> Last 30 days
                     </p>
                 </div>
             </div>

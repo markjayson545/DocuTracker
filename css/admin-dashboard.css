@@ -13,12 +13,12 @@
     --bg-color: #f5f7fb;
     --input-bg: #ffffff;
     --border-color: #e1e5eb;
-    
+
     /* Status colors */
     --success-color: #4CAF50;
     --warning-color: #ff9800;
     --error-color: #f44336;
-    
+
     /* Effects */
     --shadow-color: rgba(0, 0, 0, 0.05);
     --transition: all 0.3s ease-in-out;
@@ -297,7 +297,8 @@ header h2 {
 /* main */
 main {
     display: flex;
-    flex-direction: row; /* Change to row for desktop view */
+    flex-direction: row;
+    /* Change to row for desktop view */
     min-height: 100vh;
     gap: 25px;
     padding: 20px;
@@ -321,7 +322,8 @@ main {
     border-radius: 20px;
     box-shadow: var(--shadow);
     animation: fadeIn 0.8s ease;
-    margin-bottom: 5px; /* Reduced from 30px */
+    margin-bottom: 5px;
+    /* Reduced from 30px */
 }
 
 .dashboard-title h3 {
@@ -461,8 +463,20 @@ main {
     border-left: 4px solid var(--warning-color);
 }
 
+.system-notification .notification.success-notif {
+    border-left: 4px solid var(--success-color);
+}
+
+.system-notification .notification.info-notif {
+    border-left: 4px solid var(--primary-color);
+}
+
 .system-notification .notification i {
     font-size: 1.5em;
+}
+
+.system-notification .notification.success-notif i {
+    color: var(--success-color);
 }
 
 .system-notification .notification.urgent-notif i {
@@ -472,6 +486,12 @@ main {
 .system-notification .notification.warn-notif i {
     color: var(--warning-color);
 }
+
+.system-notification .notification.info-notif i {
+    color: var(--primary-color);
+}
+
+
 
 .system-notification .notification:hover {
     transform: translateX(5px);
@@ -510,12 +530,195 @@ main {
     gap: 10px;
 }
 
+.recent-requests h2::before {
+    content: "\f0ae";
+    /* Font Awesome clipboard list icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: var(--primary-color);
+    font-size: 1.1em;
+}
+
+/* Table styles */
+.recent-requests-container {
+    overflow-x: auto;
+    /* Enable horizontal scrolling on small screens */
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    background: white;
+    margin-top: 10px;
+    animation: fadeUp 0.6s ease-out;
+}
+
+.requests-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+}
+
+.requests-table thead {
+    background: var(--primary-gradient);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+
+
+.requests-table th {
+    text-align: left;
+    padding: 18px 20px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.requests-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.requests-table tbody tr:nth-child(even) {
+    background-color: rgba(245, 247, 251, 0.5);
+}
+
+.requests-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+}
+
+.status-badge::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-approved {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: var(--success-color);
+}
+
+.status-approved::before {
+    background-color: var(--success-color);
+}
+
+.status-pending {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: var(--warning-color);
+}
+
+.status-pending::before {
+    background-color: var(--warning-color);
+}
+
+.status-rejected {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: var(--error-color);
+}
+
+.status-rejected::before {
+    background-color: var(--error-color);
+}
+
+/* Table row hover effect */
+.requests-table tbody tr {
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.requests-table tbody tr:hover {
+    background-color: var(--primary-light);
+    transform: translateX(5px);
+    box-shadow: -5px 0 0 var(--primary-color);
+}
+
+.requests-table tbody tr:hover .status-badge {
+    transform: scale(1.05);
+}
+
+/* Add subtle animations */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive table adjustments */
+@media (max-width: 767px) {
+
+    .requests-table th,
+    .requests-table td {
+        padding: 12px 15px;
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        font-size: 0.8em;
+    }
+
+    .recent-requests {
+        padding: 15px;
+    }
+
+    .recent-requests h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 575px) {
+
+    .requests-table th,
+    .requests-table td {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+
+    .status-badge {
+        padding: 3px 8px;
+        font-size: 0.75em;
+    }
+
+    .recent-requests {
+        padding: 12px;
+    }
+}
+
 /* Animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -538,7 +741,7 @@ main {
     .status-cards .card {
         flex: 1 1 calc(50% - 24px);
     }
-    
+
     .status-cards {
         gap: 20px;
     }
@@ -546,6 +749,7 @@ main {
 
 /* Tablet (768px to 991px) */
 @media (max-width: 991px) {
+
     /* Header Responsive Styles */
     header {
         flex-wrap: wrap;
@@ -559,11 +763,12 @@ main {
 
     /* Main Layout Responsive */
     main {
-        flex-direction: column; /* Stack vertically on tablet/mobile */
+        flex-direction: column;
+        /* Stack vertically on tablet/mobile */
         padding: 15px;
         gap: 15px;
     }
-    
+
     /* Dashboard body in mobile */
     .dashboard-body {
         width: 100%;
@@ -603,21 +808,21 @@ main {
         font-size: 1.5em;
         color: var(--primary-color);
     }
-    
+
     .dashboard-title {
         padding: 15px 20px;
     }
-    
+
     .dashboard-title h3 {
         font-size: 1.6em;
     }
-    
+
     .status-cards .card {
         flex: 1 1 calc(50% - 15px);
         min-width: 180px;
         padding: 20px;
     }
-    
+
     .status-cards {
         gap: 15px;
     }
@@ -629,61 +834,61 @@ main {
         padding: 12px;
         gap: 15px;
     }
-    
+
     .dashboard-title {
         padding: 15px;
         margin-bottom: 20px;
     }
-    
+
     .dashboard-title h3 {
         font-size: 1.4em;
     }
-    
+
     .status-cards {
         gap: 15px;
     }
-    
+
     .status-cards .card {
         flex: 1 1 100%;
         min-width: 100%;
         padding: 20px;
     }
-    
+
     .system-notification {
         padding: 15px;
     }
-    
+
     .system-notification h2 {
         font-size: 1.2em;
         margin-bottom: 15px;
     }
-    
+
     .system-notification .notification {
         padding: 15px;
         gap: 12px;
     }
-    
+
     .system-notification .notification i {
         font-size: 1.3em;
     }
-    
+
     .recent-requests {
         padding: 15px;
     }
-    
+
     .recent-requests h2 {
         font-size: 1.2em;
     }
-    
+
     /* Improve header on mobile */
     header {
         padding: 12px 15px;
     }
-    
+
     header h2 {
         font-size: 1.3em;
     }
-    
+
     .notification-button .fas {
         font-size: 1.6em;
     }
@@ -694,80 +899,80 @@ main {
     .sidebar {
         padding: 15px;
     }
-    
+
     main {
         padding: 10px;
         gap: 10px;
     }
-    
+
     .dashboard-title {
         padding: 12px;
         margin-bottom: 15px;
     }
-    
+
     .dashboard-title h3 {
         font-size: 1.3em;
     }
-    
+
     .dashboard-title p {
         font-size: 0.9em;
     }
-    
+
     .status-cards {
         gap: 12px;
     }
-    
+
     .status-cards .card {
         padding: 15px;
     }
-    
+
     .status-cards .card h2 {
         font-size: 1.7em;
     }
-    
+
     .status-cards .card h4 {
         font-size: 0.95em;
     }
-    
+
     .status-cards .card p {
         font-size: 0.85em;
     }
-    
+
     .system-notification {
         padding: 12px;
     }
-    
+
     .system-notification h2 {
         font-size: 1.1em;
     }
-    
+
     .system-notification .notification {
         padding: 12px;
         gap: 10px;
     }
-    
+
     .system-notification .notification .title-description h3 {
         font-size: 1em;
     }
-    
+
     .system-notification .notification .title-description p {
         font-size: 0.85em;
     }
-    
+
     /* User info dropdown adjustments */
     .user-info .user-details {
         display: none;
     }
-    
+
     .user-dropdown {
         right: -15px;
     }
-    
+
     /* Header */
     .header-actions {
         gap: 10px;
     }
-    
+
     .notification-badge {
         top: 10px;
         right: -5px;

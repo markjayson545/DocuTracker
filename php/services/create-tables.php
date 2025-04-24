@@ -141,7 +141,9 @@ $notificationSql = "CREATE TABLE IF NOT EXISTS Notification(
 // System Notifications Table
 $systemNotificationSql = "CREATE TABLE IF NOT EXISTS SystemNotification(
             system_notification_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
+            type VARCHAR(50) NOT NULL,
             status VARCHAR(50) DEFAULT 'unread',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";

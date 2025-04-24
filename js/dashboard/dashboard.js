@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const gcashRadio = document.getElementById('gcash');
     const creditCardMethod = document.querySelector('.method.credit-card');
     const gcashMethod = document.querySelector('.method.gcash');
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebarMenu = document.getElementById('sidebar-menu');
     const methodContainer = document.getElementById('method-container');
     const creditCardBtn = document.getElementById('credit-card-payment-method');
     const gcashBtn = document.getElementById('gcash-payment-method');
@@ -102,13 +100,4 @@ document.addEventListener('DOMContentLoaded', function () {
         if (paymentMethodField) paymentMethodField.textContent = methodName;
     }
 
-    if (sidebarToggle && sidebarMenu) {
-        sidebarToggle.addEventListener('click', function () {
-            if (sidebarMenu.style.display === 'block') {
-                sidebarMenu.style.display = 'none';
-            } else {
-                sidebarMenu.style.display = 'block';
-            }
-        });
-    }
 });
