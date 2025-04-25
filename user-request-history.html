@@ -207,14 +207,14 @@
                             <button title="submit" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                         <div class="filter-options">
-                            <select id="filter-status">
+                            <select id="filter-status" title="Filter by Status">
                                 <option value="all">All Status</option>
                                 <option value="pending">Pending</option>
                                 <option value="approved">Approved</option>
                                 <option value="rejected">Rejected</option>
                                 <option value="completed">Completed</option>
                             </select>
-                            <select id="filter-date">
+                            <select id="filter-date" title="Filter by Date">
                                 <option value="all">All Time</option>
                                 <option value="week">Last Week</option>
                                 <option value="month">Last Month</option>
@@ -312,11 +312,15 @@
                     </div>
                     
                     <div class="pagination">
-                        <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                        <button class="pagination-btn" disabled title="Previous Page">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
                         <button class="pagination-btn active">1</button>
                         <button class="pagination-btn">2</button>
                         <button class="pagination-btn">3</button>
-                        <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                        <button class="pagination-btn" title="Next Page">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
