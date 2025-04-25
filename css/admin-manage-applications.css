@@ -198,7 +198,7 @@ main {
 }
 
 .application-stats .card {
-    flex: 1 1 calc(25% - 24px);
+    flex: 1;
     min-width: 200px;
     padding: 25px;
     background-color: white;

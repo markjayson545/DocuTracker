@@ -217,6 +217,10 @@ main {
     opacity: 0.7;
 }
 
+.user-card-info .card.total-users::before {
+    background: var(--primary-color);
+}
+
 .user-card-info .card.active-users::before {
     background: var(--success-color);
 }
@@ -507,6 +511,11 @@ main {
 .role-admin {
     background-color: rgba(156, 39, 176, 0.15);
     color: var(--admin-color);
+}
+
+.role-client {
+    background-color: rgba(58, 12, 163, 0.15);
+    color: var(--secondary-color);
 }
 
 .role-staff {

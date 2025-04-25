@@ -15,6 +15,7 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/sidebar.js"></script>
     <script src="js/services/logout.js"></script>
+    <script src="js/admin-manage-users/fetch-users-data.js"></script>
 </head>
 <body>
     <header>
@@ -145,11 +146,19 @@
             </div>
 
             <div class="user-card-info">
+                <div class="card total-users">
+                    <h3>
+                        Total Users
+                    </h3>
+                    <h2 id="total-users-value">
+                        250
+                    </h2>
+                </div>
                 <div class="card active-users">
                     <h3>
                         Active Users
                     </h3>
-                    <h2>
+                    <h2 id="active-users-value">
                         126
                     </h2>
                 </div>
@@ -157,7 +166,7 @@
                     <h3>
                         Pending Verification
                     </h3>
-                    <h2>
+                    <h2 id="pending-verification-value">
                         18
                     </h2>
                 </div>
@@ -165,7 +174,7 @@
                     <h3>
                         Suspended Users
                     </h3>
-                    <h2>
+                    <h2 id="suspended-users-value">
                         4
                     </h2>
                 </div>
@@ -173,7 +182,7 @@
                     <h3>
                         Verified Users
                     </h3>
-                    <h2>
+                    <h2 id="verified-users-value">
                         98
                     </h2>
                 </div>
@@ -215,7 +224,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="user-table-body">
                                 <tr>
                                     <td>USR7890</td>
                                     <td>John Doe</td>
