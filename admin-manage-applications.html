@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,9 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/sidebar.js"></script>
     <script src="js/services/logout.js"></script>
+    <script src="js/admin-application-request/fetch-application-request.js"></script>
 </head>
+
 <body>
     <header>
         <a href="index.html">
@@ -105,32 +108,32 @@
             </button>
             <ul id="sidebar-menu">
                 <li>
-                    <button class="dashboard-home">
-                        <i class="fas fa-home"></i> Dashboard Home
+                    <button class="admin-dashboard-home" id="admin-dashboard-home">
+                        <i class="fas fa-home"></i> Admin Dashboard
                     </button>
                 </li>
                 <li>
-                    <button class="active">
-                        <i class="fas fa-envelope"></i> User Applications
+                    <button class="active admin-manage-applications-sidebar-btn" id="admin-manage-applications-sidebar-btn">
+                        <i class="fas fa-envelope"></i> Manage Applications
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-manage-requests-sidebar-btn" id="admin-manage-requests-sidebar-btn">
                         <i class="fas fa-credit-card"></i> Manage Requests
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-manage-users-sidebar-btn" id="admin-manage-users-sidebar-btn">
                         <i class="fas fa-user-circle"></i> Manage Users
                     </button>
                 </li>
                 <li>
-                    <button>
-                        <i class="fas fa-user"></i> Profile
+                    <button class="admin-profile-sidebar-btn" id="admin-profile-sidebar-btn">
+                        <i class="fas fa-user"></i> Admin Profile
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-settings-sidebar-btn" id="admin-settings-sidebar-btn">
                         <i class="fas fa-cogs"></i> Settings
                     </button>
                 </li>
@@ -145,19 +148,35 @@
             </div>
 
             <div class="application-stats">
+                <div class="card total-applications">
+                    <h3>
+                        Total Applications
+                    </h3>
+                    <h2 id="total-applications-value">
+                        8
+                    </h2>
+                </div>
                 <div class="card pending-applications">
                     <h3>
                         Pending Applications
                     </h3>
-                    <h2>
+                    <h2 id="pending-applications-value">
                         24
+                    </h2>
+                </div>
+                <div class="card under-review-applications">
+                    <h3>
+                        Under Review Applications
+                    </h3>
+                    <h2 id="under-review-applications-value">
+                        45
                     </h2>
                 </div>
                 <div class="card approved-applications">
                     <h3>
                         Approved Applications
                     </h3>
-                    <h2>
+                    <h2 id="approved-applications-value">
                         156
                     </h2>
                 </div>
@@ -165,18 +184,11 @@
                     <h3>
                         Rejected Applications
                     </h3>
-                    <h2>
+                    <h2 id="rejected-applications-value">
                         12
                     </h2>
                 </div>
-                <div class="card recent-applications">
-                    <h3>
-                        Applications Today
-                    </h3>
-                    <h2>
-                        8
-                    </h2>
-                </div>
+                
             </div>
 
             <div class="applications-container-wrapper">
@@ -187,7 +199,8 @@
                 </div>
                 <div class="applications-container">
                     <div class="application-search">
-                        <input type="search" placeholder="Search applications by name, email, ID..." aria-label="Search">
+                        <input type="search" placeholder="Search applications by name, email, ID..."
+                            aria-label="Search">
                         <button title="submit" type="submit"><i class="fas fa-search"></i></button>
                     </div>
                     <div class="filter-options">
@@ -219,7 +232,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="application-table-body">
                                 <tr>
                                     <td>APP-7652</td>
                                     <td>Maria Rodriguez</td>
@@ -306,7 +319,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </section>
     </main>
 
@@ -344,4 +357,5 @@
         </div>
     </footer>
 </body>
+
 </html>

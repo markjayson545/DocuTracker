@@ -15,6 +15,7 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/sidebar.js"></script>
     <script src="js/services/logout.js"></script>
+    <script src="js/user-request-history/fetch-request-history.js"></script>
 </head>
 <body>
     <header>
@@ -28,12 +29,13 @@
             <button title="submit" type="submit"><i class="fas fa-search"></i></button>
         </div>
         <div class="header-actions">
-            <div class="notification">
+            
+            <!-- <div class="notification">
                 <button class="notification-button">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </button>
-                <!-- <div class="notification-dropdown" id="notification-dropdown">
+                <div class="notification-dropdown" id="notification-dropdown">
                     <div class="notification-header">
                         <h3>Notifications</h3>
                         <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
@@ -52,7 +54,16 @@
                             <span class="notification-time">3 days ago</span>
                         </div>
                     </div>
-                </div> -->
+                </div>
+            </div> -->
+
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
             </div>
 
             <div class="user-info" id="user-info">
@@ -124,7 +135,8 @@
             <button class="dashboard-button" id="sidebar-toggle">
                 <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
                 <h3>
-                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                    <i class="fa-solid fa-table-columns"></i> 
+                    Dashboard
                 </h3>
                 <!-- <button class="dashboard-button">
                     <i class="fas fa-arrow-down"></i>
@@ -132,22 +144,22 @@
             </button>
             <ul id="sidebar-menu">
                 <li>
-                    <button class="dashboard-home">
+                    <button class="user-dashboard-home-sidebar-btn" id="user-dashboard-home-sidebar-btn">
                         <i class="fas fa-home"></i> Dashboard Home
                     </button>
                 </li>
                 <li>
-                    <button class="active request-history">
+                    <button class="active request-history-sidebar-btn" id="request-history-sidebar-btn">
                         <i class="fas fa-envelope"></i> Request History
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="profile-sidebar-btn" id="profile-sidebar-btn">
                         <i class="fas fa-user"></i> Profile
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="settings-sidebar-btn" id="settings-sidebar-btn">
                         <i class="fas fa-cogs"></i> Settings
                     </button>
                 </li>
@@ -162,11 +174,20 @@
             </div>
 
             <div class="request-stats">
+
+                <div class="stat-card total-requests">
+                    <h3>
+                        Total Requests
+                    </h3>
+                    <h2 id="total-requests-count">
+                        11
+                    </h2>
+                </div>
                 <div class="stat-card pending">
                     <h3>
                         Pending
                     </h3>
-                    <h2>
+                    <h2 id="pending-requests-count">
                         2
                     </h2>
                 </div>
@@ -174,7 +195,7 @@
                     <h3>
                         Approved
                     </h3>
-                    <h2>
+                    <h2 id="approved-requests-count">
                         8
                     </h2>
                 </div>
@@ -182,16 +203,8 @@
                     <h3>
                         Rejected
                     </h3>
-                    <h2>
+                    <h2 id="rejected-requests-count">
                         1
-                    </h2>
-                </div>
-                <div class="stat-card completed">
-                    <h3>
-                        Completed
-                    </h3>
-                    <h2>
-                        5
                     </h2>
                 </div>
             </div>
@@ -236,7 +249,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="request-history-body">
                                 <tr>
                                     <td>REQ12345</td>
                                     <td>Birth Certificate</td>

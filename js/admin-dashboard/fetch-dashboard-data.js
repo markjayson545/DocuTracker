@@ -112,8 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     totalPendingApplicationCount.innerText = data.data.totalPendingApplications;
                     totalVerifiedUserCount.innerText = data.data.totalVerifiedUsers;
 
-
-
                     if (data.data.systemNotifications) {
                         systemNotificationContainer.innerHTML = '';
                         data.data.systemNotifications.forEach(notification => {
@@ -129,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             addRequestToTable(request.request_id, request.first_name, request.last_name, request.document_type_name, request.status, request.updated_at, request.created_at);
                         });
                     }
-
                 } else {
                     alert('You are not authorized to view this page.');
                     setTimeout(function () {

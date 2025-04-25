@@ -196,7 +196,7 @@ main {
 }
 
 .user-card-info .card {
-    flex: 1 1 calc(33.333% - 24px);
+    flex: 1;
     min-width: 200px;
     padding: 25px;
     background-color: white;

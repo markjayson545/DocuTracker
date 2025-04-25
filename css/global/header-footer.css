@@ -71,6 +71,41 @@ header h2 {
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
 }
 
+.notification-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.notification-button .fas {
+    font-size: 2em;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 20px;
+    background: var(--warning-color);
+    color: white;
+    padding: 1px 5px;
+    border-radius: 100%;
+    font-size: 0.8em;
+}
+
+.notification-button:hover .notification-badge {
+    background: var(--accent-color);
+    transition: var(--transition);
+}
+
+/* Notification Dropdown */
+
+.notification .notification-dropdown {
+    display: none;
+    position: absolute;
+}
+
 a {
     text-decoration: none;
 }

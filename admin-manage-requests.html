@@ -16,6 +16,7 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/sidebar.js"></script>
     <script src="js/services/logout.js"></script>
+    <script src="js/admin-manage-request/fetch-document-request.js"></script>
 </head>
 
 <body>
@@ -136,32 +137,32 @@
             </button>
             <ul id="sidebar-menu">
                 <li>
-                    <button class="dashboard-home">
-                        <i class="fas fa-home"></i> Dashboard Home
+                    <button class="admin-dashboard-home" id="admin-dashboard-home">
+                        <i class="fas fa-home"></i> Admin Dashboard
                     </button>
                 </li>
                 <li>
-                    <button>
-                        <i class="fas fa-envelope"></i> User Applications
+                    <button class="admin-manage-applications-sidebar-btn" id="admin-manage-applications-sidebar-btn">
+                        <i class="fas fa-envelope"></i> Manage Applications
                     </button>
                 </li>
                 <li>
-                    <button class="active">
+                    <button class="active admin-manage-requests-sidebar-btn" id="admin-manage-requests-sidebar-btn">
                         <i class="fas fa-credit-card"></i> Manage Requests
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-manage-users-sidebar-btn" id="admin-manage-users-sidebar-btn">
                         <i class="fas fa-user-circle"></i> Manage Users
                     </button>
                 </li>
                 <li>
-                    <button>
-                        <i class="fas fa-user"></i> Profile
+                    <button class="admin-profile-sidebar-btn" id="admin-profile-sidebar-btn">
+                        <i class="fas fa-user"></i> Admin Profile
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-settings-sidebar-btn" id="admin-settings-sidebar-btn">
                         <i class="fas fa-cogs"></i> Settings
                     </button>
                 </li>
@@ -177,11 +178,19 @@
             </div>
 
             <div class="user-card-info">
+                <div class="card total-requests">
+                    <h3>
+                        Total Requests
+                    </h3>
+                    <h2 id="total-requests-value">
+                        20
+                    </h2>
+                </div>
                 <div class="card pending-requests">
                     <h3>
                         Pending Requests
                     </h3>
-                    <h2>
+                    <h2 id="pending-requests-value">
                         5
                     </h2>
                 </div>
@@ -189,7 +198,7 @@
                     <h3>
                         Approved Requests
                     </h3>
-                    <h2>
+                    <h2 id="approved-requests-value">
                         10
                     </h2>
                 </div>
@@ -197,7 +206,7 @@
                     <h3>
                         Rejected Requests
                     </h3>
-                    <h2>
+                    <h2 id="rejected-requests-value">
                         2
                     </h2>
                 </div>
@@ -228,7 +237,7 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="request-table-body">
                                 <tr>
                                     <td>REQ12345</td>
                                     <td>John Doe</td>

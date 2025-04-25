@@ -179,6 +179,10 @@ main {
     opacity: 0.7;
 }
 
+.user-card-info .card.total-requests::before {
+    background: var(--primary-color);
+}
+
 .user-card-info .card.pending-requests::before {
     background: var(--warning-color);
 }

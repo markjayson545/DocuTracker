@@ -78,7 +78,7 @@ try {
 
         if ($applicationId) {
             // Update existing application
-            $stmt = $conn->prepare("UPDATE Application SET document_type = ?, document_path = ?, status = 'Under Review', updated_at = NOW() WHERE id = ?");
+            $stmt = $conn->prepare("UPDATE Application SET document_type = ?, document_path = ?, status = 'under-review', updated_at = NOW() WHERE id = ?");
             $stmt->bind_param("ssi", $documentType, $fileDestination, $applicationId);
         } else {
             // Insert new application

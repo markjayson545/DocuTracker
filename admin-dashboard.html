@@ -84,11 +84,17 @@
                     </div>
                     <hr>
                     <ul class="dropdown-menu">
+                        <li id="admin-dashboard-btn">
+                            <a href="admin-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Admin Dashboard
+                            </a>
                         <li id="user-dashboard-btn">
                             <a href="user-dashboard.html">
                                 <i class="fas fa-tachometer-alt"></i>
                                 Dashboard
                             </a>
+                        </li>
                         </li>
                         <li id="identity-verification-btn">
                             <a href="identity-verification.html">
@@ -133,32 +139,32 @@
             </button>
             <ul id="sidebar-menu">
                 <li>
-                    <button class="active dashboard-home">
-                        <i class="fas fa-home"></i> Dashboard Home
+                    <button class="active admin-dashboard-home" id="admin-dashboard-home">
+                        <i class="fas fa-home"></i> Admin Dashboard
                     </button>
                 </li>
                 <li>
-                    <button>
-                        <i class="fas fa-envelope"></i> User Applications
+                    <button class="admin-manage-applications-sidebar-btn" id="admin-manage-applications-sidebar-btn">
+                        <i class="fas fa-envelope"></i> Manage Applications
                     </button>
                 </li>
                 <li>
-                    <button>
-                        <i class="fas fa-credit-card"></i> Document Requests
+                    <button class="admin-manage-requests-sidebar-btn" id="admin-manage-requests-sidebar-btn">
+                        <i class="fas fa-credit-card"></i> Manage Requests
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-manage-users-sidebar-btn" id="admin-manage-users-sidebar-btn">
                         <i class="fas fa-user-circle"></i> Manage Users
                     </button>
                 </li>
                 <li>
-                    <button>
-                        <i class="fas fa-user"></i> Profile
+                    <button class="admin-profile-sidebar-btn" id="admin-profile-sidebar-btn">
+                        <i class="fas fa-user"></i> Admin Profile
                     </button>
                 </li>
                 <li>
-                    <button>
+                    <button class="admin-settings-sidebar-btn" id="admin-settings-sidebar-btn">
                         <i class="fas fa-cogs"></i> Settings
                     </button>
                 </li>

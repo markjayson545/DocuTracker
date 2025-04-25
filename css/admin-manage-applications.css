@@ -219,6 +219,14 @@ main {
     opacity: 0.7;
 }
 
+.application-stats .card.total-applications::before {
+    background: var(--primary-gradient);
+}
+
+.application-stats .card.under-review-applications::before {
+    background: var(--secondary-color);
+}
+
 .application-stats .card.pending-applications::before {
     background: var(--warning-color);
 }
@@ -480,6 +488,15 @@ main {
 
 .status-pending::before {
     background-color: var(--warning-color);
+}
+
+.status-under-review {
+    background-color: rgba(33, 150, 243, 0.15);
+    color: var(--info-color);
+}
+
+.status-under-review::before {
+    background-color: var(--info-color);
 }
 
 .status-rejected {

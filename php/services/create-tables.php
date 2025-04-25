@@ -28,6 +28,7 @@ $userSql = "CREATE TABLE IF NOT EXISTS User(
             email VARCHAR(50) NOT NULL UNIQUE,
             role VARCHAR(255) DEFAULT 'client',
             is_verified BOOLEAN DEFAULT FALSE,
+            status VARCHAR(50) DEFAULT 'pending',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             password VARCHAR(255) NOT NULL
