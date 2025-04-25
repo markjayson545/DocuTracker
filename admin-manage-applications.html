@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Applications | DocuTrack</title>
+    <link rel="stylesheet" href="css/global/header-footer.css">
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
+    <link rel="stylesheet" href="css/global/sidebar.css">
+    <link rel="stylesheet" href="css/admin-manage-applications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <script src="js/services/logout.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search applications, users..." aria-label="Search">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-actions">
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">example@email.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="dropdown-menu">
+                        <li id="user-dashboard-btn">
+                            <a href="user-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="dashboard-home">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button class="active">
+                        <i class="fas fa-envelope"></i> User Applications
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-credit-card"></i> Manage Requests
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user-circle"></i> Manage Users
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <section class="main-content">
+            <div class="page-header">
+                <h1>
+                    <i class="fas fa-id-card"></i> Application Verification
+                </h1>
+                <p class="subtitle">Verify user identity documents and approve account applications</p>
+            </div>
+
+            <div class="application-stats">
+                <div class="card pending-applications">
+                    <h3>
+                        Pending Applications
+                    </h3>
+                    <h2>
+                        24
+                    </h2>
+                </div>
+                <div class="card approved-applications">
+                    <h3>
+                        Approved Applications
+                    </h3>
+                    <h2>
+                        156
+                    </h2>
+                </div>
+                <div class="card rejected-applications">
+                    <h3>
+                        Rejected Applications
+                    </h3>
+                    <h2>
+                        12
+                    </h2>
+                </div>
+                <div class="card recent-applications">
+                    <h3>
+                        Applications Today
+                    </h3>
+                    <h2>
+                        8
+                    </h2>
+                </div>
+            </div>
+
+            <div class="applications-container-wrapper">
+                <div class="header-title">
+                    <h2>
+                        Pending Verifications
+                    </h2>
+                </div>
+                <div class="applications-container">
+                    <div class="application-search">
+                        <input type="search" placeholder="Search applications by name, email, ID..." aria-label="Search">
+                        <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="filter-options">
+                        <label for="filter-type">Filter by document type:</label>
+                        <select id="filter-type" name="filter-type">
+                            <option value="all">All Documents</option>
+                            <option value="id-card">ID Card</option>
+                            <option value="passport">Passport</option>
+                            <option value="drivers-license">Driver's License</option>
+                            <option value="birth-certificate">Birth Certificate</option>
+                        </select>
+                        <label for="filter-date">Date submitted:</label>
+                        <select id="filter-date" name="filter-date">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    <div class="application-table-container">
+                        <table class="application-table">
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>Name</th>
+                                    <th>Document Type</th>
+                                    <th>Date Submitted</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>APP-7652</td>
+                                    <td>Maria Rodriguez</td>
+                                    <td>ID Card</td>
+                                    <td>2023-10-15</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td class="actions-cell">
+                                        <button class="verify-btn">Verify</button>
+                                        <button class="reject-btn">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APP-7653</td>
+                                    <td>James Wilson</td>
+                                    <td>Passport</td>
+                                    <td>2023-10-16</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td class="actions-cell">
+                                        <button class="verify-btn">Verify</button>
+                                        <button class="reject-btn">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APP-7654</td>
+                                    <td>Samuel Lee</td>
+                                    <td>Driver's License</td>
+                                    <td>2023-10-16</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td class="actions-cell">
+                                        <button class="verify-btn">Verify</button>
+                                        <button class="reject-btn">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APP-7655</td>
+                                    <td>Sophia Martinez</td>
+                                    <td>Birth Certificate</td>
+                                    <td>2023-10-17</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td class="actions-cell">
+                                        <button class="verify-btn">Verify</button>
+                                        <button class="reject-btn">Reject</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>APP-7656</td>
+                                    <td>Daniel Taylor</td>
+                                    <td>ID Card</td>
+                                    <td>2023-10-17</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td class="actions-cell">
+                                        <button class="verify-btn">Verify</button>
+                                        <button class="reject-btn">Reject</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="verification-details-container">
+                <div class="header-title">
+                    <h2>
+                        Document Viewer
+                    </h2>
+                    <p>Click "Verify" on any application to view document details here</p>
+                </div>
+                <div class="document-viewer">
+                    <div class="document-placeholder">
+                        <i class="fas fa-id-card"></i>
+                        <p>No document selected. Click "Verify" to view a document.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </section>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

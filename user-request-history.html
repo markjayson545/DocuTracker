@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request History | DocuTracker</title>
+    <link rel="stylesheet" href="css/global/header-footer.css">
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
+    <link rel="stylesheet" href="css/user-request-history.css">
+    <link rel="stylesheet" href="css/global/sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <script src="js/services/logout.js"></script>
+</head>
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTracker
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search your requests..." aria-label="Search">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-actions">
+            <div class="notification">
+                <button class="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <!-- <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item">
+                            <p>Your request for a birth certificate has been approved.</p>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your payment for the marriage certificate is successful.</p>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your request for a death certificate is pending.</p>
+                            <span class="notification-time">3 days ago</span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">example@email.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="dropdown-menu">
+                        <li id="user-dashboard-btn">
+                            <a href="user-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="user-request-history.html">
+                                <i class="fas fa-history"></i>
+                                Request History
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+                <!-- <button class="dashboard-button">
+                    <i class="fas fa-arrow-down"></i>
+                </button> -->
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="dashboard-home">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button class="active request-history">
+                        <i class="fas fa-envelope"></i> Request History
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <section class="main-content">
+            <div class="page-header">
+                <h1>
+                    <i class="fas fa-history"></i> Request History
+                </h1>
+                <p class="subtitle">View and track all your document requests</p>
+            </div>
+
+            <div class="request-stats">
+                <div class="stat-card pending">
+                    <h3>
+                        Pending
+                    </h3>
+                    <h2>
+                        2
+                    </h2>
+                </div>
+                <div class="stat-card approved">
+                    <h3>
+                        Approved
+                    </h3>
+                    <h2>
+                        8
+                    </h2>
+                </div>
+                <div class="stat-card rejected">
+                    <h3>
+                        Rejected
+                    </h3>
+                    <h2>
+                        1
+                    </h2>
+                </div>
+                <div class="stat-card completed">
+                    <h3>
+                        Completed
+                    </h3>
+                    <h2>
+                        5
+                    </h2>
+                </div>
+            </div>
+
+            <div class="history-container">
+                <div class="header-title">
+                    <h2>Request Records</h2>
+                </div>
+                <div class="history-content">
+                    <div class="filter-container">
+                        <div class="search-box">
+                            <input type="search" placeholder="Search requests..." aria-label="Search">
+                            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div class="filter-options">
+                            <select id="filter-status">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                            <select id="filter-date">
+                                <option value="all">All Time</option>
+                                <option value="week">Last Week</option>
+                                <option value="month">Last Month</option>
+                                <option value="year">Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="requests-table-container">
+                        <table class="requests-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Document Type</th>
+                                    <th>Date Requested</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                    <th>Last Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>REQ12345</td>
+                                    <td>Birth Certificate</td>
+                                    <td>2023-09-15</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>$20.00 <span class="payment-status paid">Paid</span></td>
+                                    <td>2023-09-20</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="view-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                            <button class="download-btn" title="Download Receipt" disabled><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12346</td>
+                                    <td>Marriage Certificate</td>
+                                    <td>2023-08-28</td>
+                                    <td><span class="status-badge status-approved">Approved</span></td>
+                                    <td>$30.00 <span class="payment-status paid">Paid</span></td>
+                                    <td>2023-09-10</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="view-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                            <button class="download-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12347</td>
+                                    <td>Business Permit</td>
+                                    <td>2023-09-01</td>
+                                    <td><span class="status-badge status-rejected">Rejected</span></td>
+                                    <td>$50.00 <span class="payment-status refunded">Refunded</span></td>
+                                    <td>2023-09-05</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="view-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                            <button class="download-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12348</td>
+                                    <td>Land Title</td>
+                                    <td>2023-08-20</td>
+                                    <td><span class="status-badge status-completed">Completed</span></td>
+                                    <td>$100.00 <span class="payment-status paid">Paid</span></td>
+                                    <td>2023-09-15</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="view-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                            <button class="download-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12349</td>
+                                    <td>Death Certificate</td>
+                                    <td>2023-09-10</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>$25.00 <span class="payment-status pending">Pending</span></td>
+                                    <td>2023-09-10</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="view-btn" title="View Details"><i class="fas fa-eye"></i></button>
+                                            <button class="download-btn" title="Download Receipt" disabled><i class="fas fa-download"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination">
+                        <button class="pagination-btn" disabled><i class="fas fa-chevron-left"></i></button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

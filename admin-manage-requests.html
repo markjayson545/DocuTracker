@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/global/header-footer.css">
+    <link rel="stylesheet" href="css/global/user-dropdown.css">
+    <link rel="stylesheet" href="css/global/sidebar.css">
+    <link rel="stylesheet" href="css/admin-manage-requests.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <script src="js/services/logout.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-actions">
+            <!-- <div class="notification">
+                <button class="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item">
+                            <p>Your request for a birth certificate has been approved.</p>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your payment for the marriage certificate is successful.</p>
+                            <span class="notification-time">1 day ago</span>
+                        </div>
+                        <div class="notification-item">
+                            <p>Your request for a death certificate is pending.</p>
+                            <span class="notification-time">3 days ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">example@email.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="dropdown-menu">
+                        <li id="user-dashboard-btn">
+                            <a href="user-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="dashboard-home">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-envelope"></i> User Applications
+                    </button>
+                </li>
+                <li>
+                    <button class="active">
+                        <i class="fas fa-credit-card"></i> Manage Requests
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user-circle"></i> Manage Users
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button>
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <section class="main-content">
+
+            <div class="page-header">
+                <h1>
+                    <i class="fas fa-tasks"></i> Admin Request Management
+                </h1>
+                <p class="subtitle">Review and process user document requests</p>
+            </div>
+
+            <div class="user-card-info">
+                <div class="card pending-requests">
+                    <h3>
+                        Pending Requests
+                    </h3>
+                    <h2>
+                        5
+                    </h2>
+                </div>
+                <div class="card approved-requests">
+                    <h3>
+                        Approved Requests
+                    </h3>
+                    <h2>
+                        10
+                    </h2>
+                </div>
+                <div class="card rejected-requests">
+                    <h3>
+                        Rejected Requests
+                    </h3>
+                    <h2>
+                        2
+                    </h2>
+                </div>
+            </div>
+
+            <div class="requests-container-wrapper">
+                <div class="header-title">
+                    <h2>
+                        Manage Requests
+                    </h2>
+                </div>
+                <div class="requests-container">
+                    <div class="request-search">
+                        <input type="search" placeholder="Search requests..." aria-label="Search">
+                        <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="request-table-container">
+                        <table class="request-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>User Name</th>
+                                    <th>Document Type</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                    <th>Updated On</th>
+                                    <th>Date Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>REQ12345</td>
+                                    <td>John Doe</td>
+                                    <td>Birth Certificate</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>$20.00</td>
+                                    <td>2023-10-01</td>
+                                    <td>2023-09-25</td>
+                                    <td>
+                                        <button class="view-btn">View</button>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12346</td>
+                                    <td>Jane Smith</td>
+                                    <td>Marriage Certificate</td>
+                                    <td><span class="status-badge status-approved">Approved</span></td>
+                                    <td>$30.00</td>
+                                    <td>2023-10-02</td>
+                                    <td>2023-09-26</td>
+                                    <td>
+                                        <button class="view-btn">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12347</td>
+                                    <td>Michael Johnson</td>
+                                    <td>Death Certificate</td>
+                                    <td><span class="status-badge status-rejected">Rejected</span></td>
+                                    <td>$25.00</td>
+                                    <td>2023-10-03</td>
+                                    <td>2023-09-27</td>
+                                    <td>
+                                        <button class="view-btn">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12348</td>
+                                    <td>Sarah Williams</td>
+                                    <td>Business Permit</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                    <td>$50.00</td>
+                                    <td>2023-10-04</td>
+                                    <td>2023-09-28</td>
+                                    <td>
+                                        <button class="view-btn">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>REQ12349</td>
+                                    <td>Robert Brown</td>
+                                    <td>Land Title</td>
+                                    <td><span class="status-badge status-approved">Approved</span></td>
+                                    <td>$100.00</td>
+                                    <td>2023-10-05</td>
+                                    <td>2023-09-29</td>
+                                    <td>
+                                        <button class="view-btn">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

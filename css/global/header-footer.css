@@ -29,6 +29,7 @@
 header {
     display: flex;
     width: 100%;
+
     justify-content: space-between;
     align-items: center;
     padding: 15px 5%;
@@ -45,6 +46,50 @@ header h2 {
     font-size: 1.8em;
     transition: var(--transition);
     cursor: pointer;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    flex: 0 1 500px;
+    position: relative;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 12px 45px 12px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    background-color: var(--input-bg);
+    font-size: 0.95em;
+    transition: var(--transition);
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+.search-container button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
 }
 
 header h2:hover {
@@ -134,7 +179,7 @@ a {
     transition: var(--transition);
 }
 
-.signup-button button{
+.signup-button button {
     font-size: 1em;
     color: white;
     background-color: transparent;
@@ -196,7 +241,8 @@ footer a:hover {
     color: var(--accent-color);
 }
 
-.contacts .email i, .contacts .telephone i {
+.contacts .email i,
+.contacts .telephone i {
     margin-right: 3px;
 }
 
@@ -238,6 +284,7 @@ footer a:hover {
     .title h1 {
         font-size: 2.8em;
     }
+
     header h2 {
         font-size: 1.4em;
     }
@@ -245,38 +292,49 @@ footer a:hover {
     header ul li {
         padding: 12px;
     }
-    
+
     header ul li a {
         font-size: 0.8em;
     }
+
     .title p {
         font-size: 1em;
     }
+
     .get-started a {
         font-size: 1em;
     }
+
     section h2 {
         font-size: 2.2em;
     }
+
     .reasons div {
         padding: 30px 20px;
     }
+
     .reasons div h3 {
         font-size: 1.2em;
     }
+
     .reasons div p {
         font-size: 0.9em;
     }
+
     footer h3 {
         font-size: 1em;
     }
+
     footer p {
         font-size: 0.8em;
     }
+
     footer a {
         font-size: 0.8em;
     }
-    .contacts .email i, .contacts .telephone i {
+
+    .contacts .email i,
+    .contacts .telephone i {
         font-size: 0.9em;
     }
 }
@@ -292,64 +350,69 @@ footer a:hover {
         font-size: 1.3em;
     }
 
-    .login-button, .signup-button {
+    .login-button,
+    .signup-button {
         font-size: 0.8em;
     }
-    
+
     header ul {
         display: none;
         margin-bottom: 15px;
         flex-wrap: wrap;
         justify-content: center;
     }
-    
+
     main {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .title {
         padding-right: 0;
         margin: 20px 0;
     }
-    
+
     .title h1 {
         font-size: 2em;
     }
+
     .title p {
         font-size: 0.9em;
     }
-    
+
     section {
         padding: 50px 20px;
     }
-    
+
     .reasons {
         flex-direction: column;
     }
-    
+
     .reasons div {
         margin-bottom: 20px;
     }
-    
+
     footer {
         flex-direction: column;
     }
-    
-    .about-us, .quick-links, .contacts {
+
+    .about-us,
+    .quick-links,
+    .contacts {
         margin-bottom: 30px;
         text-align: center;
     }
-    
+
     footer h3::after {
         left: 50%;
         transform: translateX(-50%);
     }
-    
-    .contacts .email, .contacts .telephone {
+
+    .contacts .email,
+    .contacts .telephone {
         justify-content: center;
     }
-    
+
     .social-media-icons {
         justify-content: center;
     }
