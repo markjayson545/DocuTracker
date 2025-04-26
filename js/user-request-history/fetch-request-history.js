@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const documentFileSizeValue = document.getElementById("modal-document-file-size");
         const documentFileStatusIconValue = document.getElementById("modal-document-status-icon");
 
-        const documentFilePathValue = document.getElementById("modal-document-file-path");
+        // const documentFilePathValue = document.getElementById("modal-document-file-path");
 
 
         const data = new FormData();
@@ -94,28 +94,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
 
                     // TODO: Implement the logic to display the file name, and download link button
-                    // if (requestDetails.document_path) {
-                    //     const fileName = requestDetails.document_path.split('/').pop();
-                    //     documentFileNameValue.innerText = fileName;
-                    //     documentFilePathValue.href = requestDetails.document_path;
-                    //     documentFilePathValue.download = fileName;
-                    //     documentFileStatusIconValue.classList.add('fa-check');
-                    //     documentFileStatusIconValue.classList.remove('fa-times');
-                    // } else {
-                    //     documentFileNameValue.innerText = 'No file available';
-                    //     documentFileSizeValue.innerText = 'null';
-                    //     documentFilePathValue.href = '#';
-                    //     documentFilePathValue.download = '';
-                    //     documentFileStatusIconValue.classList.add('fa-times');
-                    //     documentFileStatusIconValue.classList.remove('fa-check');
-                    // }
+                    const fileName = requestDetails.document_type + ' - REQ' + requestDetails.request_id + '.pdf'; // Temporary file name
+                    if (requestDetails.document_path) {
+                        documentFileNameValue.innerText = fileName;
+                        documentFilePathValue.href = requestDetails.document_path;
+                    } else {
+                        documentFileNameValue.innerText = 'No file available';
+                        // documentFilePathValue.href = '#';
+                    }
 
                     // TODO: Implement the request timeline
 
                     requestDetailsModal.style.display = "block";
                 }
-            }
-            );
+            });
     }
 
     function createEventListenerForDetailsButton(btnId, reqId) {
