@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const page =
-        fetch('php/check-session.php')
+        fetch('php/services/check-session.php')
             .then(response => response.json())
             .then(data => {
                 console.log(data);

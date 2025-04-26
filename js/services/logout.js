@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add event listener to logout button
     logoutButton.addEventListener('click', function () {
         // Send a request to the server to log out the user
-        fetch('php/logout.php')
+        fetch('php/auth/logout.php')
             .then(response => response.json())
             .then(data => {
                 console.log(data);

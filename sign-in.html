@@ -4,27 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="css/sign-up.css">
+    <title>DocuTracker: Login</title>
+    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/global/header-footer.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
-    <script src="js/auth/sign-up/sign-up.js"></script>
-    <script>
-        function scrollToElement() {
-            const element = document.getElementById("sign-up-form");
-            if (element) {
-                const elementRect = element.getBoundingClientRect();
-                const elementHeight = elementRect.height;
-                const windowHeight = window.innerHeight;
-                const offset = elementRect.top + window.pageYOffset - (windowHeight - elementHeight) / 2;
-                window.scrollTo({ top: offset, behavior: 'smooth' });
-            }
-        }
-    </script>
+    <script src="js/auth/sign-in/sign-in.js"></script>
 </head>
 
 <body>
@@ -50,54 +36,50 @@
         </ul>
         <div class="login-or-create">
             <div class="login-button">
-                <button onclick="window.location.href='sign-in.html'">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login
+                <button onclick=scrollToElement()>
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </div>
             <div class="signup-button">
-                <button onclick=scrollToElement()>
-                    <i class="fas fa-user-plus"></i>
-                    Sign Up
+                <button onclick="window.location.href='sign-up.html'">
+                    <i class="fas fa-user-plus"></i> Sign Up
                 </button>
             </div>
         </div>
+
+        <script>
+            function scrollToElement() {
+                const element = document.getElementById("login-form");
+                if (element) {
+                    const elementRect = element.getBoundingClientRect();
+                    const elementHeight = elementRect.height;
+                    const offset = 100;
+                    const bodyRect = document.body.getBoundingClientRect().top;
+                    const elementPosition = elementRect.top - bodyRect;
+                    const offsetPosition = elementPosition - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        </script>
     </header>
 
     <main>
         <div class="main-container">
             <div class="welcome-container">
-                <h2>Welcome to DocuTrack</h2>
-                <p>Join our community today and start requesting your official documents securely</p>
-                <lottie-player src="assets/sign-up/sign-up-animation.json" background="transparent" speed="2" loop
-                    autoplay></lottie-player>
+                <h2>Welcome Back!</h2>
+                <p>Sign in to your account to access your documents and requests</p>
+                <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_mjlh3hcy.json"
+                    background="transparent" speed="1" loop autoplay></lottie-player>
             </div>
 
-
-
-            <div class="form-container" id="sign-up-form">
-                <form id="signup-form">
-                    <h2 class="title">Create Account</h2>
-                    <p class="subtitle">Join our community today</p>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <div class="input-group">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="username" name="username" required>
-                        </div>
-                        <p class="error-fields" id="username-error"></p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">
-                            Phone Number
-                        </label>
-                        <div class="input-group">
-                            <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <p class="error-fields" id="phone-error"></p>
-                    </div>
+            <div class="form-container">
+                <form id="login-form">
+                    <h2 class="title">Sign In</h2>
+                    <p class="subtitle">Access your DocuTrack account</p>
 
                     <div class="form-group">
                         <label for="email">Email</label>
@@ -105,42 +87,50 @@
                             <i class="fas fa-envelope"></i>
                             <input type="email" id="email" name="email" required>
                         </div>
-                        <p class="error-fields" id="email-error"></p>
                     </div>
-
+                    <script>
+                        function showPassword() {
+                            var x = document.getElementById("password");
+                            if (x.type === "password") {
+                                x.type = "text";
+                            } else {
+                                x.type = "password";
+                            }
+                        }
+                    </script>
                     <div class="form-group">
                         <label for="password">Password</label>
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" required>
                             <button type="button" class="toggle-password" aria-label="Toggle password visibility"
-                                id="toggle-password1">
-                                <i class="fas fa-eye-slash" id="toggle-password-icon1"></i>
+                                onclick=showPassword()>
+                                <i class="fas fa-eye"></i>
                             </button>
                         </div>
-                        <p class="error-fields" id="password-error"></p>
                     </div>
 
-                    <div class="form-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="confirm-password" name="confirm-password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"
-                                id="toggle-password2">
-                                <i class="fas fa-eye-slash" id="toggle-password-icon2"></i>
-                            </button>
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember-me" name="remember-me">
+                            <label for="remember-me">Remember Me</label>
                         </div>
-                        <p class="error-fields" id="confirm-password-error"></p>
+                        <div class="forgot-password">
+                            <a href="forgot-password.html">Forgot Password?</a>
+                        </div>
                     </div>
-                    <div class="login-link">
-                        Already have an account? <a href="sign-in.html">Log in</a>
+
+                    <div class="signup-link">
+                        Don't have an account? <a href="sign-up.html">Sign Up</a>
                     </div>
+
                     <div id="message" style="margin: 10px 0; padding: 10px; border-radius: 5px; display: none;"></div>
+
                     <button type="submit" class="submit-btn">
-                        <span>Sign Up</span>
+                        <span>Sign In</span>
                         <i class="fas fa-arrow-right"></i>
                     </button>
+
                     <div id="system-message">
                         <i class="fas fa-regular fa-circle-exclamation" id="system-message-icon"></i>
                         <div id="system-message-content-container">
@@ -148,6 +138,7 @@
                             <p id="system-message-content">Content</p>
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -186,6 +177,7 @@
             </div>
         </div>
     </footer>
+
 </body>
 
 </html>

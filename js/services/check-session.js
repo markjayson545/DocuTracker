@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // TODO: Add a admin mode and client mode session check implementation
 
   window.getUserInfo = function () {
-    fetch("php/check-session.php")
+    fetch("php/services/check-session.php")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  fetch("php/check-session.php")
+  fetch("php/services/check-session.php")
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const logoutButton = document.getElementById("logout-button");
         if (logoutButton) {
           logoutButton.addEventListener("click", function () {
-            window.location.href = "php/logout.php";
+            window.location.href = "php/auth/logout.php";
           });
         }
       } else {
