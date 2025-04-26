@@ -6,6 +6,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const requestTableBody = document.getElementById("request-history-body");
 
+    const requestDetailsModal = document.getElementById("document-request-modal");
+    const closeRequestDetailsModal = document.getElementById("close-request-modal");
+
+    closeRequestDetailsModal.addEventListener("click", function () {
+        requestDetailsModal.style.display = "none";
+    });
+
+
     function parseDate(date) {
         const now = new Date();
         const updateDateTime = new Date(date);
@@ -32,6 +40,93 @@ document.addEventListener("DOMContentLoaded", function () {
         return formattedUpdateDate;
     }
 
+    function insertModalContent(reqId, docType, dRequested, lastUpdated, status, paymentMode, pAmount, pStatus, documentPath) {
+
+    }
+
+    function showDetailsModal(reqId) {
+        const requestIdValue = document.getElementById("modal-request-id");
+        const documentTypeValue = document.getElementById("modal-document-type");
+
+        const dateRequestedValue = document.getElementById("modal-date-requested");
+        const lastUpdatedValue = document.getElementById("modal-last-updated");
+
+        const modeOfPaymentValue = document.getElementById("modal-payment-mode-of-payment");
+        const paymentAmountValue = document.getElementById("modal-payment-amount");
+        const paymentStatusValue = document.getElementById("modal-payment-status");
+
+        // TODO: parse the document path and display the file name
+        const documentFileNameValue = document.getElementById("modal-document-file-name");
+        const documentFileSizeValue = document.getElementById("modal-document-file-size");
+        const documentFileStatusIconValue = document.getElementById("modal-document-status-icon");
+
+        const documentFilePathValue = document.getElementById("modal-document-file-path");
+
+
+        const data = new FormData();
+        data.append('request_id', reqId);
+        fetch('php/client/user-request-history/fetch-document-request-details.php',
+            {
+                method: 'POST',
+                body: data
+            }
+        )
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    const requestDetails = data.data.request_details[0];
+                    console.log(requestDetails);
+                    requestIdValue.innerText = ('REQ-' + requestDetails.request_id);
+                    documentTypeValue.innerText = requestDetails.document_type;
+                    dateRequestedValue.innerText = requestDetails.created_at;
+                    lastUpdatedValue.innerText = parseDate(requestDetails.updated_at);
+                    modeOfPaymentValue.innerText = requestDetails.mode_of_payment;
+                    paymentAmountValue.innerText = requestDetails.amount;
+
+                    paymentStatusValue.classList.remove('paid');
+                    if (requestDetails.payment_status === 'pending') {
+                        paymentStatusValue.classList.add('pending');
+                        paymentStatusValue.innerText = 'Pending';
+                    } else if (requestDetails.payment_status === 'paid') {
+                        paymentStatusValue.classList.add('paid');
+                        paymentStatusValue.innerText = 'Paid';
+                    }
+
+                    // TODO: Implement the logic to display the file name, and download link button
+                    // if (requestDetails.document_path) {
+                    //     const fileName = requestDetails.document_path.split('/').pop();
+                    //     documentFileNameValue.innerText = fileName;
+                    //     documentFilePathValue.href = requestDetails.document_path;
+                    //     documentFilePathValue.download = fileName;
+                    //     documentFileStatusIconValue.classList.add('fa-check');
+                    //     documentFileStatusIconValue.classList.remove('fa-times');
+                    // } else {
+                    //     documentFileNameValue.innerText = 'No file available';
+                    //     documentFileSizeValue.innerText = 'null';
+                    //     documentFilePathValue.href = '#';
+                    //     documentFilePathValue.download = '';
+                    //     documentFileStatusIconValue.classList.add('fa-times');
+                    //     documentFileStatusIconValue.classList.remove('fa-check');
+                    // }
+
+                    // TODO: Implement the request timeline
+
+                    requestDetailsModal.style.display = "block";
+                }
+            }
+            );
+    }
+
+    function createEventListenerForDetailsButton(btnId, reqId) {
+        const detailsBtn = document.getElementById(btnId);
+        detailsBtn.addEventListener('click', function () {
+            console.log("Details button clicked for btnId:", btnId);
+            console.log("Request ID:", reqId);
+            showDetailsModal(reqId);
+        });
+    }
+
     function addRequestRow(reqId, docType, dRequested, status, payment, pStatus, lastUpdated) {
         let rowTemplate =
             `                       <tr>
@@ -43,17 +138,18 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <td>${parseDate(lastUpdated)}</td>
                                     <td>
                                         <div class="action-buttons">
-                                            <button class="view-btn" title="View Details"><i class="fas fa-eye"></i></button>
-                                            <button class="download-btn" title="Download Receipt" disabled><i class="fas fa-download"></i></button>
+                                            <button class="view-btn" title="View Details" id="view-${reqId}"><i class="fas fa-eye"></i></button>
+                                            <button class="download-btn" title="Download File" disabled><i class="fas fa-download"></i></button>
                                         </div>
                                     </td>
                                 </tr>
         `;
-        requestTableBody.innerHTML += rowTemplate;
+        requestTableBody.insertAdjacentHTML('beforeend', rowTemplate);
+        createEventListenerForDetailsButton('view-' + reqId, reqId);
     }
 
     function fetchRequestHistory() {
-        fetch('php/fetch-user-request-history.php')
+        fetch('php/client/user-request-history/fetch-user-request-history.php')
             .then(response => response.json())
             .then(data => {
                 console.log(data);

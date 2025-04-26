@@ -1,7 +1,7 @@
 <?php
 
-require 'services/open-db.php';
-include 'services/logger.php';
+require __DIR__ . '/../../services/open-db.php';
+include __DIR__ . '/../../services/logger.php';
 
 session_start();
 $userId = $_SESSION['user_id'];
