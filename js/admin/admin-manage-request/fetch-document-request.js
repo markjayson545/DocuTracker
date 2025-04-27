@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <td>${fName} ${lName}</td>
                                     <td>${docType}</td>
                                     <td><span class="status-badge status-${status}">${status}</span></td>
-                                    <td>Php${payment}</td>
+                                    <td>₱${payment}</td>
                                     <td>${parseDate(updateOn)}</td>
                                     <td>${parseDate(dateSubmitted)}</td>
                                     <td>

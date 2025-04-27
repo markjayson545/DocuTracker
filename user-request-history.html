@@ -367,7 +367,7 @@
                         <div class="request-status-badge">
                             <span class="status-badge status-pending">Pending</span>
                         </div>
-                        
+
                         <div class="request-details">
                             <div class="detail-group">
                                 <h3><i class="fas fa-hashtag"></i> Request Information</h3>
@@ -376,27 +376,31 @@
                                     <span id="modal-request-id" class="detail-value">REQ12345</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label"><i class="fas fa-file-signature"></i> Document Type:</span>
+                                    <span class="detail-label"><i class="fas fa-file-signature"></i> Document
+                                        Type:</span>
                                     <span id="modal-document-type" class="detail-value">Birth Certificate</span>
                                 </div>
                             </div>
-                            
+
                             <div class="detail-group">
                                 <h3><i class="fas fa-calendar-alt"></i> Dates</h3>
                                 <div class="detail-item">
-                                    <span class="detail-label"><i class="fas fa-calendar-plus"></i> Date Requested:</span>
+                                    <span class="detail-label"><i class="fas fa-calendar-plus"></i> Date
+                                        Requested:</span>
                                     <span id="modal-date-requested" class="detail-value">2023-09-15</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label"><i class="fas fa-calendar-check"></i> Last Updated:</span>
+                                    <span class="detail-label"><i class="fas fa-calendar-check"></i> Last
+                                        Updated:</span>
                                     <span id="modal-last-updated" class="detail-value">2023-09-20</span>
                                 </div>
                             </div>
-                            
+
                             <div class="detail-group">
                                 <h3><i class="fas fa-credit-card"></i> Payment Details</h3>
                                 <div class="detail-item">
-                                    <span class="detail-label"><i class="fas fa-credit-card"></i> Mode of Payment:</span>
+                                    <span class="detail-label"><i class="fas fa-credit-card"></i> Mode of
+                                        Payment:</span>
                                     <span id="modal-payment-mode-of-payment" class="detail-value">PAY12345</span>
                                 </div>
                                 <div class="detail-item">
@@ -413,7 +417,7 @@
 
                         </div>
                     </div>
-                    
+
                     <div class="document-preview">
                         <h3><i class="fas fa-eye"></i> Document Preview</h3>
                         <div class="document-preview-container">
@@ -425,55 +429,58 @@
                                 <span id="modal-document-file-size" class="document-size">1.2 MB</span>
                             </div>
                             <div class="document-status">
-                                <span class="document-status-badge" id="modal-document-status">
-                                    <i class="fas fa-clock" id="modal-document-status-icon"></i> Processing
+                                <span class="document-status-badge status-pending" id="modal-document-status-container">
+                                    <i class="fas fa-clock" id="modal-document-status-icon"></i>
+                                    <span id="modal-document-status-text">
+                                        Processing
+                                    </span>
                                 </span>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="tracking-timeline">
                         <h3><i class="fas fa-history"></i> Request Timeline</h3>
                         <div class="timeline">
-                            <div class="timeline-item complete">
+                            <div class="timeline-item" id="timeline-container-request-submitted">
                                 <div class="timeline-icon">
                                     <i class="fas fa-paper-plane"></i>
                                 </div>
                                 <div class="timeline-content">
                                     <h4>Request Submitted</h4>
-                                    <p>2023-09-15 10:30 AM</p>
+                                    <p id="timeline-request-submitted">2023-09-15 10:30 AM</p>
                                 </div>
                             </div>
-                            <div class="timeline-item complete">
+                            <div class="timeline-item" id="timeline-container-payment-received">
                                 <div class="timeline-icon">
                                     <i class="fas fa-credit-card"></i>
                                 </div>
                                 <div class="timeline-content">
                                     <h4>Payment Received</h4>
-                                    <p>2023-09-15 10:45 AM</p>
+                                    <p id="timeline-payment-received">2023-09-15 10:45 AM</p>
                                 </div>
                             </div>
-                            <div class="timeline-item active">
+                            <div class="timeline-item active" id="timeline-container-processing">
                                 <div class="timeline-icon">
                                     <i class="fas fa-cog fa-spin"></i>
                                 </div>
                                 <div class="timeline-content">
                                     <h4>Processing</h4>
-                                    <p>Started on 2023-09-16</p>
+                                    <p id="timeline-processing-date">Started on 2023-09-16</p>
                                 </div>
                             </div>
-                            <div class="timeline-item">
+                            <div class="timeline-item" id="timeline-container-ready-to-download">
                                 <div class="timeline-icon">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div class="timeline-content">
                                     <h4>Ready for Download</h4>
-                                    <p>Pending</p>
+                                    <p id="timeline-ready-to-download">Pending</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="modal-actions">
                         <button class="download-receipt-btn" id="download-receipt-btn">
                             <i class="fas fa-download"></i>

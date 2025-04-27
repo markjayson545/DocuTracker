@@ -37,7 +37,7 @@ try {
                         JOIN ClientProfile client_profile ON request.user_id = client_profile.user_id
                         JOIN DocumentTypes document_type ON request.document_type_id = document_type.document_type_id
                         JOIN Payment payment ON request.request_id = payment.request_id
-                        ORDER BY request.updated_at";
+                        ORDER BY request.updated_at DESC";
 
     // Fetch total requests
     $stmt = mysqli_prepare($conn, $sqlTotalRequest);

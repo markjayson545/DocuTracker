@@ -27,7 +27,7 @@ try {
         mysqli_stmt_fetch($stmtDocType);
         mysqli_stmt_close($stmtDocType);
 
-        // Check Pending Requests and refuse if ther are any
+        // Check Pending Requests and refuse if there are any
         $sqlCheckPending = "SELECT COUNT(*) FROM Request WHERE user_id = ? AND document_type_id = ? AND status = 'pending'";
         $stmtCheckPending = mysqli_prepare($conn, $sqlCheckPending);
         mysqli_stmt_bind_param($stmtCheckPending, "ss", $userId, $doc_type);
@@ -63,7 +63,9 @@ try {
             // Insert to payments table
             $sqlPaymentInsert = "INSERT INTO Payment (user_id, request_id, mode_of_payment, amount, status) VALUES (?, ?, ?, ?, ?)";
             $stmtPayment = mysqli_prepare($conn, $sqlPaymentInsert);
-            mysqli_stmt_bind_param($stmtPayment, "sssss", $userId, $request_id, $mode_of_payment, $amount, $status);
+            $paymentStatus = 'paid';
+            // Assuming payment is successful, set status to 'paid'
+            mysqli_stmt_bind_param($stmtPayment, "sssss", $userId, $request_id, $mode_of_payment, $amount, $paymentStatus);
             mysqli_stmt_execute($stmtPayment);
             mysqli_stmt_close($stmtPayment);
             writeLog("Payment request created successfully for user_id: $userId, request_id: $request_id", "create-new-doc-request.log");
@@ -87,6 +89,34 @@ try {
         mysqli_stmt_execute($stmtLog);
         mysqli_stmt_close($stmtLog);
         writeLog("Audit log created for user_id: $userId, action: $action", "create-new-doc-request.log");
+
+        // Log the successful request creation
+        // Insert into RequestLog table
+        // Implementing the request log creation for real life scenarios
+        // For example, when the request is created, payment is received, and processing starts
+        $sqlReqLogInsertCreation = "INSERT INTO RequestLog (request_id, status) VALUES (?, ?)";
+        $stmtReqLogInsertCreation = mysqli_prepare($conn, $sqlReqLogInsertCreation);
+        $status = "created";
+        mysqli_stmt_bind_param($stmtReqLogInsertCreation, "ss", $request_id, $status);
+        mysqli_stmt_execute($stmtReqLogInsertCreation);
+        mysqli_stmt_close($stmtReqLogInsertCreation);
+        writeLog("Request log created for request_id: $request_id, status: $status", "create-new-doc-request.log");
+
+        $sqlReqLogInsertPaymentReceived = "INSERT INTO RequestLog (request_id, status) VALUES (?, ?)";
+        $stmtReqLogInsertPaymentReceived = mysqli_prepare($conn, $sqlReqLogInsertPaymentReceived);
+        $status = "payment_received";
+        mysqli_stmt_bind_param($stmtReqLogInsertPaymentReceived, "ss", $request_id, $status);
+        mysqli_stmt_execute($stmtReqLogInsertPaymentReceived);
+        mysqli_stmt_close($stmtReqLogInsertPaymentReceived);
+        writeLog("Request log created for request_id: $request_id, status: $status", "create-new-doc-request.log");
+
+        $sqlReqLogInsertProcessing = "INSERT INTO RequestLog (request_id, status) VALUES (?, ?)";
+        $stmtReqLogInsertProcessing = mysqli_prepare($conn, $sqlReqLogInsertProcessing);
+        $status = "processing";
+        mysqli_stmt_bind_param($stmtReqLogInsertProcessing, "ss", $request_id, $status);
+        mysqli_stmt_execute($stmtReqLogInsertProcessing);
+        mysqli_stmt_close($stmtReqLogInsertProcessing);
+        writeLog("Request log created for request_id: $request_id, status: $status", "create-new-doc-request.log");
 
         echo json_encode(
             [

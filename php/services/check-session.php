@@ -79,6 +79,7 @@ try {
         ]
     );
     exit;
-} finally {
+} finally {    
+    writeLog("Session token checked successfully", "check-session.log");
     mysqli_close($conn);
 }

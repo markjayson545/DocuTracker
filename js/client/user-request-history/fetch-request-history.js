@@ -40,28 +40,41 @@ document.addEventListener("DOMContentLoaded", function () {
         return formattedUpdateDate;
     }
 
-    function insertModalContent(reqId, docType, dRequested, lastUpdated, status, paymentMode, pAmount, pStatus, documentPath) {
-
-    }
-
     function showDetailsModal(reqId) {
+
+        // Request Information
         const requestIdValue = document.getElementById("modal-request-id");
         const documentTypeValue = document.getElementById("modal-document-type");
 
+        // Dates
         const dateRequestedValue = document.getElementById("modal-date-requested");
         const lastUpdatedValue = document.getElementById("modal-last-updated");
 
+        // Payment Details
         const modeOfPaymentValue = document.getElementById("modal-payment-mode-of-payment");
         const paymentAmountValue = document.getElementById("modal-payment-amount");
         const paymentStatusValue = document.getElementById("modal-payment-status");
 
         // TODO: parse the document path and display the file name
+        // Document Preview
         const documentFileNameValue = document.getElementById("modal-document-file-name");
         const documentFileSizeValue = document.getElementById("modal-document-file-size");
-        const documentFileStatusIconValue = document.getElementById("modal-document-status-icon");
 
+        const documentFileStatusContainer = document.getElementById("modal-document-status-container");
+        const documentFileStatusIconValue = document.getElementById("modal-document-status-icon");
+        const documentFileStatusTextValue = document.getElementById("modal-document-status-text");
         // const documentFilePathValue = document.getElementById("modal-document-file-path");
 
+        // Request Timeline
+        const requestTimelineContainerReqSubmitted = document.getElementById("timeline-container-request-submitted");
+        const requestTimelineContainerPaymentReceived = document.getElementById("timeline-container-payment-received");
+        const requestTimelineContainerProcessingStarted = document.getElementById("timeline-container-processing");
+        const requestTimelineContainerReadyToDownload = document.getElementById("timeline-container-ready-to-download");
+
+        const requestSubmittedValue = document.getElementById("timeline-request-submitted");
+        const paymentReceived = document.getElementById("timeline-payment-received");
+        const processingStarted = document.getElementById("timeline-processing-date");
+        const readyToDownload = document.getElementById("timeline-ready-to-download");
 
         const data = new FormData();
         data.append('request_id', reqId);
@@ -82,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     dateRequestedValue.innerText = requestDetails.created_at;
                     lastUpdatedValue.innerText = parseDate(requestDetails.updated_at);
                     modeOfPaymentValue.innerText = requestDetails.mode_of_payment;
-                    paymentAmountValue.innerText = requestDetails.amount;
+                    paymentAmountValue.innerText = '₱' + requestDetails.amount;
 
                     paymentStatusValue.classList.remove('paid');
                     if (requestDetails.payment_status === 'pending') {
@@ -97,13 +110,50 @@ document.addEventListener("DOMContentLoaded", function () {
                     const fileName = requestDetails.document_type + ' - REQ' + requestDetails.request_id + '.pdf'; // Temporary file name
                     if (requestDetails.document_path) {
                         documentFileNameValue.innerText = fileName;
-                        documentFilePathValue.href = requestDetails.document_path;
+                        documentFileStatusIconValue.classList.remove('fa-clock');
+                        documentFileStatusIconValue.classList.add('fa-check');
+                        documentFileStatusTextValue.innerText = 'File Available';
+                        documentFileStatusContainer.classList.remove('status-pending');
+                        documentFileStatusContainer.classList.add('status-approved');
+                    } else if (requestDetails.status === 'pending') {
+                        documentFileNameValue.innerText = 'No file available';
+                        documentFileSizeValue.innerText = '--.--.MB'; // Temporary file size
+                        documentFileStatusTextValue.innerText = 'File Not Available';
+                        // documentFilePathValue.href = '#';
                     } else {
                         documentFileNameValue.innerText = 'No file available';
-                        // documentFilePathValue.href = '#';
+                        documentFileStatusIconValue.classList.remove('fa-clock');
+                        documentFileStatusIconValue.classList.add('fa-times');
+                        documentFileStatusTextValue.innerText = 'File Not Available';
+                        documentFileStatusContainer.classList.remove('status-pending');
+                        documentFileStatusContainer.classList.add('status-rejected');
                     }
 
                     // TODO: Implement the request timeline
+                    // Incomplete Implementation
+                    const requestHistory = data.data.request_history;
+                    if (requestHistory[0]){
+                        // Created
+                        requestTimelineContainerReqSubmitted.classList.add('active');
+                    } 
+                    if (requestHistory[1]){
+                        // Payment Received
+                        requestTimelineContainerReqSubmitted.classList.remove('active');
+                        requestTimelineContainerReqSubmitted.classList.add('complete');
+                        requestTimelineContainerPaymentReceived.classList.add('active');
+                    }
+                    if (requestHistory[2]){
+                        // Processing Started
+                        requestTimelineContainerPaymentReceived.classList.remove('active');
+                        requestTimelineContainerPaymentReceived.classList.add('complete');
+                        requestTimelineContainerProcessingStarted.classList.add('active');
+                    }
+                    if (requestHistory[3]){
+                        // Ready to Download
+                        requestTimelineContainerProcessingStarted.classList.remove('active');
+                        requestTimelineContainerProcessingStarted.classList.add('complete');
+                        requestTimelineContainerReadyToDownload.classList.add('complete');
+                    }
 
                     requestDetailsModal.style.display = "block";
                 }
@@ -126,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <td>${docType}</td>
                                     <td>${parseDate(dRequested)}</td>
                                     <td><span class="status-badge status-pending">${status}</span></td>
-                                    <td>Php${payment} <span class="payment-status paid">${pStatus}</span></td>
+                                    <td>₱${payment} <span class="payment-status paid">${pStatus}</span></td>
                                     <td>${parseDate(lastUpdated)}</td>
                                     <td>
                                         <div class="action-buttons">

@@ -871,8 +871,6 @@ body {
 }
 
 .document-status-badge {
-    background-color: rgba(255, 152, 0, 0.15);
-    color: var(--warning-color);
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -881,6 +879,23 @@ body {
     align-items: center;
     gap: 6px;
 }
+
+.document-status-badge.status-pending {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: var(--warning-color);
+}
+
+.document-status-badge.status-approved {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: var(--success-color);
+}
+
+.document-status-badge.status-rejected {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: var(--error-color);
+}
+
+
 
 /* Timeline Styling */
 .tracking-timeline {

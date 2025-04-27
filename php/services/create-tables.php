@@ -169,6 +169,15 @@ $documentTypesSql = "CREATE TABLE IF NOT EXISTS DocumentTypes(
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )";
 
+// Request Log Table
+$requestLogSql = "CREATE TABLE IF NOT EXISTS RequestLog(
+            log_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            request_id INT(6) UNSIGNED NOT NULL,
+            FOREIGN KEY (request_id) REFERENCES Request(request_id),
+            status VARCHAR(50) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )";
+
 try {
     createTable($conn, $userSql);
     createTable($conn, $applicationSql);
@@ -182,6 +191,7 @@ try {
     createTable($conn, $notificationSql);
     createTable($conn, $systemNotificationSql);
     createTable($conn, $sessionTokensSql);
+    createTable($conn, $requestLogSql);
 
     writeLog("Tables created successfully", "create-tables.log");
     echo json_encode(
