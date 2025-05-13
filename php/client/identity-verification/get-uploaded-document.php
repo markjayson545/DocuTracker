@@ -23,6 +23,17 @@ try {
     if ($result->num_rows > 0) {
         $application = $result->fetch_assoc();
         
+        // Get documents from the application
+        $docsStmt = $conn->prepare("SELECT * FROM ApplicationDocuments WHERE application_id = ? ORDER BY created_at DESC");
+        $docsStmt->bind_param("i", $application['application_id']);
+        $docsStmt->execute();
+        $docsResult = $docsStmt->get_result();
+        $documents = [];
+        
+        while($doc = $docsResult->fetch_assoc()) {
+            $documents[] = $doc;
+        }
+        
         // Just check if personal details exist without fetching all the data
         $profileStmt = $conn->prepare("SELECT 1 FROM ClientProfile WHERE user_id = ? LIMIT 1");
         $profileStmt->bind_param("i", $userId);
@@ -35,12 +46,13 @@ try {
             'has_application' => true,
             'application' => [
                 'id' => $application['application_id'] ?? null,
-                'document_type' => $application['document_type'] ?? null,
-                'document_path' => $application['document_path'] ?? null,
                 'status' => $application['status'] ?? 'Under Review',
                 'submission_date' => $application['created_at'] ?? date('F j, Y'),
                 'last_updated' => $application['updated_at'] ?? date('F j, Y'),
+                'admin_notes' => $application['admin_notes'] ?? '',
+                'additional_documents_required' => $application['additional_documents_required'] ?? false
             ],
+            'documents' => $documents,
             'has_personal_details' => $hasPersonalDetails
         ]);
     } else {
@@ -53,6 +65,9 @@ try {
     // Close connections
     if (isset($profileStmt)) {
         $profileStmt->close();
+    }
+    if (isset($docsStmt)) {
+        $docsStmt->close();
     }
     $stmt->close();
     $conn->close();

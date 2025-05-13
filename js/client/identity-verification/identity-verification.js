@@ -184,6 +184,26 @@ document.addEventListener('DOMContentLoaded', async function () {
     verifyIdentityStep.style.cursor = 'pointer';
     processingStep.style.cursor = 'pointer';
 
+    // Add status notification container to the DOM if it doesn't exist
+    if (!document.getElementById('status-notification')) {
+        const notificationContainer = document.createElement('div');
+        notificationContainer.id = 'status-notification';
+        notificationContainer.className = 'status-notification hidden';
+        document.body.appendChild(notificationContainer);
+    }
+
+    // Show notification function
+    window.showNotification = function(message, type = 'info') {
+        const notification = document.getElementById('status-notification');
+        notification.textContent = message;
+        notification.className = `status-notification ${type}`;
+        notification.classList.remove('hidden');
+
+        setTimeout(() => {
+            notification.classList.add('hidden');
+        }, 5000);
+    };
+
     // Modified: Check if the user already has an application - returns a Promise
     window.checkExistingApplication = function () {
         return new Promise((resolve, reject) => {
@@ -197,12 +217,89 @@ document.addEventListener('DOMContentLoaded', async function () {
                             document.getElementById('application-date').textContent = data.application.submission_date || 'N/A';
                             document.getElementById('application-status').textContent = data.application.status || 'Under Review';
 
+                            // Check for admin notes and additional documents required
+                            if (data.application.additional_documents_required) {
+                                const adminNotesContainer = document.querySelector('.admin-notes');
+                                if (!adminNotesContainer) {
+                                    // Create admin notes container if it doesn't exist
+                                    const adminSection = document.createElement('div');
+                                    adminSection.className = 'admin-notes admin-feedback-section';
+                                    adminSection.innerHTML = `
+                                        <h3><i class="fas fa-exclamation-circle"></i> Additional Documents Required</h3>
+                                        <p>${data.application.admin_notes || 'Please upload the requested additional documents.'}</p>
+                                        <button id="upload-additional-docs-btn" class="btn btn-primary">
+                                            <i class="fas fa-upload"></i> Upload Additional Documents
+                                        </button>
+                                    `;
+                                    
+                                    // Insert after the application details
+                                    const appDetailsContainer = document.querySelector('.application-details');
+                                    if (appDetailsContainer) {
+                                        appDetailsContainer.parentNode.insertBefore(adminSection, appDetailsContainer.nextSibling);
+                                        
+                                        // Add event listener to button
+                                        document.getElementById('upload-additional-docs-btn').addEventListener('click', function() {
+                                            window.showVerificationForm();
+                                        });
+                                    }
+                                }
+
+                                // Show a notification about additional documents
+                                window.showNotification('Additional documents have been requested by the administrator.', 'warning');
+                            }
+
                             // Update process step indicators based on status
                             updateProcessStepIndicators(data.application.status);
 
-                            // Show document preview if available
-                            if (data.application.document_path) {
-                                window.showExistingDocument(data.application.document_type, data.application.document_path);
+                            // Show document previews if available
+                            if (data.documents && data.documents.length > 0) {
+                                // Create a documents section in the processing status page
+                                const documentsSection = document.querySelector('.documents-section') || document.createElement('div');
+                                documentsSection.className = 'documents-section';
+                                documentsSection.innerHTML = '<h3>Uploaded Documents</h3>';
+                                
+                                const docsList = document.createElement('div');
+                                docsList.className = 'documents-list';
+                                
+                                data.documents.forEach(doc => {
+                                    const docItem = document.createElement('div');
+                                    docItem.className = 'document-item';
+                                    
+                                    const fileExt = doc.document_path.split('.').pop().toLowerCase();
+                                    let previewHtml = '';
+                                    
+                                    if (['jpg', 'jpeg', 'png'].includes(fileExt)) {
+                                        previewHtml = `<img src="php/client/identity-verification/view-document.php?path=${encodeURIComponent(doc.document_path)}" alt="${doc.document_type}">`;
+                                    } else if (fileExt === 'pdf') {
+                                        previewHtml = `<i class="fas fa-file-pdf"></i>`;
+                                    }
+                                    
+                                    docItem.innerHTML = `
+                                        <div class="document-preview">
+                                            ${previewHtml}
+                                        </div>
+                                        <div class="document-info">
+                                            <h4>${doc.document_type}</h4>
+                                            <p>Uploaded: ${new Date(doc.created_at).toLocaleDateString()}</p>
+                                            <a href="php/client/identity-verification/view-document.php?path=${encodeURIComponent(doc.document_path)}" target="_blank" class="view-document-btn">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </div>
+                                    `;
+                                    
+                                    docsList.appendChild(docItem);
+                                });
+                                
+                                documentsSection.appendChild(docsList);
+                                
+                                // Add to processing status if not already there
+                                const processingStatus = document.querySelector('.processing-status');
+                                if (processingStatus && !processingStatus.querySelector('.documents-section')) {
+                                    processingStatus.appendChild(documentsSection);
+                                }
+
+                                // Also update document preview in the upload form
+                                window.showExistingDocument(data.documents[0].document_type, data.documents[0].document_path);
                             }
                         }
 
@@ -212,12 +309,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                         }
 
                         // Determine which section to show based on application state
-                        if (data.application && data.application.document_path) {
-                            // If document is uploaded and application exists, show processing step
+                        if (data.application && (data.documents && data.documents.length > 0)) {
+                            // If document is uploaded and application exists
                             window.applicationState.personalInfoCompleted = true;
                             window.applicationState.documentUploaded = true;
-                            window.applicationState.processingStarted = true;
-                            resolve({ step: 3 });
+                            
+                            if (data.application.additional_documents_required) {
+                                // If additional docs are requested, we should show the upload form
+                                window.applicationState.processingStarted = true;
+                                resolve({ step: 2 }); // Show document upload form
+                            } else {
+                                // Otherwise show processing step
+                                window.applicationState.processingStarted = true;
+                                resolve({ step: 3 }); // Show processing status
+                            }
                         } else if (data.has_personal_details) {
                             // If user has entered personal details but not uploaded document
                             window.applicationState.personalInfoCompleted = true;
@@ -328,11 +433,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Always mark submitted as done
         submittedIcon.classList.add('active');
 
-        if (status === 'Under Review') {
+        // Update based on application status
+        if (status === 'additional-info-requested') {
             reviewIcon.classList.add('active');
-        } else if (status === 'Approved' || status === 'Verified') {
+            // Add a warning indicator class
+            reviewIcon.classList.add('warning');
+        } else if (status === 'under-review') {
+            reviewIcon.classList.add('active');
+        } else if (status === 'approved' || status === 'verified') {
             reviewIcon.classList.add('active');
             verifiedIcon.classList.add('active');
+        } else if (status === 'rejected') {
+            reviewIcon.classList.add('active');
+            reviewIcon.classList.add('error');
         }
     }
 

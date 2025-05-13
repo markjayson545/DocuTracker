@@ -39,14 +39,21 @@ $applicationSql = "CREATE TABLE IF NOT EXISTS Application(
             application_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
-            document_type VARCHAR(50) NOT NULL,
-            document_path TEXT,
             status VARCHAR(50) DEFAULT 'pending',
             admin_notes TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )";
 
+$applicationDocumentsSql = "CREATE TABLE IF NOT EXISTS ApplicationDocuments(
+            document_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            application_id INT(6) UNSIGNED NOT NULL,
+            FOREIGN KEY (application_id) REFERENCES Application(application_id),
+            document_type VARCHAR(50) NOT NULL,
+            document_path TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )";
 
 // Client Profile Table
 $clientProfileSql = "CREATE TABLE IF NOT EXISTS ClientProfile(
@@ -86,6 +93,7 @@ $userDetailsSql = "CREATE TABLE IF NOT EXISTS UserDetails(
             complexion VARCHAR(20) NOT NULL,
             blood_type VARCHAR(10) NOT NULL,
             religion VARCHAR(20) NOT NULL,
+            nationality VARCHAR(30) NOT NULL,
             educational_attainment VARCHAR(50) NOT NULL,
             occupation VARCHAR(50) NOT NULL,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -181,6 +189,7 @@ $requestLogSql = "CREATE TABLE IF NOT EXISTS RequestLog(
 try {
     createTable($conn, $userSql);
     createTable($conn, $applicationSql);
+    createTable($conn, $applicationDocumentsSql);
     createTable($conn, $clientProfileSql);
     createTable($conn, $contactAddressSql);
     createTable($conn, $userDetailsSql);

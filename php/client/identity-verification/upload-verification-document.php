@@ -10,6 +10,7 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $documentType = $_POST['document-type'];
         $isUpdate = isset($_POST['is_update']) ? true : false;
+        $isAdditionalDocument = isset($_POST['is_additional_document']) ? true : false;
         $directory = '/home/mark/apache-xampp-hosting/docutracker/userfiles/' . $userId . '/verification/' . $documentType . '/';
         $fileTmpName = $_FILES['verification-document']['tmp_name'];
         $fileName = $_FILES['verification-document']['name'];
@@ -63,56 +64,52 @@ try {
             exit;
         }
 
-        // If this is an update, fetch the current application ID
+        // Get or create application record
         $applicationId = null;
-        if ($isUpdate) {
-            $checkStmt = $conn->prepare("SELECT id FROM Application WHERE user_id = ?");
-            $checkStmt->bind_param("i", $userId);
-            $checkStmt->execute();
-            $checkResult = $checkStmt->get_result();
-            if ($checkResult->num_rows > 0) {
-                $applicationId = $checkResult->fetch_assoc()['id'];
+        // Always get or create the application for this user
+        $checkAppStmt = $conn->prepare("SELECT application_id, status FROM Application WHERE user_id = ?");
+        $checkAppStmt->bind_param("i", $userId);
+        $checkAppStmt->execute();
+        $checkAppResult = $checkAppStmt->get_result();
+        
+        if ($checkAppResult->num_rows > 0) {
+            $appRow = $checkAppResult->fetch_assoc();
+            $applicationId = $appRow['application_id'];
+            
+            // If this is an additional document upload, update application status
+            if ($isAdditionalDocument) {
+                $updateAppStmt = $conn->prepare("UPDATE Application SET status = 'under-review', additional_documents_required = 0, updated_at = NOW() WHERE application_id = ?");
+                $updateAppStmt->bind_param("i", $applicationId);
+                $updateAppStmt->execute();
+                $updateAppStmt->close();
+                writeLog("Application ID $applicationId updated with additional documents", "verification-upload.log");
             }
-            $checkStmt->close();
-        }
-
-        if ($applicationId) {
-            // Update existing application
-            $stmt = $conn->prepare("UPDATE Application SET document_type = ?, document_path = ?, status = 'under-review', updated_at = NOW() WHERE id = ?");
-            $stmt->bind_param("ssi", $documentType, $fileDestination, $applicationId);
         } else {
-            // Insert new application
-            $stmt = $conn->prepare("INSERT INTO Application (user_id, document_type, document_path, status) 
-                    VALUES (?, ?, ?, 'Under Review')
-                    ON DUPLICATE KEY UPDATE 
-                    document_path = VALUES(document_path),
-                    status = 'Under Review',
-                    updated_at = NOW()");
-            $stmt->bind_param("iss", $userId, $documentType, $fileDestination);
+            $newAppStmt = $conn->prepare("INSERT INTO Application (user_id, status) VALUES (?, 'under-review')");
+            $newAppStmt->bind_param("i", $userId);
+            $newAppStmt->execute();
+            $applicationId = $conn->insert_id;
+            $newAppStmt->close();
         }
+        $checkAppStmt->close();
 
-        if ($stmt->execute()) {
-            // Get the application ID for new submissions
-            if (!$applicationId) {
-                $applicationId = $conn->insert_id;
-            }
-
+        // Insert new document into ApplicationDocuments
+        $docStmt = $conn->prepare("INSERT INTO ApplicationDocuments (application_id, document_type, document_path) VALUES (?, ?, ?)");
+        $docStmt->bind_param("iss", $applicationId, $documentType, $fileDestination);
+        if ($docStmt->execute()) {
+            $conn->commit();
             echo json_encode([
                 'status' => 'success',
-                'message' => $isUpdate ? 'Document updated successfully.' : 'Document uploaded successfully.',
+                'message' => $isAdditionalDocument ? 'Additional document uploaded successfully.' : 'Document uploaded successfully.',
                 'file_name' => $fileNameNew,
                 'application_id' => $applicationId,
-                'submission_date' => date('F j, Y'),
-                'is_update' => $isUpdate
+                'document_id' => $conn->insert_id,
+                'submission_date' => date('F j, Y')
             ]);
         } else {
-            writeLog("Database error: " . $conn->error, "verification-upload.log");
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Failed to save document information in the database.'
-            ]);
+            throw new Exception("Failed to insert document record: " . $conn->error);
         }
-        $stmt->close();
+        $docStmt->close();
         $conn->close();
     }
 } catch (\Throwable $th) {

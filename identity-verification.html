@@ -361,8 +361,7 @@
                                 <span><i class="fas fa-cloud-upload-alt"></i> Drop file here</span>
                             </div>
                         </fieldset>
-                        <div id="document-preview-container" class="document-preview-container" style="display: none;">
-                        </div>
+                        <div id="document-preview-container" class="document-preview-container" style="display: none;"></div>
                         <div class="upload-progress-container">
                             <div class="upload-progress-bar"></div>
                         </div>
@@ -370,6 +369,22 @@
                             <i class="fas fa-upload"></i> Upload Document
                         </button>
                     </form>
+                    <div id="uploaded-documents-list" class="uploaded-documents-list">
+                        <h4>Uploaded Documents</h4>
+                        <table id="documents-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Preview</th>
+                                    <th>Date Uploaded</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

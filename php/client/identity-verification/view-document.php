@@ -22,9 +22,9 @@ if (!isset($_GET['path'])) {
 $requestedPath = $_GET['path'];
 
 try {
-    // Verify the document belongs to the user
-    $stmt = $conn->prepare("SELECT document_path FROM Application WHERE user_id = ? AND document_path = ?");
-    $stmt->bind_param("is", $userId, $requestedPath);
+    // Check if the document belongs to the user in ApplicationDocuments
+    $stmt = $conn->prepare("SELECT ad.document_path FROM ApplicationDocuments ad JOIN Application a ON ad.application_id = a.application_id WHERE ad.document_path = ? AND a.user_id = ?");
+    $stmt->bind_param("si", $requestedPath, $userId);
     $stmt->execute();
     $result = $stmt->get_result();
     
@@ -36,8 +36,8 @@ try {
     }
     
     // Document exists and belongs to user - serve it
-    $document = $result->fetch_assoc();
-    $filePath = $document['document_path'];
+    $filePath = $result->fetch_assoc()['document_path'];
+    $stmt->close();
     
     // Check if file exists
     if (!file_exists($filePath)) {
@@ -71,7 +71,6 @@ try {
     // Output the file
     readfile($filePath);
     
-    $stmt->close();
     $conn->close();
     
 } catch (\Throwable $th) {

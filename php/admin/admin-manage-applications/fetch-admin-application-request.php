@@ -27,7 +27,7 @@ try {
 
     $sqlGetTotalApplication = "SELECT COUNT(*) as total FROM Application";
     $sqlGetTotalPendingApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'pending'";
-    $sqlGetTotalUnderReviewApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'Under Review'";
+    $sqlGetTotalUnderReviewApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'under-review'";
     $sqlGetTotalApprovedApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'approved'";
     $sqlGetTotalRejectedApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'rejected'";
 

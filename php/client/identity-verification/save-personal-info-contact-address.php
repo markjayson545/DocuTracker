@@ -65,8 +65,8 @@ try {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
-        $sql = "INSERT INTO UserDetails (user_id, height, weight, complexion, blood_type, religion, educational_attainment, occupation) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        $sql = "INSERT INTO UserDetails (user_id, height, weight, complexion, blood_type, religion, educational_attainment, occupation, nationality) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
         height = VALUES(height),
         weight = VALUES(weight),
@@ -76,7 +76,7 @@ try {
         educational_attainment = VALUES(educational_attainment),
         occupation = VALUES(occupation)";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "ssssssss", $userId, $height, $weight, $complexion, $blood_type, $religion, $education, $occupation);
+        mysqli_stmt_bind_param($stmt, "sssssssss", $userId, $height, $weight, $complexion, $blood_type, $religion, $education, $occupation, $nationality);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
 
