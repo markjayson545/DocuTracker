@@ -67,10 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Check file size (5MB max)
             const fileSize = verificationDocumentInput.files[0].size;
-            const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+            const maxSize = 20 * 1024 * 1024; // 5MB in bytes
             
             if (fileSize > maxSize) {
-                alert("File size should be less than 5MB");
+                alert("File size should be less than 20MB");
                 isValid = false;
             }
         }

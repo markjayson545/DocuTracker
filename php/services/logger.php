@@ -1,5 +1,5 @@
 <?php
-$logPath = __DIR__ . '/../../logs/';
+$logPath = __DIR__ . '/../logs/';
 function writeLog($message, $where)
 {
     try {

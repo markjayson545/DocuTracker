@@ -50,7 +50,6 @@ try {
                 'submission_date' => $application['created_at'] ?? date('F j, Y'),
                 'last_updated' => $application['updated_at'] ?? date('F j, Y'),
                 'admin_notes' => $application['admin_notes'] ?? '',
-                'additional_documents_required' => $application['additional_documents_required'] ?? false
             ],
             'documents' => $documents,
             'has_personal_details' => $hasPersonalDetails

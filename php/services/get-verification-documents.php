@@ -25,7 +25,7 @@ try {
     $result = $stmt->get_result();
 
     // Fetch application status and additional document requests
-    $appSql = "SELECT status, admin_notes, additional_documents_required FROM Application WHERE application_id = ?";
+    $appSql = "SELECT status, admin_notes FROM Application WHERE application_id = ?";
     $appStmt = $conn->prepare($appSql);
     $appStmt->bind_param("i", $applicationId);
     $appStmt->execute();
@@ -47,7 +47,6 @@ try {
             'documents' => $documents,
             'application_status' => $applicationInfo['status'] ?? 'under-review',
             'admin_notes' => $applicationInfo['admin_notes'] ?? '',
-            'additional_documents_required' => $applicationInfo['additional_documents_required'] ?? false
         ]);
     } else {
         echo json_encode([
@@ -55,7 +54,6 @@ try {
             'message' => 'No documents found',
             'application_status' => $applicationInfo['status'] ?? 'pending',
             'admin_notes' => $applicationInfo['admin_notes'] ?? '',
-            'additional_documents_required' => $applicationInfo['additional_documents_required'] ?? false
         ]);
     }
 

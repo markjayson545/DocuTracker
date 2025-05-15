@@ -39,10 +39,10 @@ try {
             exit;
         }
 
-        if ($fileSize > 10000000) {
+        if ($fileSize > 20000000) {
             echo json_encode([
                 'status' => 'error',
-                'message' => 'File size exceeds the 10MB limit. Please upload a smaller file.'
+                'message' => 'File size exceeds the 20MB limit. Please upload a smaller file.'
             ]);
             exit;
         }
@@ -78,7 +78,7 @@ try {
             
             // If this is an additional document upload, update application status
             if ($isAdditionalDocument) {
-                $updateAppStmt = $conn->prepare("UPDATE Application SET status = 'under-review', additional_documents_required = 0, updated_at = NOW() WHERE application_id = ?");
+                $updateAppStmt = $conn->prepare("UPDATE Application SET status = 'under-review', updated_at = NOW() WHERE application_id = ?");
                 $updateAppStmt->bind_param("i", $applicationId);
                 $updateAppStmt->execute();
                 $updateAppStmt->close();

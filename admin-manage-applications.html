@@ -332,14 +332,15 @@
                                 <div class="profile-section__details">
                                     <h2 class="profile-section__name" id="full-name-title">John Doe</h2>
                                     <p class="profile-section__id">User ID: <span id="user-id-title">0001</span></p>
-                                    <p class="profile-section__date">Registered on <span id="registered-on-title">Jan 15, 2025</span></p>
+                                    <p class="profile-section__date">Registered on <span id="registered-on-title">Jan
+                                            15, 2025</span></p>
                                 </div>
                                 <div class="profile-section__verification-status" id="verification-status-badge">
                                     <i class="fas fa-check-circle" id="verification-status-icon"></i>
                                     <p class="status" id="verification-status">Verified</p>
                                 </div>
                             </div>
-                            
+
                             <!-- Add verified users section -->
                             <div class="verified-users-section" id="verified-users-section">
                                 <h3><i class="fas fa-shield-alt"></i> Verified User Information</h3>
@@ -456,21 +457,36 @@
                                         <thead>
                                             <tr>
                                                 <th>Type</th>
-                                                <th>Preview</th>
                                                 <th>Date Uploaded</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <!-- Populated by JS -->
+                                        <tbody id="admin-documents-table-body">
+                                            <!-- Mock data added for document preview -->
+                                            <tr data-document-path="documents/id-card-sample.jpg">
+                                                <td>
+                                                    <div class="doc-preview-icon"><i class="fas fa-id-card"></i></div>
+                                                    ID Card
+                                                </td>
+                                                <td>May 15, 2023 10:45 AM</td>
+                                                <td><button class="view-document-btn">View</button></td>
+                                            </tr>
+                                            <tr data-document-path="documents/driver-license-sample.jpg">
+                                                <td>
+                                                    <div class="doc-preview-icon"><i class="fas fa-id-badge"></i></div>
+                                                    Driver's License
+                                                </td>
+                                                <td>May 17, 2023 9:15 AM</td>
+                                                <td><button class="view-document-btn">View</button></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="document-placeholder" id="document-placeholder">
                                     <i class="fas fa-id-card"></i>
-                                    <p>No document selected. Click "Verify" to view a document.</p>
+                                    <p>No document selected. Click "View" to display a document.</p>
                                 </div>
-                                <div class="document-controls" id="document-controls" style="display: none;">
+                                <div class="document-controls" id="document-controls">
                                     <button class="document-control-btn" id="zoom-in-btn" title="Zoom In">
                                         <i class="fas fa-search-plus"></i>
                                     </button>

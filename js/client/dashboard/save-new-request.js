@@ -1,51 +1,31 @@
-/**
- * Document Request Form Handler
- * 
- * This script handles the submission of new document requests from the user dashboard
- */
 document.addEventListener('DOMContentLoaded', function() {
     const submitRequestForm = document.getElementById('submit-document-request-form');
     
-    if (!submitRequestForm) return;
-    
-    submitRequestForm.addEventListener('submit', async function(event) {
+    submitRequestForm.addEventListener('submit', function(event){
         event.preventDefault();
+
+        const formData = new FormData(submitRequestForm);
         
-        try {
-            // Get form values
-            const documentType = document.getElementById('document-type').value;
-            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
-            const amountToPay = document.getElementById('amount-to-pay').value;
-            
-            // Show loading state
-            const submitButton = submitRequestForm.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.textContent;
-            submitButton.disabled = true;
-            submitButton.textContent = 'Processing...';
-            
-            // Use API utility to send request
-            const response = await createDocumentRequest(documentType, paymentMethod, amountToPay);
-            
-            // Handle response
-            if (response.success) {
-                showAlert('Document request submitted successfully!', 'success');
-                
-                // Reset form and reload dashboard data
-                submitRequestForm.reset();
-                document.getElementById('close-request-form').click();
-                fetchDashboardData();
-            } else {
-                showAlert(response.message || 'Failed to submit document request', 'error');
+        fetch('php/client/user-dashboard/create-new-doc-request.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Save response:', data);
+            if (data.status == 'success') {
+                alert('Request submitted successfully!');
+                location.reload();
+            } else{
+                alert('Error: ' + data.stack_trace);
             }
-        } catch (error) {
-            console.error('Error submitting document request:', error);
-            showAlert('An error occurred while submitting your request', 'error');
-        } finally {
-            // Restore button state
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
-            }
-        }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the request. Please try again.');
+        })
+        ;
+
     });
+
 });

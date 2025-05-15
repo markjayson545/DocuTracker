@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             document.getElementById('application-status').textContent = data.application.status || 'Under Review';
 
                             // Check for admin notes and additional documents required
-                            if (data.application.additional_documents_required) {
+                            if (data.application.status === 'additional-info-requested') {
                                 const adminNotesContainer = document.querySelector('.admin-notes');
                                 if (!adminNotesContainer) {
                                     // Create admin notes container if it doesn't exist
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             window.applicationState.personalInfoCompleted = true;
                             window.applicationState.documentUploaded = true;
                             
-                            if (data.application.additional_documents_required) {
+                            if (data.application.status === 'additional-info-requested') {
                                 // If additional docs are requested, we should show the upload form
                                 window.applicationState.processingStarted = true;
                                 resolve({ step: 2 }); // Show document upload form

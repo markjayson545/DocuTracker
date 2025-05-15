@@ -18,10 +18,14 @@ try {
                     'data' => $_POST
                 ]
             );
+            exit;
         }
 
         $errormsg;
         $isError = false;
+
+        // Begin transaction
+        mysqli_begin_transaction($conn);
 
         // Username Validation
         $sql = "SELECT id FROM User WHERE username = ?";
@@ -59,7 +63,6 @@ try {
             $errormsg = 'Email Address already exists';
         }
 
-
         if ($isError === false) {
             // Hash the password
             $passwordHash = password_hash($password, PASSWORD_BCRYPT);
@@ -68,18 +71,23 @@ try {
             $sql = "INSERT INTO User (username, phone, email, password) VALUES (?, ?, ?, ?)";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "ssss", $username, $phone, $email, $passwordHash);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_close($stmt);
-            writeLog("User $username created successfully", 'sign-up.log');
-            echo json_encode(
-                [
-                    'success' => true,
-                    'message' => 'User created successfully',
-                    'data' => $_POST
-                ]
-                
-            );
+            
+            if (mysqli_stmt_execute($stmt)) {
+                mysqli_commit($conn);
+                mysqli_stmt_close($stmt);
+                writeLog("User $username created successfully", 'sign-up.log');
+                echo json_encode(
+                    [
+                        'success' => true,
+                        'message' => 'User created successfully',
+                        'data' => $_POST
+                    ]
+                );
+            } else {
+                throw new Exception("Failed to create user: " . mysqli_error($conn));
+            }
         } else {
+            mysqli_rollback($conn);
             echo json_encode(
                 [
                     'success' => false,
@@ -93,6 +101,7 @@ try {
         echo json_encode(['error' => 'Invalid request method']);
     }
 } catch (\Throwable $th) {
+    mysqli_rollback($conn);
     writeLog($th->getMessage(), 'sign-up.log');
     echo json_encode(
         [

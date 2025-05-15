@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
     <script src="js/services/logout.js"></script>
     <script src="js/admin/admin-manage-users/fetch-users-data.js"></script>
 </head>
+
 <body>
     <header>
         <a href="index.html">
@@ -234,8 +236,10 @@
                                     <td><i class="fas fa-check-circle verified-icon"></i></td>
                                     <td>2023-05-15</td>
                                     <td class="actions-cell">
-                                        <button class="action-icon-btn" title="Edit User"><i class="fas fa-edit"></i></button>
-                                        <button class="action-icon-btn" title="View User"><i class="fas fa-eye"></i></button>
+                                        <button class="action-icon-btn" title="Edit User"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button class="action-icon-btn" title="View User"><i
+                                                class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -247,8 +251,10 @@
                                     <td><i class="fas fa-check-circle verified-icon"></i></td>
                                     <td>2023-06-02</td>
                                     <td class="actions-cell">
-                                        <button class="action-icon-btn" title="Edit User"><i class="fas fa-edit"></i></button>
-                                        <button class="action-icon-btn" title="View User"><i class="fas fa-eye"></i></button>
+                                        <button class="action-icon-btn" title="Edit User"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button class="action-icon-btn" title="View User"><i
+                                                class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -260,8 +266,10 @@
                                     <td><i class="fas fa-clock pending-icon"></i></td>
                                     <td>2023-07-10</td>
                                     <td class="actions-cell">
-                                        <button class="action-icon-btn" title="Edit User"><i class="fas fa-edit"></i></button>
-                                        <button class="action-icon-btn" title="View User"><i class="fas fa-eye"></i></button>
+                                        <button class="action-icon-btn" title="Edit User"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button class="action-icon-btn" title="View User"><i
+                                                class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -273,8 +281,10 @@
                                     <td><i class="fas fa-check-circle verified-icon"></i></td>
                                     <td>2023-06-18</td>
                                     <td class="actions-cell">
-                                        <button class="action-icon-btn" title="Edit User"><i class="fas fa-edit"></i></button>
-                                        <button class="action-icon-btn" title="View User"><i class="fas fa-eye"></i></button>
+                                        <button class="action-icon-btn" title="Edit User"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button class="action-icon-btn" title="View User"><i
+                                                class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -286,8 +296,10 @@
                                     <td><i class="fas fa-check-circle verified-icon"></i></td>
                                     <td>2023-07-05</td>
                                     <td class="actions-cell">
-                                        <button class="action-icon-btn" title="Edit User"><i class="fas fa-edit"></i></button>
-                                        <button class="action-icon-btn" title="View User"><i class="fas fa-eye"></i></button>
+                                        <button class="action-icon-btn" title="Edit User"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button class="action-icon-btn" title="View User"><i
+                                                class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -309,6 +321,331 @@
             </div>
         </section>
     </main>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="user-profile-modal">
+
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-user-circle"></i> User Profile
+                </h2>
+                <button class="close-modal-btn" id="close-modal-btn" title="Close Modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="user-profile-container">
+                <section class="profile-section profile-summary">
+                    <div class="profile-section__header">
+                        <h2><i class="fas fa-user"></i> User Profile</h2>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-envelope"></i> Contact User
+                        </button>
+                    </div>
+                    <div class="profile-section__primary-info">
+                        <i class="fas fa-user-circle"></i>
+                        <div class="profile-section__details">
+                            <h2 class="profile-section__name" id="full-name-title">John Doe</h2>
+                            <p class="profile-section__id">User ID: <span id="user-id-title">0001</span></p>
+                            <p class="profile-section__date">Registered on <span id="registered-on-title">Jan
+                                    15, 2025</span></p>
+                        </div>
+                        <div class="profile-section__verification-status" id="verification-status-badge">
+                            <i class="fas fa-check-circle" id="verification-status-icon"></i>
+                            <p class="status" id="verification-status">Verified</p>
+                        </div>
+                    </div>
+
+                    <!-- Add verified users section -->
+                    <div class="verified-users-section" id="verified-users-section">
+                        <h3><i class="fas fa-shield-alt"></i> Verified User Information</h3>
+                        <p>This user has been verified in the system.</p>
+                        <p>Verification Date: <span id="verification-date">N/A</span></p>
+                        <p>Verified By: <span id="verified-by">N/A</span></p>
+                        <button class="view-application-btn" id="view-application-btn">
+                            <i class="fas fa-file-alt"></i> View Application
+                        </button>
+                    </div>
+                    <div class="profile-section__actions">
+                        <div class="action-title">
+                            <h3>
+                                <i class="fas fa-cogs"></i> User Actions
+                            </h3>
+                        </div>
+                        <div class="action-group">
+                            <button class="btn btn-success" id="activate-user-btn">
+                                <i class="fas fa-user-check"></i> Activate User
+                            </button>
+                            <button class="btn btn-danger" id="suspend-user-btn">
+                                <i class="fas fa-user-slash"></i> Suspend User
+                            </button>
+                        </div>
+
+                        <div class="action-title">
+                            <h3>
+                                <i class="fas fa-user-shield"></i> Verification Actions
+                            </h3>
+                        </div>
+                        <div class="action-group">
+                            <button class="btn btn-info" id="verify-user-btn">
+                                <i class="fas fa-check"></i> Verify User
+                            </button>
+                            <button class="btn btn-warning" id="request-additional-info-btn">
+                                <i class="fas fa-question-circle"></i> Request Info
+                            </button>
+                            <button class="btn btn-danger" id="reject-user-btn">
+                                <i class="fas fa-times"></i> Reject User
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="profile-section profile-details">
+                    <div class="profile-section__header">
+                        <h2>
+                            <i class="fas fa-address-card"></i> Personal Information
+                        </h2>
+                        <div class="edit-status" id="edit-status">
+                            <span class="edit-mode-label">Editing Mode <i class="fas fa-pencil-alt"></i></span>
+                        </div>
+                    </div>
+
+                    <form id="personal-info-form" class="personal-info-form">
+                        <div class="profile-section__info-grid" id="info-grid-container">
+                            <div class="form-group">
+                                <label for="first-name"><i class="fas fa-user"></i> First Name</label>
+                                <input type="text" id="first-name" name="first-name" value="John" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="last-name"><i class="fas fa-user"></i> Last Name</label>
+                                <input type="text" id="last-name" name="last-name" value="Doe" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="middle-name"><i class="fas fa-user"></i> Middle Name</label>
+                                <input type="text" id="middle-name" name="middle-name" value="">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                                <input type="email" id="email" name="email" value="example@email.com" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+                                <input type="tel" id="phone" name="phone" value="+639123456789" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="house-num"><i class="fas fa-home"></i> House No.</label>
+                                <input type="text" id="house-num" name="house-num" value="123" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="street"><i class="fas fa-map-marker-alt"></i> Street</label>
+                                <input type="text" id="street" name="street" value="Main St" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="barangay"><i class="fas fa-map-marker-alt"></i> Barangay</label>
+                                <input type="text" id="barangay" name="barangay" value="Sample Barangay" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="city"><i class="fas fa-city"></i> City</label>
+                                <input type="text" id="city" name="city" value="City" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="province"><i class="fas fa-map"></i> Province</label>
+                                <input type="text" id="province" name="province" value="Country" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dob"><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+                                <input type="date" id="dob" name="dob" value="1990-01-01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="birth-place"><i class="fas fa-map"></i> Birth Place</label>
+                                <input type="text" id="birth-place" name="birth-place" value="Manila, Philippines"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sex"><i class="fas fa-venus-mars"></i> Sex</label>
+                                <select name="sex" id="sex" required>
+                                    <option value="male" selected>Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                    <option value="prefer-not-to-say">Prefer not to say</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="civil-status"><i class="fas fa-heart"></i> Civil Status</label>
+                                <select name="civil-status" id="civil-status" required>
+                                    <option value="single" selected>Single</option>
+                                    <option value="married">Married</option>
+                                    <option value="widowed">Widowed</option>
+                                    <option value="separated">Separated</option>
+                                    <option value="divorced">Divorced</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="height"><i class="fas fa-ruler-vertical"></i> Height (cm)</label>
+                                <input type="text" id="height" name="height" value="178">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="weight"><i class="fas fa-weight"></i> Weight (kg)</label>
+                                <input type="text" id="weight" name="weight" value="75">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="nationality"><i class="fas fa-flag"></i> Nationality</label>
+                                <select name="nationality" id="nationality" required>
+                                    <option value="filipino">Filipino</option>
+                                    <option value="american">American</option>
+                                    <option value="british">British</option>
+                                    <option value="australian">Australian</option>
+                                    <option value="japanese">Japanese</option>
+                                    <option value="chinese">Chinese</option>
+                                    <option value="korean">Korean</option>
+                                    <option value="indian">Indian</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="complexion"><i class="fas fa-palette"></i> Complexion</label>
+                                <select name="complexion" id="complexion" required>
+                                    <option value="fair" selected>Fair</option>
+                                    <option value="light">Light</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="dark">Dark</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="blood-type"><i class="fas fa-tint"></i> Blood Type</label>
+                                <select name="blood-type" id="blood-type">
+                                    <option value="unknown" selected>Unknown</option>
+                                    <option value="a+">A+</option>
+                                    <option value="a-">A-</option>
+                                    <option value="b+">B+</option>
+                                    <option value="b-">B-</option>
+                                    <option value="ab+">AB+</option>
+                                    <option value="ab-">AB-</option>
+                                    <option value="o+">O+</option>
+                                    <option value="o-">O-</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="religion"><i class="fas fa-pray"></i> Religion</label>
+                                <select name="religion" id="religion" required>
+                                    <option value="roman-catholic" selected>Roman Catholic</option>
+                                    <option value="protestant">Protestant</option>
+                                    <option value="islam">Islam</option>
+                                    <option value="buddhism">Buddhism</option>
+                                    <option value="hinduism">Hinduism</option>
+                                    <option value="judaism">Judaism</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="education"><i class="fas fa-graduation-cap"></i> Education</label>
+                                <select name="education" id="education" required>
+                                    <option value="elementary">Elementary</option>
+                                    <option value="high-school">High School</option>
+                                    <option value="high-school-undergraduate">High School Undergraduate</option>
+                                    <option value="college" selected>College</option>
+                                    <option value="college-undergraduate">College Undergraduate</option>
+                                    <option value="masters">Masters</option>
+                                    <option value="doctorate">Doctorate</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="occupation"><i class="fas fa-briefcase"></i> Occupation</label>
+                                <select name="occupation" id="occupation" required>
+                                    <option value="student">Student</option>
+                                    <option value="employed" selected>Employed</option>
+                                    <option value="unemployed">Unemployed</option>
+                                    <option value="self-employed">Self-Employed</option>
+                                    <option value="retired">Retired</option>
+                                    <option value="housewife">Housewife</option>
+                                    <option value="ofw">OFW</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="edit-actions">
+                            <button type="submit" class="btn btn-success" id="save-changes-btn">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="discard-changes-btn">
+                                <i class="fas fa-undo"></i> Discard Changes
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <div class="verification-details-container">
+                    <div class="header-title">
+                        <h2>
+                            Document Viewer
+                        </h2>
+                        <p>Click "Verify" on any application to view document details here</p>
+                    </div>
+                    <div class="document-viewer">
+                        <div class="admin-documents-list">
+                            <h4>Uploaded Documents</h4>
+                            <table id="admin-documents-table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Date Uploaded</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-documents-table-body">
+                                    <!-- Documents will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="document-placeholder" id="document-placeholder">
+                            <i class="fas fa-id-card"></i>
+                            <p>No document selected. Click "View" to display a document.</p>
+                        </div>
+                        <div class="document-controls" id="document-controls">
+                            <button class="document-control-btn" id="zoom-in-btn" title="Zoom In">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="document-control-btn" id="zoom-out-btn" title="Zoom Out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="document-control-btn" id="rotate-btn" title="Rotate">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="document-control-btn" id="reset-btn" title="Reset">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="document-control-btn" id="download-btn" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="about-us">
@@ -344,4 +681,5 @@
         </div>
     </footer>
 </body>
+
 </html>

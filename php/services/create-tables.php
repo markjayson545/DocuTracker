@@ -2,6 +2,7 @@
 
 require 'open-db.php';
 include 'logger.php';
+include 'audit-log.php';
 
 writeLog("Creating tables...", "create-tables.log");
 // Complete the createTable function
@@ -40,6 +41,8 @@ $applicationSql = "CREATE TABLE IF NOT EXISTS Application(
             user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
             status VARCHAR(50) DEFAULT 'pending',
+            admin_id INT(6) UNSIGNED,
+            FOREIGN KEY (admin_id) REFERENCES User(id),
             admin_notes TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -186,6 +189,27 @@ $requestLogSql = "CREATE TABLE IF NOT EXISTS RequestLog(
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
 
+function createDefaultAdmin(){
+    global $conn;
+    $username = "admin";
+    $password = password_hash("admin123", PASSWORD_BCRYPT);
+    $phone = "09123456789";
+    $email = "admin@docutracker.com";
+    $role = "admin";
+    $status = "active";
+    $is_verified = 1;
+    $sql = "INSERT INTO User (username, password, phone, email, role, status, is_verified) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssis", $username, $password, $phone, $email, $role, $status, $is_verified);
+    if ($stmt->execute()) {
+        writeLog("Default admin user created successfully", "create-tables.log");
+    } else {
+        writeLog("Error creating default admin user: " . $stmt->error, "create-tables.log");
+    }
+    $stmt->close();
+}
+
 try {
     createTable($conn, $userSql);
     createTable($conn, $applicationSql);
@@ -202,6 +226,7 @@ try {
     createTable($conn, $sessionTokensSql);
     createTable($conn, $requestLogSql);
 
+    writeAuditLog(1, "System", "Created tables");
     writeLog("Tables created successfully", "create-tables.log");
     echo json_encode(
         [
@@ -212,4 +237,10 @@ try {
     mysqli_close($conn);
 } catch (\Throwable $th) {
     writeLog("Error creating tables: " . $th->getMessage(), "create-tables.log");
+    echo json_encode(
+        [
+            "status" => "error",
+            "message" => "Error creating tables: " . $th->getMessage()
+        ]
+    );
 }
