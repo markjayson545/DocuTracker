@@ -1,12 +1,4 @@
-/**
- * This file is now deprecated. 
- * Validation functionality has been moved to FormValidator module.
- * Include these scripts in your HTML instead:
- * 
- * <script src="/js/utils/core.js"></script>
- * <script src="/js/validation/form-validator.js"></script>
- * <script src="/js/client/identity-verification/identity-verification.js"></script>
- */
+
 
 // Basic backward compatibility layer
 document.addEventListener('DOMContentLoaded', function() {
