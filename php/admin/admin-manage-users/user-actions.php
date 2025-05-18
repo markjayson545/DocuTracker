@@ -15,6 +15,25 @@ function activateUser($userId)
     return $result;
 }
 
+function resetPassword($userId, $newPassword, $confirmPassword)
+{
+    global $conn;
+    $success = true;
+    if ($newPassword !== $confirmPassword) {
+        $success = false;
+    } else {
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+        $sql = "UPDATE User SET password = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $hashedPassword, $userId);
+        if (!$stmt->execute()) {
+            $success = false;
+        }
+        $stmt->close();
+    }
+    return $success;
+}
+
 function suspendUser($userId)
 {
     global $conn;
@@ -76,7 +95,7 @@ function requestMoreInfo($userId)
     // Update application with admin notes
     $sql = "UPDATE Application SET status = 'additional-info-requested', admin_id = ?, admin_notes = ? WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isi", $$_SESSION['user_id'], $message, $userId); 
+    $stmt->bind_param("isi", $_SESSION['user_id'], $message, $userId);
     if (!$stmt->execute()) {
         $success = false;
     }
@@ -89,10 +108,10 @@ function rejectUser($userId)
 {
     global $conn;
     $success = true;
-    
+
     // Get the rejection reason from the POST data
     $message = $_POST['message'] ?? "Application rejected";
-    
+
     // Update user status
     $sql = "UPDATE User SET status = 'suspended', is_verified = 0 WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -105,7 +124,7 @@ function rejectUser($userId)
     // Update application with rejection reason
     $sql = "UPDATE Application SET status = 'rejected', admin_id = ?, admin_notes = ? WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isi", $$_SESSION['user_id'], $message, $userId);
+    $stmt->bind_param("isi", $_SESSION['user_id'], $message, $userId);
     if (!$stmt->execute()) {
         $success = false;
     }
@@ -144,6 +163,14 @@ try {
     switch ($action) {
         case 'activate':
             $success = activateUser($user_id);
+            break;
+        case 'reset-password':
+            $newPassword = $_POST['new_password'] ?? null;
+            $confirmPassword = $_POST['confirm_password'] ?? null;
+            if (!$newPassword || !$confirmPassword) {
+                throw new Exception('New password or confirmation not provided');
+            }
+            $success = resetPassword($user_id, $newPassword, $confirmPassword);
             break;
         case 'suspend':
             $success = suspendUser($user_id);
@@ -184,4 +211,3 @@ try {
     // Close the connection
     $conn->close();
 }
-?>

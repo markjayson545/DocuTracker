@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const userTableBody = document.getElementById("user-table-body");
     const userDetailsModal = document.getElementById("modal-overlay");
     const closeModalButton = document.getElementById("close-modal-btn");
-    
+
     // Event listeners setup
     closeModalButton.addEventListener("click", function () {
         userDetailsModal.style.display = "none";
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     }
-    
+
     function capitalize(string) {
         if (!string) return '';
         string = string.replace(/-/g, ' ');
@@ -96,14 +96,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     const tableBody = document.getElementById("admin-documents-table-body");
                     if (tableBody) {
                         tableBody.innerHTML = '';
-                        
+
                         if (data.documents.length === 0) {
                             tableBody.innerHTML = '<tr><td colspan="4">No documents uploaded.</td></tr>';
                         } else {
                             data.documents.forEach(doc => {
                                 const fileExt = doc.document_path.split('.').pop().toLowerCase();
                                 const filePath = doc.document_path;
-                                
+
                                 // Determine the appropriate icon based on file extension
                                 let iconClass = 'fa-file';
 
@@ -197,11 +197,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                         <td><button class="view-document-btn" id="viewDoc${doc.document_id}">View</button></td>
                                     </tr>`;
                                 tableBody.insertAdjacentHTML('beforeend', rowTemplate);
-                                
+
                                 // Add event listener for the view button
                                 const viewBtn = document.getElementById(`viewDoc${doc.document_id}`);
                                 if (viewBtn) {
-                                    viewBtn.addEventListener('click', function() {
+                                    viewBtn.addEventListener('click', function () {
                                         insertApplicationDocument(doc.document_path);
                                     });
                                 }
@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .catch(error => console.log("Error updating user details:", error));
         });
-        
+
         // Event listener for the "Discard Changes" button
         document.getElementById("discard-changes-btn").addEventListener("click", function () {
             fetchUserDetails(userId);
@@ -316,6 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Actions Listeners
         const activateUserButton = document.getElementById("activate-user-btn");
+        const resetPasswordButton = document.getElementById("reset-password-btn");
         const suspendUserButton = document.getElementById("suspend-user-btn");
         const verifyUserButton = document.getElementById("verify-user-btn");
         const requestMoreInfoButton = document.getElementById("request-additional-info-btn");
@@ -346,6 +347,22 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
                 formData.append("message", rejectionReason);
+            } else if (action === "reset-password") {
+                let newPassword = prompt("Enter new password for user ID: " + userId);
+                let confirmPassword = prompt("Confirm new password for user ID: " + userId);
+                if (newPassword === null || confirmPassword === null) {
+                    return;
+                }
+                if (newPassword.trim() === "" || confirmPassword.trim() === "") {
+                    alert("You must provide a new password.");
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    alert("Passwords do not match. Please try again.");
+                    return;
+                }
+                formData.append("new_password", newPassword);
+                formData.append("confirm_password", confirmPassword);
             }
 
             fetch(`php/admin/admin-manage-users/user-actions.php`, {
@@ -367,6 +384,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         activateUserButton.addEventListener("click", function () {
             handleAction("activate");
+        });
+        resetPasswordButton.addEventListener("click", function () {
+            handleAction("reset-password");
         });
         suspendUserButton.addEventListener("click", function () {
             handleAction("suspend");
@@ -539,7 +559,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Set a reasonable default zoom that works well
         let currentZoom = 1;
         let currentRotation = 0;
-        
+
         // Reset any previous event listeners
         zoomInBtn.replaceWith(zoomInBtn.cloneNode(true));
         zoomOutBtn.replaceWith(zoomOutBtn.cloneNode(true));
