@@ -17,6 +17,7 @@
     <script src="js/services/sidebar.js"></script>
     <script src="js/services/logout.js"></script>
     <script src="js/admin/admin-manage-request/fetch-document-request.js"></script>
+    <script src="js/admin/admin-manage-request/file-upload-preview.js"></script>
 </head>
 
 <body>
@@ -323,13 +324,6 @@
                                 </div>
                             </div>
                             <div class="detail-item">
-                                <i class="fas fa-folder"></i>
-                                <div class="detail-item-info">
-                                    <span class="detail-label">Document Type</span>
-                                    <span id="document-type">Birth Certificate</span>
-                                </div>
-                            </div>
-                            <div class="detail-item">
                                 <i class="fas fa-info-circle"></i>
                                 <div class="detail-item-info">
                                     <span class="detail-label">Status</span>
@@ -337,10 +331,24 @@
                                 </div>
                             </div>
                             <div class="detail-item">
+                                <i class="fas fa-credit-card"></i>
+                                <div class="detail-item-info">
+                                    <span class="detail-label">Payment Status</span>
+                                    <span id="document-payment-status">Paid</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
                                 <i class="fas fa-dollar-sign"></i>
                                 <div class="detail-item-info">
                                     <span class="detail-label">Payment</span>
                                     <span id="document-payment">$20.00</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <div class="detail-item-info">
+                                    <span class="detail-label">Payment Method</span>
+                                    <span id="document-payment-method">GCash</span>
                                 </div>
                             </div>
                             <div class="detail-item">
@@ -360,17 +368,75 @@
                         </div>
 
                         <div class="sidebar-actions">
+                            <!-- File preview container with all necessary elements -->
+                            <div id="existing-file-container" class="existing-file-container">
+                                <div class="file-preview-header">
+                                    <i class="fas fa-file-alt"></i>
+                                    <h3>Current Document</h3>
+                                </div>
+                                <div id="existing-file-preview" class="existing-file-preview">
+                                    <!-- Image preview (hidden by default) -->
+                                    <div class="document-container" id="document-preview-container">
+                                        <!-- Image preview for images -->
+                                        <img id="file-preview-image" class="file-preview-image" src=""
+                                            alt="Document preview" style="display: none;">
+
+                                        <!-- PDF preview iframe -->
+                                        <iframe id="file-preview-pdf" class="file-preview-pdf" src=""
+                                            style="display: none;"></iframe>
+
+                                        <!-- Generic file icon for other file types -->
+                                        <div id="file-preview-icon" class="file-preview-icon" style="display: none;">
+                                            <i class="fas fa-file"></i>
+                                            <p id="file-preview-name">filename.ext</p>
+                                        </div>
+
+                                        <!-- File information section -->
+                                        <div class="file-info">
+                                            <p id="file-name" class="file-name">No file available</p>
+                                            <p id="file-size" class="file-size">0 KB</p>
+                                        </div>
+
+                                        <!-- Download button -->
+                                        <a id="download-btn" class="download-btn" href="#" download>
+                                            <i class="fas fa-download"></i> Download
+                                        </a>
+                                    </div>
+
+                                    <!-- Error message container -->
+                                    <p id="file-error-message" class="error-message" style="display: none;">
+                                        Error loading document. Please try again.
+                                    </p>
+                                </div>
+                            </div>
                             <div class="submit-document-to-user">
                                 <form id="submit-document-request">
                                     <div class="form-header">
                                         <i class="fas fa-upload"></i>
                                         <label for="document-file">Upload Document</label>
                                     </div>
+                                    <div class="preview-file">
+                                        <div class="file-icon-container">
+                                            <i class="fas fa-file-upload"></i>
+                                            <div id="upload-preview-container" class="file-preview"
+                                                style="display: none;">
+                                                <img id="upload-preview-image" class="preview-image" src=""
+                                                    alt="Preview" style="display: none;">
+                                            </div>
+
+                                        </div>
+                                        <p id="upload-file-name">No file chosen</p>
+                                        <p id="upload-file-size">0 KB</p>
+                                        <!-- Container for the upload preview -->
+                                    </div>
                                     <div class="file-input-container">
                                         <input type="file" id="document-file" name="document-file"
-                                            accept=".pdf, .jpg, .jpeg, .png">
+                                            accept=".pdf, .jpg, .jpeg, .png, .doc, .docx">
+                                        <label for="document-file" class="file-input-label">
+                                            <i class="fas fa-folder-open"></i> Browse Files
+                                        </label>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-primary" id="submit-document-btn">
                                         <i class="fas fa-paper-plane"></i> Submit
                                     </button>
                                 </form>
@@ -425,10 +491,8 @@
                                     <p>This user has been verified in the system.</p>
                                     <p>Verification Date: <span id="verification-date">N/A</span></p>
                                     <p>Verified By: <span id="verified-by">N/A</span></p>
-                                    <button class="view-application-btn" id="view-application-btn">
-                                        <i class="fas fa-file-alt"></i> View Application
-                                    </button>
                                 </div>
+
                             </section>
 
                             <section class="profile-section profile-details">
@@ -541,7 +605,7 @@
                                             </thead>
                                             <tbody id="admin-documents-table-body">
                                                 <!-- Mock data added for document preview -->
-                                                <tr data-document-path="documents/id-card-sample.jpg">
+                                                <tr>
                                                     <td>
                                                         <div class="doc-preview-icon"><i class="fas fa-id-card"></i>
                                                         </div>
@@ -550,7 +614,7 @@
                                                     <td>May 15, 2023 10:45 AM</td>
                                                     <td><button class="view-document-btn">View</button></td>
                                                 </tr>
-                                                <tr data-document-path="documents/driver-license-sample.jpg">
+                                                <tr>
                                                     <td>
                                                         <div class="doc-preview-icon"><i class="fas fa-id-badge"></i>
                                                         </div>
@@ -565,6 +629,7 @@
                                     <div class="document-placeholder" id="document-placeholder">
                                         <i class="fas fa-id-card"></i>
                                         <p>No document selected. Click "View" to display a document.</p>
+                                        
                                     </div>
                                     <div class="document-controls" id="document-controls">
                                         <button class="document-control-btn" id="zoom-in-btn" title="Zoom In">
@@ -579,7 +644,7 @@
                                         <button class="document-control-btn" id="reset-btn" title="Reset">
                                             <i class="fas fa-sync-alt"></i>
                                         </button>
-                                        <button class="document-control-btn" id="download-btn" title="Download">
+                                        <button class="document-control-btn" id="download-verification-btn" title="Download">
                                             <i class="fas fa-download"></i>
                                         </button>
                                     </div>

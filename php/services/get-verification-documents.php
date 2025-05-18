@@ -10,11 +10,23 @@ try {
         throw new Exception('User not logged in');
     }
 
+    $userId = $_POST['user_id'];
     $applicationId = $_POST['application_id'] ?? null;
+
 
     // Validate application ID
     if (!$applicationId) {
-        throw new Exception('No application ID provided');
+        $sqlGetApplicationId = "SELECT application_id FROM Application WHERE user_id = ?";
+        $stmt = $conn->prepare($sqlGetApplicationId);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $applicationId = $row['application_id'];
+        } else {
+            throw new Exception('No application found for this user');
+        }
     }
 
     // Fetch documents for the given application ID
@@ -43,20 +55,19 @@ try {
             ];
         }
         echo json_encode([
-            'success' => true, 
+            'success' => true,
             'documents' => $documents,
             'application_status' => $applicationInfo['status'] ?? 'under-review',
             'admin_notes' => $applicationInfo['admin_notes'] ?? '',
         ]);
     } else {
         echo json_encode([
-            'success' => false, 
+            'success' => false,
             'message' => 'No documents found',
             'application_status' => $applicationInfo['status'] ?? 'pending',
             'admin_notes' => $applicationInfo['admin_notes'] ?? '',
         ]);
     }
-
 } catch (\Throwable $th) {
     writeLog("Error in get-verification-documents.php: " . $th->getMessage(), "admin-dashboard.log");
     echo json_encode([
@@ -64,4 +75,3 @@ try {
         'message' => 'An error occurred: ' . $th->getMessage()
     ]);
 }
-?>
