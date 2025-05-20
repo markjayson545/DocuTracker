@@ -45,6 +45,15 @@
                 </button>
             </div>
 
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="sign-in.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+            </div>
+
             <div class="user-info" id="user-info">
                 <div class="user-icon">
                     <i class="fas fa-user-circle"></i>
@@ -146,7 +155,7 @@
                 <div class="profile-card avatar-section">
                     <div class="profile-avatar">
                         <div class="avatar-container">
-                            <img src="images/profile-placeholder.png" alt="Profile Photo" id="profile-avatar">
+                            <img src="https://placehold.co/400" alt="Profile Photo" id="profile-avatar">
                             <div class="avatar-overlay">
                                 <label for="avatar-upload" class="avatar-upload-btn">
                                     <i class="fas fa-camera"></i>
@@ -163,6 +172,89 @@
                     <div class="verification-badge verified">
                         <i class="fas fa-check-circle"></i> Verified Account
                     </div>
+                </div>
+
+                <!-- Personal Information Section - Added to match admin view -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-id-card"></i> Personal Information</h3>
+                    <div class="personal-info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span class="info-label">Full Name</span>
+                            <span class="info-value">John Doe</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="info-label">Birthdate</span>
+                            <span class="info-value">January 1, 1990</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-venus-mars"></i>
+                            <span class="info-label">Sex</span>
+                            <span class="info-value">Male</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-heart"></i>
+                            <span class="info-label">Civil Status</span>
+                            <span class="info-value">Single</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-flag"></i>
+                            <span class="info-label">Nationality</span>
+                            <span class="info-value">Filipino</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map"></i>
+                            <span class="info-label">Birth Place</span>
+                            <span class="info-value">Manila, Philippines</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span class="info-label">Address</span>
+                            <span class="info-value">123 Main St, Makati City, Metro Manila, Philippines 1000</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-ruler-vertical"></i>
+                            <span class="info-label">Height</span>
+                            <span class="info-value">5'10" (178 cm)</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-weight"></i>
+                            <span class="info-label">Weight</span>
+                            <span class="info-value">165 lbs (75 kg)</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-palette"></i>
+                            <span class="info-label">Complexion</span>
+                            <span class="info-value">Fair</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-tint"></i>
+                            <span class="info-label">Blood Type</span>
+                            <span class="info-value">O+</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-pray"></i>
+                            <span class="info-label">Religion</span>
+                            <span class="info-value">Catholic</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span class="info-label">Education</span>
+                            <span class="info-value">Bachelor's Degree</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-briefcase"></i>
+                            <span class="info-label">Occupation</span>
+                            <span class="info-value">Software Developer</span>
+                        </div>
+                    </div>
+                    <!-- Not updated by user, admin intervention needed -->
+                    <!-- <div class="personal-info-actions">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-edit"></i> Update Information
+                        </button>
+                    </div> -->
                 </div>
 
                 <!-- Contact Details Section -->
@@ -183,13 +275,6 @@
                                 <button class="change-btn" data-field="phone">Change</button>
                             </div>
                         </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Mailing Address</span>
-                            <div class="detail-value-container">
-                                <span class="detail-value">123 Main Street, Makati City, Metro Manila, Philippines 1000</span>
-                                <button class="change-btn" data-field="address">Change</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -204,7 +289,8 @@
                             </div>
                             <button class="change-btn" data-field="password">Change Password</button>
                         </div>
-                        <div class="security-item">
+                        <!-- Optional Implementation -->
+                        <!-- <div class="security-item">
                             <div class="security-info">
                                 <div class="security-title">Two-Factor Authentication</div>
                                 <div class="security-status">
@@ -220,41 +306,7 @@
                                 <div class="security-status">1 recovery email set</div>
                             </div>
                             <button class="manage-btn">Manage Recovery</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Personal Preferences Section -->
-                <div class="profile-card">
-                    <h3><i class="fas fa-sliders-h"></i> Personal Preferences</h3>
-                    <div class="preferences-grid">
-                        <div class="preference-item">
-                            <span class="preference-label">Language</span>
-                            <span class="preference-value">English</span>
-                        </div>
-                        <div class="preference-item">
-                            <span class="preference-label">Time Zone</span>
-                            <span class="preference-value">Asia/Manila (GMT+8)</span>
-                        </div>
-                        <div class="preference-item">
-                            <span class="preference-label">Date Format</span>
-                            <span class="preference-value">MM/DD/YYYY</span>
-                        </div>
-                        <div class="preference-item">
-                            <span class="preference-label">Email Notifications</span>
-                            <span class="preference-value enabled">Enabled</span>
-                        </div>
-                        <div class="preference-item">
-                            <span class="preference-label">SMS Notifications</span>
-                            <span class="preference-value disabled">Disabled</span>
-                        </div>
-                        <div class="preference-item">
-                            <span class="preference-label">Push Notifications</span>
-                            <span class="preference-value enabled">Enabled</span>
-                        </div>
-                    </div>
-                    <div class="preferences-actions">
-                        <button class="btn btn-secondary">Edit Preferences</button>
+                        </div> -->
                     </div>
                 </div>
 
@@ -279,48 +331,9 @@
                     </div>
                 </div>
 
-                <!-- Connected Integrations -->
-                <div class="profile-card">
-                    <h3><i class="fas fa-plug"></i> Connected Integrations</h3>
-                    <div class="integrations-list">
-                        <div class="integration-item connected">
-                            <div class="integration-logo">
-                                <i class="fab fa-google"></i>
-                            </div>
-                            <div class="integration-info">
-                                <h4>Google</h4>
-                                <p>Connected as: example@gmail.com</p>
-                            </div>
-                            <button class="disconnect-btn">Disconnect</button>
-                        </div>
-                        <div class="integration-item">
-                            <div class="integration-logo">
-                                <i class="fab fa-facebook"></i>
-                            </div>
-                            <div class="integration-info">
-                                <h4>Facebook</h4>
-                                <p>Not connected</p>
-                            </div>
-                            <button class="connect-btn">Connect</button>
-                        </div>
-                        <div class="integration-item webhook">
-                            <div class="integration-logo">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <div class="integration-info">
-                                <h4>Webhook Endpoint</h4>
-                                <div class="webhook-url">
-                                    <input type="text" value="https://api.myservice.com/webhooks/docutracker" readonly>
-                                    <button class="copy-btn" title="Copy"><i class="fas fa-copy"></i></button>
-                                </div>
-                            </div>
-                            <button class="edit-btn">Edit</button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- GDPR / Data Controls -->
-                <div class="profile-card">
+                <!-- Refer to Settings -->
+                <!-- <div class="profile-card">
                     <h3><i class="fas fa-user-shield"></i> Data Privacy Controls</h3>
                     <div class="data-controls">
                         <div class="data-control-info">
@@ -338,7 +351,7 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </main>
@@ -379,36 +392,32 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Profile avatar upload preview
-            const avatarUpload = document.getElementById('avatar-upload');
-            const profileAvatar = document.getElementById('profile-avatar');
-
-            avatarUpload.addEventListener('change', function(e) {
-                if (this.files && this.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        profileAvatar.src = e.target.result;
-                    };
-                    reader.readAsDataURL(this.files[0]);
-                }
-            });
-
-            // Handle copy webhook URL
-            const copyBtn = document.querySelector('.copy-btn');
-            if (copyBtn) {
-                copyBtn.addEventListener('click', function() {
-                    const webhookInput = this.previousElementSibling;
-                    webhookInput.select();
-                    document.execCommand('copy');
+            // Handle all change buttons
+            const changeButtons = document.querySelectorAll('.change-btn');
+            
+            changeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const field = this.getAttribute('data-field');
                     
-                    // Show a brief "Copied" message
-                    const originalTitle = this.title;
-                    this.title = 'Copied!';
-                    setTimeout(() => {
-                        this.title = originalTitle;
-                    }, 2000);
+                    // Determine which tab and field to activate
+                    let tab = 'profile-identity';
+                    let fieldId = '';
+                    
+                    if (field === 'email') {
+                        tab = 'profile-identity';
+                        fieldId = 'email';
+                    } else if (field === 'phone') {
+                        tab = 'profile-identity';
+                        fieldId = 'phone';
+                    } else if (field === 'password') {
+                        tab = 'security';
+                        fieldId = 'current-password';
+                    }
+                    
+                    // Redirect to settings page with parameters
+                    window.location.href = `user-settings.html?tab=${tab}&field=${fieldId}`;
                 });
-            }
+            });
         });
     </script>
 </body>

@@ -22,7 +22,7 @@
 
     <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
+    <script src="js/admin/admin-settings/fetch-document-types.js"></script>
 </head>
 
 <body>
@@ -42,6 +42,15 @@
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </button>
+            </div>
+
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="sign-in.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
             </div>
 
             <div class="user-info" id="user-info">
@@ -162,942 +171,319 @@
                 </div>
 
                 <div class="admin-tabs">
-                    <button class="tab-button active" data-tab="user-role-management">
-                        <i class="fas fa-users-cog"></i> User & Role
-                    </button>
-                    <button class="tab-button" data-tab="platform-config">
-                        <i class="fas fa-tasks"></i> Platform Config
-                    </button>
-                    <button class="tab-button" data-tab="branding-ui">
-                        <i class="fas fa-paint-brush"></i> Branding & UI
+                    <button class="tab-button active" data-tab="document-types">
+                        <i class="fas fa-file-alt"></i> Document Types
                     </button>
                     <button class="tab-button" data-tab="notifications-templates">
                         <i class="fas fa-envelope"></i> Notifications
                     </button>
-                    <button class="tab-button" data-tab="security-compliance">
-                        <i class="fas fa-lock"></i> Security
-                    </button>
-                    <button class="tab-button" data-tab="monitoring-logs">
-                        <i class="fas fa-chart-line"></i> Monitoring
-                    </button>
-                    <button class="tab-button" data-tab="data-integrations">
-                        <i class="fas fa-plug"></i> Integrations
+                    <button class="tab-button" data-tab="data-privacy">
+                        <i class="fas fa-user-shield"></i> Data & Privacy
                     </button>
                 </div>
 
-                <!-- User & Role Management Panel -->
-                <div class="admin-panel active" id="user-role-management">
+                <!-- Document Types Panel -->
+                <div class="admin-panel active" id="document-types">
                     <div class="admin-card">
-                        <h3><i class="fas fa-user-tag"></i> Role Management</h3>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Administrator</strong>
-                                <span>Full access to all system features and settings</span>
-                            </div>
-                            <button class="btn btn-secondary">Edit Permissions</button>
+                        <h3><i class="fas fa-file-invoice"></i> Document Types Management</h3>
+                        <p>Add, edit, or remove document types and set their prices.</p>
+
+                        <div class="document-types-list">
+                            <table class="doc-types-table">
+                                <thead>
+                                    <tr>
+                                        <th>Document Name</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doc-types-list-body">
+                                    <tr>
+                                        <td>Birth Certificate</td>
+                                        <td>$15.00</td>
+                                        <td>
+                                            <div class="doc-actions">
+                                                <button title="Edit Document"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Marriage Certificate</td>
+                                        <td>$25.00</td>
+                                        <td>
+                                            <div class="doc-actions">
+                                                <button title="Edit Document"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Property Title</td>
+                                        <td>$35.00</td>
+                                        <td>
+                                            <div class="doc-actions">
+                                                <button title="Edit Document"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Moderator</strong>
-                                <span>Can manage requests and limited user actions</span>
-                            </div>
-                            <button class="btn btn-secondary">Edit Permissions</button>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Viewer</strong>
-                                <span>Read-only access to system data</span>
-                            </div>
-                            <button class="btn btn-secondary">Edit Permissions</button>
-                        </div>
-                        <div class="form-actions">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Create New Role
+
+                        <div class="add-document-type">
+                            <button class="btn btn-primary" id="add-doc-type-btn">
+                                <i class="fas fa-plus"></i> Add Document Type
                             </button>
                         </div>
-                    </div>
 
-                    <div class="admin-card">
-                        <h3><i class="fas fa-users"></i> User Management</h3>
-                        <div class="invite-users">
-                            <button>
-                                <i class="fas fa-user-plus"></i> Invite Users
-                            </button>
-                        </div>
-                        <div class="bulk-actions">
-                            <select id="bulk-action">
-                                <option value="">Bulk Actions</option>
-                                <option value="activate">Activate Selected</option>
-                                <option value="deactivate">Deactivate Selected</option>
-                                <option value="delete">Delete Selected</option>
-                            </select>
-                            <button>Apply</button>
-                        </div>
-                        <table class="user-list">
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" id="select-all-users"></th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox" class="user-select"></td>
-                                    <td>Admin User</td>
-                                    <td>admin@example.com</td>
-                                    <td><span class="user-role role-admin">Administrator</span></td>
-                                    <td><span class="user-status status-active"></span> Active</td>
-                                    <td>
-                                        <div class="user-actions">
-                                            <button title="Edit User"><i class="fas fa-edit"></i></button>
-                                            <button title="Delete User"><i class="fas fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="user-select"></td>
-                                    <td>Moderator User</td>
-                                    <td>moderator@example.com</td>
-                                    <td><span class="user-role role-moderator">Moderator</span></td>
-                                    <td><span class="user-status status-active"></span> Active</td>
-                                    <td>
-                                        <div class="user-actions">
-                                            <button title="Edit User"><i class="fas fa-edit"></i></button>
-                                            <button title="Delete User"><i class="fas fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="user-select"></td>
-                                    <td>Viewer User</td>
-                                    <td>viewer@example.com</td>
-                                    <td><span class="user-role role-viewer">Viewer</span></td>
-                                    <td><span class="user-status status-inactive"></span> Inactive</td>
-                                    <td>
-                                        <div class="user-actions">
-                                            <button title="Edit User"><i class="fas fa-edit"></i></button>
-                                            <button title="Delete User"><i class="fas fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-lock"></i> Password Policy</h3>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Require Complex Passwords</strong>
-                                <span>Require upper/lowercase, numbers, and special characters</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Enable Account Lockout</strong>
-                                <span>Lock accounts after multiple failed login attempts</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="security-policy">
-                            <div class="policy-field">
-                                <label>Minimum Password Length</label>
-                                <input type="number" value="8" min="6" max="32">
-                            </div>
-                            <div class="policy-field">
-                                <label>Password Expiry Days</label>
-                                <input type="number" value="90" min="0">
-                                <span style="margin-left: 10px; color: var(--light-text)">0 = never expire</span>
-                            </div>
-                            <div class="policy-field">
-                                <label>Failed Attempts Before Lockout</label>
-                                <input type="number" value="5" min="1" max="10">
-                            </div>
-                            <div class="policy-field">
-                                <label>Account Lockout Duration</label>
-                                <input type="number" value="30" min="1">
-                                <span style="margin-left: 10px; color: var(--light-text)">minutes</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Platform Configuration Panel -->
-                <div class="admin-panel" id="platform-config">
-                    <div class="admin-card">
-                        <h3><i class="fas fa-sitemap"></i> Request Workflow Configuration</h3>
-                        <p>Configure the stages and fields for document request workflows.</p>
-                        
-                        <div class="workflow-step">
-                            <div class="workflow-step-header">
-                                <h4><i class="fas fa-clipboard-check"></i> Initial Request</h4>
-                                <div class="step-actions">
-                                    <button title="Edit Step"><i class="fas fa-edit"></i></button>
-                                    <button title="Delete Step"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                            <div class="workflow-step-content">
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>Document Type</h5>
-                                        <span class="field-type">Dropdown</span>
-                                    </div>
-                                </div>
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>Requester Details</h5>
-                                        <span class="field-type">Form Group</span>
-                                    </div>
-                                </div>
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>Purpose</h5>
-                                        <span class="field-type">Text Area</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="workflow-step-header">
-                                <h4><i class="fas fa-money-check-alt"></i> Payment</h4>
-                                <div class="step-actions">
-                                    <button title="Edit Step"><i class="fas fa-edit"></i></button>
-                                    <button title="Delete Step"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                            <div class="workflow-step-content">
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>Payment Method</h5>
-                                        <span class="field-type">Radio Group</span>
-                                    </div>
-                                </div>
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>Payment Details</h5>
-                                        <span class="field-type">Dynamic Form</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="workflow-step">
-                            <div class="workflow-step-header">
-                                <h4><i class="fas fa-check-double"></i> Verification</h4>
-                                <div class="step-actions">
-                                    <button title="Edit Step"><i class="fas fa-edit"></i></button>
-                                    <button title="Delete Step"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                            <div class="workflow-step-content">
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>ID Verification</h5>
-                                        <span class="field-type">File Upload</span>
-                                    </div>
-                                </div>
-                                <div class="workflow-field">
-                                    <div class="workflow-field-header">
-                                        <h5>Proof of Address</h5>
-                                        <span class="field-type">File Upload</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="add-step">
-                            <button>
-                                <i class="fas fa-plus"></i> Add Workflow Step
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-id-card"></i> Identity Verification</h3>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Require ID Verification</strong>
-                                <span>Users must verify identity before making requests</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Enable KBA Questions</strong>
-                                <span>Use knowledge-based authentication questions</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Address Verification</strong>
-                                <span>Require proof of address documents</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-cogs"></i> Workflow Triggers</h3>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Auto-Approve Low-Risk Requests</strong>
-                                <span>Automatically approve requests that meet certain criteria</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Auto-Escalate Aging Requests</strong>
-                                <span>Escalate requests that haven't been processed within the SLA</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="policy-field">
-                            <label>Escalation Threshold (hours)</label>
-                            <input type="number" value="48" min="1">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Branding & UI Panel -->
-                <div class="admin-panel" id="branding-ui">
-                    <div class="admin-card">
-                        <h3><i class="fas fa-palette"></i> Platform Appearance</h3>
-                        <div class="color-picker">
-                            <div class="color-option">
-                                <label>Primary Color</label>
-                                <div class="color-preview color-primary" title="#3a0ca3"></div>
-                                <input type="text" value="#3a0ca3" placeholder="Color HEX Code">
-                            </div>
-                            <div class="color-option">
-                                <label>Secondary Color</label>
-                                <div class="color-preview color-secondary" title="#7209b7"></div>
-                                <input type="text" value="#7209b7" placeholder="Color HEX Code">
-                            </div>
-                            <div class="color-option">
-                                <label>Accent Color</label>
-                                <div class="color-preview color-accent" title="#f72585"></div>
-                                <input type="text" value="#f72585" placeholder="Color HEX Code">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Platform Name</label>
-                            <input type="text" value="DocuTracker">
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-image"></i> Logo & Icons</h3>
-                        <div class="logo-upload">
-                            <div class="logo-preview">
-                                <img src="images/logo.svg" alt="Platform logo">
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label>Header Logo</label>
-                                <input type="file" id="logo-upload">
-                                <p style="margin-top: 8px; color: var(--light-text); font-size: 0.9em;">
-                                    Recommended size: 180x60px. PNG or SVG format.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="logo-upload">
-                            <div class="logo-preview">
-                                <img src="images/favicon.ico" alt="Favicon">
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label>Favicon</label>
-                                <input type="file" id="favicon-upload">
-                                <p style="margin-top: 8px; color: var(--light-text); font-size: 0.9em;">
-                                    Recommended size: 32x32px. ICO format.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-edit"></i> Footer Content</h3>
-                        <div class="form-group">
-                            <label>Footer Text</label>
-                            <textarea rows="3">Providing secure and efficient document processing services.</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Copyright Text</label>
-                            <input type="text" value="© 2023 DocuTracker. All rights reserved.">
-                        </div>
-                        <div class="form-group">
-                            <label>Social Media Links</label>
-                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                <input type="text" placeholder="Facebook URL" value="https://facebook.com/docutracker">
-                                <button><i class="fas fa-times"></i></button>
-                            </div>
-                            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                                <input type="text" placeholder="Twitter URL" value="https://twitter.com/docutracker">
-                                <button><i class="fas fa-times"></i></button>
-                            </div>
-                            <button class="btn btn-secondary" style="margin-top: 10px;">
-                                <i class="fas fa-plus"></i> Add Social Link
-                            </button>
-                        </div>
+                        <!-- Removing the inline form since we'll use a modal instead -->
                     </div>
                 </div>
 
                 <!-- Notifications & Templates Panel -->
                 <div class="admin-panel" id="notifications-templates">
                     <div class="admin-card">
-                        <h3><i class="fas fa-envelope-open-text"></i> Email Templates</h3>
-                        <div class="form-group">
-                            <label>Select Template</label>
-                            <select>
-                                <option>Welcome Email</option>
-                                <option>Password Reset</option>
-                                <option>Request Confirmation</option>
-                                <option>Request Status Update</option>
-                                <option>Identity Verification</option>
-                            </select>
-                        </div>
-                        <div class="template-variables">
-                            <h4>Available Variables</h4>
-                            <div class="variables-list">
-                                <span class="variable">{{user_name}}</span>
-                                <span class="variable">{{user_email}}</span>
-                                <span class="variable">{{request_id}}</span>
-                                <span class="variable">{{request_status}}</span>
-                                <span class="variable">{{verification_link}}</span>
-                                <span class="variable">{{reset_link}}</span>
-                                <span class="variable">{{company_name}}</span>
-                                <span class="variable">{{support_email}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Email Subject</label>
-                            <input type="text" value="Welcome to DocuTracker - Confirm Your Email">
-                        </div>
-                        <div class="form-group">
-                            <label>Email Body</label>
-                            <div class="template-preview">
-                                <h2>Welcome to DocuTracker!</h2>
-                                <p>Hello {{user_name}},</p>
-                                <p>Thank you for creating an account with {{company_name}}. We're excited to have you on board!</p>
-                                <p>Please confirm your email address by clicking the button below:</p>
-                                <p style="text-align: center;">
-                                    <a href="{{verification_link}}" style="background-color: #4361ee; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Verify Email Address</a>
-                                </p>
-                                <p>If you have any questions, please contact our support team at {{support_email}}.</p>
-                                <p>Best regards,<br>The DocuTracker Team</p>
-                            </div>
-                        </div>
-                        <div class="template-actions">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Template
-                            </button>
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-paper-plane"></i> Send Test Email
-                            </button>
+                        <h3><i class="fas fa-bullhorn"></i> Send System-wide Notification</h3>
+                        <p>Send a notification to all users in the system</p>
+                        <!-- New System Notification Section -->
+                        <div class="notification-section">
+                            <form id="system-notification-form">
+                                <div class="form-group">
+                                    <label for="system-notification-title">Notification Title</label>
+                                    <input type="text" id="system-notification-title" placeholder="e.g., System Maintenance" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="system-notification-message">Notification Message</label>
+                                    <textarea id="system-notification-message" rows="3" placeholder="Enter notification message here..." required></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="system-notification-status">Status</label>
+                                    <select id="system-notification-status" required>
+                                        <option value="info">Info</option>
+                                        <option value="success">Success</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="error">Error</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i> Send System Notification
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
+                    
+                    <!-- User-specific Notifications Card -->
                     <div class="admin-card">
-                        <h3><i class="fas fa-mobile-alt"></i> SMS Templates</h3>
-                        <div class="form-group">
-                            <label>Select Template</label>
-                            <select>
-                                <option>Verification Code</option>
-                                <option>Request Status Update</option>
-                                <option>Payment Confirmation</option>
-                            </select>
-                        </div>
-                        <div class="template-variables">
-                            <h4>Available Variables</h4>
-                            <div class="variables-list">
-                                <span class="variable">{{user_name}}</span>
-                                <span class="variable">{{verification_code}}</span>
-                                <span class="variable">{{request_id}}</span>
-                                <span class="variable">{{request_status}}</span>
-                                <span class="variable">{{company_name}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>SMS Message</label>
-                            <textarea rows="3">{{company_name}}: Your verification code is {{verification_code}}. This code will expire in 10 minutes.</textarea>
-                            <p style="margin-top: 5px; color: var(--light-text); font-size: 0.9em;">160 characters maximum for standard SMS</p>
-                        </div>
-                        <div class="template-actions">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Template
-                            </button>
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-paper-plane"></i> Send Test SMS
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-history"></i> Audit Log Settings</h3>
-                        <div class="form-group">
-                            <label>Audit Log Retention Period</label>
-                            <select>
-                                <option>30 days</option>
-                                <option>60 days</option>
-                                <option selected>90 days</option>
-                                <option>180 days</option>
-                                <option>1 year</option>
-                            </select>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Log User Actions</strong>
-                                <span>Record all user activities in the audit log</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Log Admin Actions</strong>
-                                <span>Record all administrator activities in the audit log</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Log System Events</strong>
-                                <span>Record system-generated events in the audit log</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Security & Compliance Panel -->
-                <div class="admin-panel" id="security-compliance">
-                    <div class="admin-card">
-                        <h3><i class="fas fa-shield-alt"></i> Security Settings</h3>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Force HTTPS</strong>
-                                <span>Redirect all HTTP traffic to HTTPS</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Enable CORS</strong>
-                                <span>Allow cross-origin requests from specific domains</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="security-policy">
-                            <div class="policy-field">
-                                <label>Session Timeout (minutes)</label>
-                                <input type="number" value="30" min="5" max="120">
-                            </div>
-                            <div class="policy-field">
-                                <label>Max Login Attempts</label>
-                                <input type="number" value="5" min="3" max="10">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-key"></i> API Key Management</h3>
-                        <div class="api-key">
-                            <div class="api-key-info">
-                                <h4>Production API Key</h4>
-                                <p>Created: Jan 15, 2023</p>
-                            </div>
-                            <div class="api-key-value">
-                                <span>••••••••••••••••••••••</span>
-                                <button title="Show API Key"><i class="fas fa-eye"></i></button>
-                                <button title="Copy API Key"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        <div class="api-key">
-                            <div class="api-key-info">
-                                <h4>Development API Key</h4>
-                                <p>Created: Mar 5, 2023</p>
-                            </div>
-                            <div class="api-key-value">
-                                <span>••••••••••••••••••••••</span>
-                                <button title="Show API Key"><i class="fas fa-eye"></i></button>
-                                <button title="Copy API Key"><i class="fas fa-copy"></i></button>
-                            </div>
-                        </div>
-                        <div class="api-key-actions">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Generate New API Key
-                            </button>
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-sync-alt"></i> Rotate Keys
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-network-wired"></i> IP Whitelist</h3>
-                        <p>Restrict API access to specific IP addresses.</p>
+                        <h3><i class="fas fa-user"></i> User-specific Notifications</h3>
+                        <p>Send targeted notifications to specific users</p>
                         
-                        <div class="ip-whitelist">
-                            <input type="text" value="192.168.1.1" placeholder="Enter IP address">
-                            <button title="Remove IP"><i class="fas fa-times"></i></button>
-                        </div>
-                        <div class="ip-whitelist">
-                            <input type="text" value="10.0.0.1" placeholder="Enter IP address">
-                            <button title="Remove IP"><i class="fas fa-times"></i></button>
-                        </div>
-                        
-                        <div class="add-ip">
-                            <button>
-                                <i class="fas fa-plus"></i> Add IP Address
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- System Monitoring & Logs Panel -->
-                <div class="admin-panel" id="monitoring-logs">
-                    <div class="admin-card">
-                        <h3><i class="fas fa-heartbeat"></i> System Status</h3>
-                        <div class="system-status">
-                            <div class="status-card status-up">
-                                <h4>API Service</h4>
-                                <div class="status-indicator">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <p>Operational</p>
-                            </div>
-                            <div class="status-card status-up">
-                                <h4>Database</h4>
-                                <div class="status-indicator">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <p>Operational</p>
-                            </div>
-                            <div class="status-card status-warning">
-                                <h4>Storage</h4>
-                                <div class="status-indicator">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                </div>
-                                <p>Degraded (85% Full)</p>
-                            </div>
-                            <div class="status-card status-up">
-                                <h4>Email Service</h4>
-                                <div class="status-indicator">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <p>Operational</p>
-                            </div>
-                        </div>
-                        <div style="text-align: right; margin-top: 15px;">
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-sync-alt"></i> Refresh Status
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="admin-card">
-                        <h3><i class="fas fa-list"></i> Application Logs</h3>
-                        <div class="log-filters">
-                            <div class="log-filter">
-                                <label>Log Level</label>
-                                <select>
-                                    <option>All Levels</option>
-                                    <option>Error</option>
-                                    <option>Warning</option>
-                                    <option>Info</option>
-                                    <option>Debug</option>
+                        <form id="user-notification-form">
+                            <div class="form-group">
+                                <label for="user-notification-recipient">Select User</label>
+                                <select id="user-notification-recipient" required>
+                                    <option value="">-- Select a user --</option>
+                                    <option value="1">John Doe (john.doe@example.com)</option>
+                                    <option value="2">Jane Smith (jane.smith@example.com)</option>
+                                    <option value="3">Robert Johnson (robert.j@example.com)</option>
+                                    <option value="4">Emily Wilson (emily.w@example.com)</option>
                                 </select>
                             </div>
-                            <div class="log-filter">
-                                <label>Date Range</label>
-                                <input type="date" value="2023-07-01">
-                                <input type="date" value="2023-07-15" style="margin-top: 5px;">
+                            
+                            <div class="form-group">
+                                <label for="user-notification-title">Notification Title</label>
+                                <input type="text" id="user-notification-title" placeholder="e.g., Document Approval" required>
                             </div>
-                            <div class="log-filter">
-                                <label>Search Term</label>
-                                <input type="text" placeholder="Search in logs...">
+                            
+                            <div class="form-group">
+                                <label for="user-notification-message">Notification Message</label>
+                                <textarea id="user-notification-message" rows="3" placeholder="Enter personalized message here..." required></textarea>
                             </div>
-                            <div class="log-actions">
-                                <button class="btn btn-primary">
-                                    <i class="fas fa-search"></i> Search
+                            
+                            <div class="form-group">
+                                <label for="user-notification-status">Status</label>
+                                <select id="user-notification-status" required>
+                                    <option value="info">Info</option>
+                                    <option value="success">Success</option>
+                                    <option value="warning">Warning</option>
+                                    <option value="error">Error</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Send User Notification
                                 </button>
-                                <button class="btn btn-secondary">
-                                    <i class="fas fa-download"></i> Export
-                                </button>
                             </div>
-                        </div>
-                        <table class="log-list">
-                            <thead>
-                                <tr>
-                                    <th>Timestamp</th>
-                                    <th>Level</th>
-                                    <th>Source</th>
-                                    <th>Message</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="log-timestamp">2023-07-15 09:45:12</td>
-                                    <td><span class="log-level level-error">Error</span></td>
-                                    <td>PaymentService</td>
-                                    <td>Failed to process payment for request #12345</td>
-                                    <td>
-                                        <button title="View Details"><i class="fas fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="log-timestamp">2023-07-15 08:30:05</td>
-                                    <td><span class="log-level level-warning">Warning</span></td>
-                                    <td>UserService</td>
-                                    <td>Multiple failed login attempts for user admin@example.com</td>
-                                    <td>
-                                        <button title="View Details"><i class="fas fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="log-timestamp">2023-07-15 08:15:22</td>
-                                    <td><span class="log-level level-info">Info</span></td>
-                                    <td>RequestService</td>
-                                    <td>New document request created: #12347</td>
-                                    <td>
-                                        <button title="View Details"><i class="fas fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        </form>
                     </div>
-
+                    
+                    <!-- Notification History Card -->
                     <div class="admin-card">
-                        <h3><i class="fas fa-chart-bar"></i> System Health</h3>
-                        <div class="form-group">
-                            <label>Health Check Frequency</label>
-                            <select>
-                                <option>Every 1 minute</option>
-                                <option selected>Every 5 minutes</option>
-                                <option>Every 15 minutes</option>
-                                <option>Every 30 minutes</option>
-                                <option>Every hour</option>
-                            </select>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Email Notifications</strong>
-                                <span>Send email alerts when health check fails</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label>Alert Recipients</label>
-                            <input type="text" value="admin@example.com, sysadmin@example.com">
-                            <p style="margin-top: 5px; color: var(--light-text); font-size: 0.9em;">
-                                Separate multiple email addresses with commas
-                            </p>
+                        <h3><i class="fas fa-history"></i> Recent Notifications</h3>
+                        <p>History of recently sent notifications</p>
+                        
+                        <div class="notifications-table-container">
+                            <table class="notifications-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date/Time</th>
+                                        <th>Type</th>
+                                        <th>Title</th>
+                                        <th>Recipient</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2023-09-14 10:30 AM</td>
+                                        <td>System</td>
+                                        <td>Scheduled Maintenance</td>
+                                        <td>All Users</td>
+                                        <td><span class="status-badge status-info">Info</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-09-13 03:45 PM</td>
+                                        <td>User</td>
+                                        <td>Document Request Approved</td>
+                                        <td>John Doe</td>
+                                        <td><span class="status-badge status-success">Success</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-09-12 11:20 AM</td>
+                                        <td>System</td>
+                                        <td>New Feature Announcement</td>
+                                        <td>All Users</td>
+                                        <td><span class="status-badge status-info">Info</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2023-09-10 09:15 AM</td>
+                                        <td>User</td>
+                                        <td>Payment Overdue</td>
+                                        <td>Jane Smith</td>
+                                        <td><span class="status-badge status-warning">Warning</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
-                <!-- Data & Integrations Panel -->
-                <div class="admin-panel" id="data-integrations">
+                
+                <!-- Data & Privacy Panel -->
+                <div class="admin-panel" id="data-privacy">
                     <div class="admin-card">
-                        <h3><i class="fas fa-plug"></i> Third-Party Integrations</h3>
-                        <div class="integration-item">
-                            <div class="integration-info">
-                                <div class="integration-icon">
-                                    <i class="fab fa-salesforce"></i>
+                        <h3><i class="fas fa-user-shield"></i> Personal Information</h3>
+                        <p>Manage your personal information and account security</p>
+                        
+                        <!-- Username Change Form -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-user"></i> Change Username</h4>
+                            <form id="change-username-form">
+                                <div class="form-group">
+                                    <label for="current-username">Current Username</label>
+                                    <input type="text" id="current-username" disabled>
                                 </div>
-                                <div class="integration-details">
-                                    <h4>Salesforce CRM</h4>
-                                    <p>Connect with Salesforce to sync customer data</p>
+                                <div class="form-group">
+                                    <label for="new-username">New Username</label>
+                                    <input type="text" id="new-username" required>
                                 </div>
-                            </div>
-                            <div class="integration-actions">
-                                <button>Connect</button>
-                            </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update Username
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="integration-item integration-connected">
-                            <div class="integration-info">
-                                <div class="integration-icon">
-                                    <i class="fas fa-file-invoice-dollar"></i>
+                        
+                        <!-- Email Change Form -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-envelope"></i> Change Email Address</h4>
+                            <form id="change-email-form">
+                                <div class="form-group">
+                                    <label for="current-email">Current Email</label>
+                                    <input type="email" id="current-email" disabled>
                                 </div>
-                                <div class="integration-details">
-                                    <h4>QuickBooks</h4>
-                                    <p>Connected on July 10, 2023</p>
+                                <div class="form-group">
+                                    <label for="new-email">New Email</label>
+                                    <input type="email" id="new-email" required>
                                 </div>
-                            </div>
-                            <div class="integration-actions">
-                                <button>Manage</button>
-                            </div>
+                                <div class="form-group">
+                                    <label for="confirm-password-email">Confirm Password</label>
+                                    <input type="password" id="confirm-password-email" required>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update Email
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="integration-item">
-                            <div class="integration-info">
-                                <div class="integration-icon">
-                                    <i class="fab fa-mailchimp"></i>
+                        
+                        <!-- Password Change Form -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-lock"></i> Change Password</h4>
+                            <form id="change-password-form">
+                                <div class="form-group">
+                                    <label for="current-password">Current Password</label>
+                                    <input type="password" id="current-password" required>
                                 </div>
-                                <div class="integration-details">
-                                    <h4>Mailchimp</h4>
-                                    <p>Connect with Mailchimp for email campaigns</p>
+                                <div class="form-group">
+                                    <label for="new-password">New Password</label>
+                                    <input type="password" id="new-password" required>
                                 </div>
-                            </div>
-                            <div class="integration-actions">
-                                <button>Connect</button>
-                            </div>
+                                <div class="form-group">
+                                    <label for="confirm-new-password">Confirm New Password</label>
+                                    <input type="password" id="confirm-new-password" required>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update Password
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-
+                    
                     <div class="admin-card">
-                        <h3><i class="fas fa-code"></i> Webhook Configuration</h3>
-                        <p>Configure webhook endpoints to receive real-time updates.</p>
+                        <h3><i class="fas fa-database"></i> Data Management</h3>
+                        <p>Import and Export system Database for backup</p>
                         
-                        <div class="form-group">
-                            <label>Webhook URL</label>
-                            <input type="text" placeholder="https://your-app.com/webhook">
-                        </div>
-                        <div class="form-group">
-                            <label>Webhook Secret</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="password" value="••••••••••••••••••••••">
-                                <button class="btn btn-secondary">Generate</button>
-                            </div>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Request Created</strong>
-                                <span>Trigger webhook when a new request is created</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Request Status Changed</strong>
-                                <span>Trigger webhook when a request status changes</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Payment Received</strong>
-                                <span>Trigger webhook when a payment is received</span>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        
-                        <div class="webhook-endpoints">
-                            <h4 style="margin-top: 20px;">Active Webhook Endpoints</h4>
-                            <div class="webhook-endpoint">
-                                <p>https://example.com/webhook1</p>
-                                <button title="Remove Endpoint"><i class="fas fa-trash"></i></button>
-                            </div>
-                            <div class="webhook-endpoint">
-                                <p>https://example.com/webhook2</p>
-                                <button title="Remove Endpoint"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        
-                        <div class="form-actions">
-                            <button class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Add Webhook
-                            </button>
-                            <button class="btn btn-secondary">
-                                <i class="fas fa-cog"></i> Test Webhook
-                            </button>
-                        </div>
-                    </div>
+                        <div class="data-management-options">
 
-                    <div class="admin-card">
-                        <h3><i class="fas fa-database"></i> Data Retention</h3>
-                        <div class="form-group">
-                            <label>Request Data Retention</label>
-                            <select>
-                                <option>90 days</option>
-                                <option>6 months</option>
-                                <option selected>1 year</option>
-                                <option>2 years</option>
-                                <option>5 years</option>
-                                <option>Indefinitely</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Data Retention</label>
-                            <select>
-                                <option>90 days</option>
-                                <option>6 months</option>
-                                <option>1 year</option>
-                                <option selected>7 years (recommended for financial records)</option>
-                                <option>Indefinitely</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>User Data Retention After Account Deletion</label>
-                            <select>
-                                <option>Immediately</option>
-                                <option selected>30 days</option>
-                                <option>90 days</option>
-                                <option>1 year</option>
-                            </select>
-                        </div>
-                        <div class="toggle-option">
-                            <div class="toggle-option-text">
-                                <strong>Automatic Data Pruning</strong>
-                                <span>Automatically delete data that exceeds retention period</span>
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <h4><i class="fas fa-upload"></i> Import Database</h4>
+                                    <p>Import a SQL dump file to restore or update the database</p>
+                                </div>
+                                <button class="btn btn-secondary" id="import-database-btn">
+                                    <i class="fas fa-upload"></i> Import Database
+                                </button>
                             </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
+                            
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <h4><i class="fas fa-database"></i> Export Database</h4>
+                                    <p>Export the entire database as a SQL dump file for backup or migration purposes</p>
+                                </div>
+                                <button class="btn btn-secondary" id="export-database-btn">
+                                    <i class="fas fa-database"></i> Export Database
+                                </button>
+                            </div>
+                            
+                            <!-- No Deletion? Still thinking about it... -->
+                            <!-- <div class="data-option danger-zone">
+                                <div class="data-option-info">
+                                    <h4><i class="fas fa-exclamation-triangle"></i> Delete Account</h4>
+                                    <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                                </div>
+                                <button class="btn btn-danger" id="delete-account-btn">
+                                    <i class="fas fa-trash"></i> Delete Account
+                                </button>
+                            </div> -->
+                            
                         </div>
                     </div>
                 </div>
@@ -1139,48 +525,70 @@
         </div>
     </footer>
 
+    <!-- Document Type Modal (used for both adding and editing) -->
+    <div id="document-modal" class="modal">
+        <form id="document-add-edit">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4><i class="fas fa-file-alt"></i> <span id="modal-title">Add Document Type</span></h4>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="modal-doc-name">Document Name</label>
+                        <input type="text" id="modal-doc-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-doc-price">Price ($)</label>
+                        <input type="number" id="modal-doc-price" min="0" step="0.01" required>
+                    </div>
+                    <input type="hidden" id="modal-doc-id">
+                    <input type="hidden" id="modal-action" value="add">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-doc-type">
+                        <i class="fas fa-save"></i> <span id="modal-save-btn-text">Save</span>
+                    </button>
+                    <button class="btn btn-danger" id="delete-doc-type-btn">
+                        <i class="fas fa-trash"></i> Delete Document
+                    </button>
+                    <button class="btn btn-secondary modal-close-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize tab switching only
+            initializeTabSwitching();
+        });
+
+        /**
+         * Initialize tab switching functionality
+         */
+        function initializeTabSwitching() {
             const tabButtons = document.querySelectorAll('.tab-button');
             const adminPanels = document.querySelectorAll('.admin-panel');
-            
+
             tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     // Remove active class from all buttons and panels
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     adminPanels.forEach(panel => panel.classList.remove('active'));
-                    
+
                     // Add active class to current button
                     button.classList.add('active');
-                    
+
                     // Show the corresponding panel
                     const tabId = button.getAttribute('data-tab');
                     document.getElementById(tabId).classList.add('active');
                 });
             });
-            
-            // User management functionality
-            const selectAllUsers = document.getElementById('select-all-users');
-            if (selectAllUsers) {
-                selectAllUsers.addEventListener('change', function() {
-                    const checkboxes = document.querySelectorAll('.user-select');
-                    checkboxes.forEach(checkbox => {
-                        checkbox.checked = selectAllUsers.checked;
-                    });
-                });
-            }
-            
-            // Color picker preview functionality
-            const colorInputs = document.querySelectorAll('.color-option input[type="text"]');
-            colorInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    const preview = input.previousElementSibling;
-                    preview.style.backgroundColor = input.value;
-                });
-            });
-        });
+        }
     </script>
 </body>
-
 </html>

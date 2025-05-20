@@ -25,6 +25,7 @@ function createTable($conn, $sql)
 $userSql = "CREATE TABLE IF NOT EXISTS User(
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(30) NOT NULL UNIQUE,
+            user_profile VARCHAR(255),
             phone VARCHAR(15) NOT NULL UNIQUE,
             email VARCHAR(50) NOT NULL UNIQUE,
             role VARCHAR(255) DEFAULT 'client',
@@ -192,7 +193,7 @@ $requestLogSql = "CREATE TABLE IF NOT EXISTS RequestLog(
 function createDefaultAdmin(){
     global $conn;
     $username = "admin";
-    $password = password_hash("admin123", PASSWORD_BCRYPT);
+    $password = password_hash("admin123", PASSWORD_DEFAULT);
     $phone = "09123456789";
     $email = "admin@docutracker.com";
     $role = "admin";

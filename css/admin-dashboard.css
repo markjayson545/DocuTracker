@@ -20,38 +20,7 @@ body {
 @import url("../css/global/variables.css");
 
 
-header {
-    background-color: white;
-    padding: 15px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
 
-header a {
-    text-decoration: none;
-}
-
-header h2 {
-    color: var(--primary-color);
-    font-size: 1.5em;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Search Bar */
-.search-container {
-    display: flex;
-    align-items: center;
-    flex: 0 1 500px;
-    position: relative;
-}
 
 .search-container input {
     width: 100%;
