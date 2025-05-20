@@ -1,25 +1,7 @@
-:root {
-    --primary-color: #4361ee;
-    --primary-dark: #3a56d4;
-    --accent-color: #4cc9f0;
-    --secondary-color: #7209b7;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f8f9fa;
-    --input-bg: #ffffff;
-    --border-color: #e1e5eb;
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --success-color: #4CAF50;
-    --success-color-light: #DFF2E7;
-    --error-color: #f44336;
-    --error-color-light: #FBE9E7;
-    --warning-color: #ff9800;
-    --warning-color-light: #FFF3E0;
-    --transition: all 0.3s ease-in-out;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-    --text-color-footer: #e6e6f0;
-}
+/* Import global variables */
+@import url('../css/global/variables.css');
+
+/* Additional login-specific variables */
 
 * {
     margin: 0;

@@ -2,9 +2,6 @@
 @import url("variables.css");
 
 /* Additional header/footer specific variables */
-:root {
-    --text-color-footer: #e6e6f0;
-}
 
 * {
     margin: 0;

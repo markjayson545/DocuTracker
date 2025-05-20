@@ -198,6 +198,10 @@ section h2::after {
         font-size: 1.4em;
     }
 
+    header ul {
+        display: none;
+    }
+
     header ul li {
         padding: 12px;
     }

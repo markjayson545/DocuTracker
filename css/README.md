@@ -4,6 +4,13 @@
 
 This document outlines how CSS is organized in the DocuTracker application to ensure maintainability, consistency, and reduced duplication. Our CSS architecture is based on a global component system that centralizes common styles while allowing for page-specific customizations.
 
+### Key Features
+
+- **Centralized Variables**: All CSS variables (111 in total) are defined in a single `variables.css` file
+- **Component-Based Structure**: Modular CSS files organized by component type
+- **Import Hierarchy**: Clear import structure ensures variables are available everywhere
+- **Reduced Duplication**: No duplicate style definitions across the application
+
 ## Directory Structure
 
 ```
@@ -233,6 +240,22 @@ When you need to add or modify global CSS:
 ## Extending the System
 
 To add new global components:
+
+1. Create your new component CSS file in the global directory
+2. Import the variables.css file at the top
+3. Add your new file to master.css in the appropriate section
+4. Document the new component in this README
+
+## CSS Architecture Validation
+
+We've included several scripts to help maintain our CSS architecture:
+
+- `validate-css-architecture.sh`: Validates that our CSS architecture follows our guidelines
+- `update-css-order.sh`: Ensures HTML files load CSS in the correct order
+- `update-css-imports.sh`: Adds missing variable imports to CSS files
+- `remove-duplicate-variables.sh`: Removes duplicate variable declarations
+
+Run these scripts after making changes to ensure consistency:
 
 1. Create a new CSS file in the global directory
 2. Add the new file to master.css imports

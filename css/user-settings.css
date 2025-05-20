@@ -1,6 +1,10 @@
 /*------------------------------------*\
   #USER SETTINGS PAGE-SPECIFIC STYLES
 \*------------------------------------*/
+
+/* Import global variables */
+@import url("../css/global/variables.css");
+
 /* Note: Most styles have been moved to global CSS files:
  * - CSS variables: utilities.css
  * - Layout elements: layouts.css

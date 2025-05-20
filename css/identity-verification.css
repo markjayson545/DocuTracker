@@ -1,23 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-:root {
-    --primary-color: #4361ee;
-    --primary-light: rgba(67, 97, 238, 0.1);
-    --secondary-color: #3a0ca3;
-    --accent-color: #4cc9f0;
-    --light-bg: #f8f9fa;
-    --dark-text: #212529;
-    --light-text: #f8f9fa;
-    --gray-text: #6c757d;
-    --transition: all 0.3s ease;
-    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-    --success-color: #2ecc71;
-    --warning-color: #f39c12;
-    --error-color: #e74c3c;
-    --border-radius: 12px;
-    --border-radius-sm: 8px;
-}
 
 * {
     margin: 0;
@@ -33,6 +15,10 @@ body {
 }
 
 /* Header styles */
+
+/* Import global variables */
+@import url("../css/global/variables.css");
+
 header {
     display: flex;
     justify-content: space-between;
@@ -139,6 +125,11 @@ a {
     background-color: var(--secondary-color);
     transform: translateY(-2px);
     box-shadow: var(--shadow);
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Enhanced status steps styling */

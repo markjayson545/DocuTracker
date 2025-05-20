@@ -1,36 +1,17 @@
 /*------------------------------------*\
-  #VARIABLES - Imported from dashboard
+  #ADMIN SETTINGS SPECIFIC STYLES
 \*------------------------------------*/
-:root {
-    /* Same variables as user-dashboard.css */
-    --primary-color: #4361ee;
-    --primary-dark: #3a56d4;
-    --primary-gradient: linear-gradient(135deg, #4361ee, #3a56d4);
-    --accent-color: #4cc9f0;
-    --secondary-color: #7209b7;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f8f9fa;
-    --input-bg: #ffffff;
-    --border-color: #e1e5eb;
-    
-    /* Status colors */
-    --success-color: #4CAF50;
-    --warning-color: #ff9800;
-    --error-color: #f44336;
-    
-    /* Admin-specific colors */
-    --admin-primary: #3a0ca3;
-    --admin-secondary: #7209b7;
-    --admin-primary-gradient: linear-gradient(135deg, #3a0ca3, #7209b7);
-    --admin-accent: #f72585;
-    
-    /* Effects */
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --transition: all 0.3s ease-in-out;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
+/* Import global variables */
+@import url('../css/global/variables.css');
+
+/* 
+ * Note: Most styles have been moved to global CSS files:
+ * - CSS variables are in variables.css
+ * - Layout elements are in layouts.css
+ * - Forms and inputs are in forms.css
+ * - Buttons are in buttons.css
+ * - Cards are in cards.css
+ */
 
 /*------------------------------------*\
   #ADMIN LAYOUT
@@ -1033,11 +1014,11 @@
     border-radius: 50%;
 }
 
-input:checked + .toggle-slider {
+input:checked+.toggle-slider {
     background-color: var(--admin-primary);
 }
 
-input:checked + .toggle-slider:before {
+input:checked+.toggle-slider:before {
     transform: translateX(24px);
 }
 
@@ -1091,28 +1072,28 @@ input:checked + .toggle-slider:before {
     .admin-tabs {
         flex-wrap: wrap;
     }
-    
+
     .admin-tabs button {
         flex: 1 0 33.33%;
     }
-    
+
     .system-status {
         flex-direction: column;
     }
-    
+
     .log-filters {
         flex-direction: column;
     }
-    
+
     .log-actions {
         align-self: flex-start;
         margin-top: 15px;
     }
-    
+
     .log-list {
         font-size: 0.9em;
     }
-    
+
     .user-list {
         display: block;
         overflow-x: auto;
@@ -1124,34 +1105,34 @@ input:checked + .toggle-slider:before {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .admin-header .actions {
         margin-top: 15px;
         width: 100%;
     }
-    
+
     .admin-tabs button {
         flex: 1 0 50%;
     }
-    
+
     .form-actions {
         flex-direction: column;
     }
-    
+
     .form-actions button {
         width: 100%;
     }
-    
+
     .integration-item {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .integration-actions {
         margin-top: 15px;
         width: 100%;
     }
-    
+
     .integration-actions button {
         width: 100%;
     }

@@ -64,15 +64,25 @@
     
     /* Status Colors */
     --success-color: #4CAF50;
+    --success-color-light: #DFF2E7;
     --warning-color: #ff9800;
+    --warning-color-light: #FFF3E0;
     --error-color: #f44336;
+    --error-color-light: #FBE9E7;
     --info-color: #2196F3;
     --danger-color: #f44336; /* Synonym for error */
+    --completed-color: #607d8b;
     
     /* Role Colors */
     --admin-color: #9c27b0;
     --staff-color: #3f51b5;
     --user-color: #0d6efd;
+    
+    /* Admin-specific Colors */
+    --admin-primary: #3a0ca3;
+    --admin-secondary: #7209b7;
+    --admin-primary-gradient: linear-gradient(135deg, #3a0ca3, #7209b7);
+    --admin-accent: #f72585;
     
     /* Priority Colors */
     --priority-high: #f44336;
@@ -85,6 +95,8 @@
     --transition-slow: all 0.5s ease-in-out;
     
     /* Shadows */
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --primary-shadow-light: rgba(67, 97, 238, 0.3);
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -137,4 +149,9 @@
     --container-lg: 960px;
     --container-xl: 1140px;
     --container-xxl: 1320px;
+    
+    /* Card Styles */
+    --card-bg: #ffffff;
+    --card-border-radius: 16px;
+    --text-color-footer: #e6e6f0;
 }

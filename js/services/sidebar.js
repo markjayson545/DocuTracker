@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sidebar-toggle');
     const sidebarMenu = document.getElementById('sidebar-menu');
 
-    const userDashboardBtn = document.getElementById('user-dashboard-home-sidebar-btn');
+    const userDashboardBtn = document.getElementById('dashboard-home-sidebar-btn');
     const requestsBtn = document.getElementById('request-history-sidebar-btn');
     const profileBtn = document.getElementById('profile-sidebar-btn');
     const settingsBtn = document.getElementById('settings-sidebar-btn');
@@ -36,18 +36,16 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = 'user-request-history.html';
         });
     }
-
-    //TODO: Uncomment when profile and settings pages are available
-    // if (profileBtn) {
-    //     profileBtn.addEventListener('click', function () {
-    //         window.location.href = '/profile';
-    //     });
-    // }
-    // if (settingsBtn) {
-    //     settingsBtn.addEventListener('click', function () {
-    //         window.location.href = '/settings';
-    //     });
-    // }
+    if (profileBtn) {
+        profileBtn.addEventListener('click', function () {
+            window.location.href = 'user-profile.html';
+        });
+    }
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', function () {
+            window.location.href = 'user-settings.html';
+        });
+    }
 
     // Admin Sidebar
     if (adminDashboardBtn) {
@@ -70,18 +68,16 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = 'admin-manage-users.html';
         });
     }
-
-    // TODO: Uncomment when profile and settings pages are available
-    // if (adminProfileBtn) {
-    //     adminProfileBtn.addEventListener('click', function () {
-    //         window.location.href = 'admin-profile.html';
-    //     });
-    // }
-    // if (adminSettingsBtn) {
-    //     adminSettingsBtn.addEventListener('click', function () {
-    //         window.location.href = 'admin-settings.html';
-    //     });
-    // }
+    if (adminProfileBtn) {
+        adminProfileBtn.addEventListener('click', function () {
+            window.location.href = 'admin-user-profile.html';
+        });
+    }
+    if (adminSettingsBtn) {
+        adminSettingsBtn.addEventListener('click', function () {
+            window.location.href = 'admin-settings.html';
+        });
+    }
 
     
 

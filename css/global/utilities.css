@@ -4,16 +4,6 @@
 @import url("variables.css");
 
 /* Additional variables that are only used in utilities */
-:root {
-    /* Priority colors - unique to utilities, can be added to variables.css if needed elsewhere */
-    --priority-high: #f44336;
-    --priority-medium: #ff9800;
-    --priority-low: #4CAF50;
-    
-    /* Additional shadow variables */
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --primary-shadow-light: rgba(67, 97, 238, 0.3);
-}
 
 /* Base Element Styling */
 * {
