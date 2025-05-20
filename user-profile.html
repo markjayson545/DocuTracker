@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuTracker: My Profile</title>
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/logout.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <!-- Global CSS First -->
+    <link rel="stylesheet" href="css/global/master.css">
+    <!-- Then Page-specific CSS -->
+    <link rel="stylesheet" href="css/user-dashboard.css">
+    <link rel="stylesheet" href="css/user-profile.css">
+
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="header-actions">
+            <div class="notification">
+                <button class="notification-button">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">example@email.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <ul class="dropdown-menu">
+                        <li id="user-dashboard-btn">
+                            <a href="user-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="user-profile.html">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="user-settings.html">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="dashboard-home-sidebar-btn" id="dashboard-home-sidebar-btn">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button class="request-history-sidebar-btn" id="request-history-sidebar-btn">
+                        <i class="fas fa-envelope"></i> Request History
+                    </button>
+                </li>
+                <li>
+                    <button class="active profile-sidebar-btn" id="profile-sidebar-btn">
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button class="settings-sidebar-btn" id="settings-sidebar-btn">
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dashboard-body">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <h2>My Profile</h2>
+                    <p>View and manage your personal information</p>
+                </div>
+
+                <!-- Avatar & Basic Info Section -->
+                <div class="profile-card avatar-section">
+                    <div class="profile-avatar">
+                        <div class="avatar-container">
+                            <img src="images/profile-placeholder.png" alt="Profile Photo" id="profile-avatar">
+                            <div class="avatar-overlay">
+                                <label for="avatar-upload" class="avatar-upload-btn">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                                <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="avatar-info">
+                            <h3>John Doe</h3>
+                            <p class="user-id">User ID: DOC-12345678</p>
+                            <p class="user-since">Member since: September 2022</p>
+                        </div>
+                    </div>
+                    <div class="verification-badge verified">
+                        <i class="fas fa-check-circle"></i> Verified Account
+                    </div>
+                </div>
+
+                <!-- Contact Details Section -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-address-card"></i> Contact Details</h3>
+                    <div class="contact-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Email Address</span>
+                            <div class="detail-value-container">
+                                <span class="detail-value">example@email.com</span>
+                                <button class="change-btn" data-field="email">Change</button>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone Number</span>
+                            <div class="detail-value-container">
+                                <span class="detail-value">+639123456789</span>
+                                <button class="change-btn" data-field="phone">Change</button>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Mailing Address</span>
+                            <div class="detail-value-container">
+                                <span class="detail-value">123 Main Street, Makati City, Metro Manila, Philippines 1000</span>
+                                <button class="change-btn" data-field="address">Change</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Security Section -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-shield-alt"></i> Account Security</h3>
+                    <div class="security-items">
+                        <div class="security-item">
+                            <div class="security-info">
+                                <div class="security-title">Password</div>
+                                <div class="security-status">Last changed: 30 days ago</div>
+                            </div>
+                            <button class="change-btn" data-field="password">Change Password</button>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-info">
+                                <div class="security-title">Two-Factor Authentication</div>
+                                <div class="security-status">
+                                    <span class="status-indicator enabled">Enabled</span>
+                                    <span class="status-info">via SMS to +639*****6789</span>
+                                </div>
+                            </div>
+                            <button class="manage-btn">Manage 2FA</button>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-info">
+                                <div class="security-title">Account Recovery</div>
+                                <div class="security-status">1 recovery email set</div>
+                            </div>
+                            <button class="manage-btn">Manage Recovery</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Preferences Section -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-sliders-h"></i> Personal Preferences</h3>
+                    <div class="preferences-grid">
+                        <div class="preference-item">
+                            <span class="preference-label">Language</span>
+                            <span class="preference-value">English</span>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-label">Time Zone</span>
+                            <span class="preference-value">Asia/Manila (GMT+8)</span>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-label">Date Format</span>
+                            <span class="preference-value">MM/DD/YYYY</span>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-label">Email Notifications</span>
+                            <span class="preference-value enabled">Enabled</span>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-label">SMS Notifications</span>
+                            <span class="preference-value disabled">Disabled</span>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-label">Push Notifications</span>
+                            <span class="preference-value enabled">Enabled</span>
+                        </div>
+                    </div>
+                    <div class="preferences-actions">
+                        <button class="btn btn-secondary">Edit Preferences</button>
+                    </div>
+                </div>
+
+                <!-- Identity Verification Status -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-id-card"></i> Identity Verification Status</h3>
+                    <div class="verification-status">
+                        <div class="verification-info">
+                            <div class="verification-icon verified">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="verification-details">
+                                <h4>Verified</h4>
+                                <p>Your identity has been verified. Last verified: July 15, 2023</p>
+                                <ul class="verified-documents">
+                                    <li><i class="fas fa-file-alt"></i> Government ID: Passport</li>
+                                    <li><i class="fas fa-file-alt"></i> Proof of Address: Utility Bill</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary">Update Documents</button>
+                    </div>
+                </div>
+
+                <!-- Connected Integrations -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-plug"></i> Connected Integrations</h3>
+                    <div class="integrations-list">
+                        <div class="integration-item connected">
+                            <div class="integration-logo">
+                                <i class="fab fa-google"></i>
+                            </div>
+                            <div class="integration-info">
+                                <h4>Google</h4>
+                                <p>Connected as: example@gmail.com</p>
+                            </div>
+                            <button class="disconnect-btn">Disconnect</button>
+                        </div>
+                        <div class="integration-item">
+                            <div class="integration-logo">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <div class="integration-info">
+                                <h4>Facebook</h4>
+                                <p>Not connected</p>
+                            </div>
+                            <button class="connect-btn">Connect</button>
+                        </div>
+                        <div class="integration-item webhook">
+                            <div class="integration-logo">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="integration-info">
+                                <h4>Webhook Endpoint</h4>
+                                <div class="webhook-url">
+                                    <input type="text" value="https://api.myservice.com/webhooks/docutracker" readonly>
+                                    <button class="copy-btn" title="Copy"><i class="fas fa-copy"></i></button>
+                                </div>
+                            </div>
+                            <button class="edit-btn">Edit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GDPR / Data Controls -->
+                <div class="profile-card">
+                    <h3><i class="fas fa-user-shield"></i> Data Privacy Controls</h3>
+                    <div class="data-controls">
+                        <div class="data-control-info">
+                            <p>Manage your personal data in accordance with data protection regulations.</p>
+                        </div>
+                        <div class="data-actions">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Download My Data
+                            </button>
+                            <button class="btn btn-outline-warning">
+                                <i class="fas fa-power-off"></i> Deactivate Account
+                            </button>
+                            <button class="btn btn-outline-danger">
+                                <i class="fas fa-trash"></i> Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Profile avatar upload preview
+            const avatarUpload = document.getElementById('avatar-upload');
+            const profileAvatar = document.getElementById('profile-avatar');
+
+            avatarUpload.addEventListener('change', function(e) {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileAvatar.src = e.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            // Handle copy webhook URL
+            const copyBtn = document.querySelector('.copy-btn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', function() {
+                    const webhookInput = this.previousElementSibling;
+                    webhookInput.select();
+                    document.execCommand('copy');
+                    
+                    // Show a brief "Copied" message
+                    const originalTitle = this.title;
+                    this.title = 'Copied!';
+                    setTimeout(() => {
+                        this.title = originalTitle;
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

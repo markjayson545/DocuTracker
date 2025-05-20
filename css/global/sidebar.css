@@ -1,3 +1,9 @@
+/* Global Sidebar Styles */
+
+/* Import variables directly for use in this file */
+@import url("variables.css");
+
+
 .sidebar {
     flex: 0 0 280px;
     background: white;

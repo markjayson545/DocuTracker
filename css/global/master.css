@@ -1,0 +1,23 @@
+/* Master CSS file that imports all global stylesheets */
+
+/* First import global CSS variables */
+@import url("variables.css");
+
+/* Then import the base utilities */
+@import url("utilities.css");
+
+/* Then import layout components */
+@import url("header-footer.css");
+@import url("sidebar.css");
+@import url("layouts.css");
+
+/* Then import UI components */
+@import url("buttons.css");
+@import url("forms.css");
+@import url("cards.css");
+
+/* Then import interactions */
+@import url("animations.css");
+@import url("user-dropdown.css");
+
+/* Finally import any additional global components */

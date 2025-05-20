@@ -1,31 +1,16 @@
 /*------------------------------------*\
-  #VARIABLES
+  #USER DASHBOARD SPECIFIC STYLES
 \*------------------------------------*/
-:root {
-    /* Colors */
-    --primary-color: #4361ee;
-    --primary-dark: #3a56d4;
-    --primary-gradient: linear-gradient(135deg, #4361ee, #3a56d4);
-    --accent-color: #4cc9f0;
-    --secondary-color: #7209b7;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f8f9fa;
-    --input-bg: #ffffff;
-    --border-color: #e1e5eb;
-    
-    /* Status colors */
-    --success-color: #4CAF50;
-    --warning-color: #ff9800;
-    --error-color: #f44336;
-    
-    /* Effects */
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --transition: all 0.3s ease-in-out;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-    --text-color-footer: #e6e6f0;
-}
+/* Import global variables */
+@import url('../css/global/variables.css');
+
+/* Note: Most styles have been moved to global CSS files:
+ * All CSS variables are now in variables.css
+ * Layout elements are in layouts.css
+ * Forms and inputs are in forms.css
+ * Buttons are in buttons.css
+ * Cards are in cards.css
+ */
 
 /*------------------------------------*\
   #BASE STYLES

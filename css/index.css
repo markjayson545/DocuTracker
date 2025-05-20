@@ -1,22 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Import global variables */
+@import url('../css/global/variables.css');
 
-:root {
-    --primary-color: #4361ee;
-    --secondary-color: #3a0ca3;
-    --accent-color: #4cc9f0;
-    --light-bg: #f8f9fa;
-    --dark-text: #212529;
-    --light-text: #f8f9fa;
-    --gray-text: #6c757d;
-    --transition: all 0.3s ease;
-    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
+/* Page-specific styles for the homepage */
 
+/* Base styles - using global variables */
 * {
     margin: 0;
     padding: 0; 
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-primary, 'Poppins', sans-serif);
     list-style-type: none;
     box-sizing: border-box;
 }
@@ -195,6 +186,11 @@ section h2::after {
 
 /* Responsive Design */
 @media screen and (max-width: 1024px) {
+
+    .title {
+        text-align: center;
+    }
+
     .title h1 {
         font-size: 2.8em;
     }
