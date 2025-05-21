@@ -23,6 +23,7 @@
     <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="js/admin/admin-settings/fetch-document-types.js"></script>
+    <script src="js/admin/admin-settings/admin-credentials.js"></script>
 </head>
 
 <body>
@@ -72,37 +73,9 @@
                         </div>
                     </div>
                     <hr>
-                    <ul class="dropdown-menu">
-                        <li id="admin-dashboard-btn">
-                            <a href="admin-dashboard.html">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Admin Dashboard
-                            </a>
-                        </li>
-                        <li id="user-dashboard-btn">
-                            <a href="user-dashboard.html">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li id="request-management-btn">
-                            <a href="admin-requests.html">
-                                <i class="fas fa-file-alt"></i>
-                                Request Management
-                            </a>
-                        </li>
-                        <li id="user-management-btn">
-                            <a href="admin-users.html">
-                                <i class="fas fa-users"></i>
-                                User Management
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin-settings.html">
-                                <i class="fas fa-cog"></i>
-                                Settings
-                            </a>
-                        </li>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> -->
                     </ul>
                     <hr>
                     <button id="logout-button" class="logout-button">
@@ -146,11 +119,7 @@
                         <i class="fas fa-user-circle"></i> Manage Users
                     </button>
                 </li>
-                <li>
-                    <button class="admin-profile-sidebar-btn" id="admin-profile-sidebar-btn">
-                        <i class="fas fa-user"></i> Admin Profile
-                    </button>
-                </li>
+
                 <li>
                     <button class="active admin-settings-sidebar-btn" id="admin-settings-sidebar-btn">
                         <i class="fas fa-cogs"></i> Settings
@@ -390,6 +359,7 @@
                                     <label for="new-username">New Username</label>
                                     <input type="text" id="new-username" required>
                                 </div>
+                                <!-- Password will be prompted via JavaScript -->
                                 <div class="form-actions">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-save"></i> Update Username

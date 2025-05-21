@@ -298,6 +298,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch('php/admin/admin-manage-requests/upload-request-document.php', { method: 'POST', body: formData })
             .then(res => res.json())
             .then(data => {
+                console.log(data);
                 if (data.success) {
                     showUploadMessage("Document uploaded successfully!", "success");
                     setTimeout(() => getRequestDetails(currentReqId), 2000);

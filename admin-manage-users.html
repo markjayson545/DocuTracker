@@ -65,25 +65,9 @@
                         </div>
                     </div>
                     <hr>
-                    <ul class="dropdown-menu">
-                        <li id="user-dashboard-btn">
-                            <a href="user-dashboard.html">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li id="identity-verification-btn">
-                            <a href="identity-verification.html">
-                                <i class="fas fa-id-card"></i>
-                                Identity Verification
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-cog"></i>
-                                Settings
-                            </a>
-                        </li>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> -->
                     </ul>
                     <hr>
                     <button id="logout-button" class="logout-button">
@@ -127,11 +111,7 @@
                         <i class="fas fa-user-circle"></i> Manage Users
                     </button>
                 </li>
-                <li>
-                    <button class="admin-profile-sidebar-btn" id="admin-profile-sidebar-btn">
-                        <i class="fas fa-user"></i> Admin Profile
-                    </button>
-                </li>
+
                 <li>
                     <button class="admin-settings-sidebar-btn" id="admin-settings-sidebar-btn">
                         <i class="fas fa-cogs"></i> Settings
@@ -398,6 +378,20 @@
                             </button>
                             <button class="btn btn-danger" id="reject-user-btn">
                                 <i class="fas fa-times"></i> Reject User
+                            </button>
+                        </div>
+
+                        <div class="action-title">
+                            <h3>
+                                <i class="fas fa-user-secret"></i> User Role
+                            </h3>
+                        </div>
+                        <div class="action-group">
+                            <button class="btn btn-primary" id="make-admin-btn">
+                                <i class="fas fa-user-shield"></i> Make Admin
+                            </button>
+                            <button class="btn btn-secondary" id="make-client-btn">
+                                <i class="fas fa-user"></i> Make Client
                             </button>
                         </div>
                     </div>

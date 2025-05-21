@@ -10,6 +10,7 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/logout.js"></script>
     <script src="js/services/sidebar.js"></script>
+    <script src="js/client/user-profile/fetch-user-details.js"></script>
     <!-- Global CSS First -->
     <!-- Then Page-specific CSS -->
 
@@ -73,31 +74,9 @@
                         </div>
                     </div>
                     <hr>
-                    <ul class="dropdown-menu">
-                        <li id="user-dashboard-btn">
-                            <a href="user-dashboard.html">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li id="identity-verification-btn">
-                            <a href="identity-verification.html">
-                                <i class="fas fa-id-card"></i>
-                                Identity Verification
-                            </a>
-                        </li>
-                        <li>
-                            <a href="user-profile.html">
-                                <i class="fas fa-user"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="user-settings.html">
-                                <i class="fas fa-cog"></i>
-                                Settings
-                            </a>
-                        </li>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> -->
                     </ul>
                     <hr>
                     <button id="logout-button" class="logout-button">
@@ -164,89 +143,89 @@
                             </div>
                         </div>
                         <div class="avatar-info">
-                            <h3>John Doe</h3>
-                            <p class="user-id">User ID: DOC-12345678</p>
-                            <p class="user-since">Member since: September 2022</p>
+                            <h3 id="profile-full-name">John Doe</h3>
+                            <p class="user-id" id="profile-user-id">User ID: DOC-12345678</p>
+                            <p class="user-since" id="profile-member-since">Member since: September 2022</p>
                         </div>
                     </div>
-                    <div class="verification-badge verified">
+                    <div class="verification-badge verified" id="profile-verification-badge">
                         <i class="fas fa-check-circle"></i> Verified Account
                     </div>
                 </div>
 
-                <!-- Personal Information Section - Added to match admin view -->
+                <!-- Personal Information Section -->
                 <div class="profile-card">
                     <h3><i class="fas fa-id-card"></i> Personal Information</h3>
                     <div class="personal-info-grid">
                         <div class="info-item">
                             <i class="fas fa-user"></i>
                             <span class="info-label">Full Name</span>
-                            <span class="info-value">John Doe</span>
+                            <span class="info-value" id="info-full-name">John Doe</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-calendar-alt"></i>
                             <span class="info-label">Birthdate</span>
-                            <span class="info-value">January 1, 1990</span>
+                            <span class="info-value" id="info-birthdate">January 1, 1990</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-venus-mars"></i>
                             <span class="info-label">Sex</span>
-                            <span class="info-value">Male</span>
+                            <span class="info-value" id="info-sex">Male</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-heart"></i>
                             <span class="info-label">Civil Status</span>
-                            <span class="info-value">Single</span>
+                            <span class="info-value" id="info-civil-status">Single</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-flag"></i>
                             <span class="info-label">Nationality</span>
-                            <span class="info-value">Filipino</span>
+                            <span class="info-value" id="info-nationality">Filipino</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-map"></i>
                             <span class="info-label">Birth Place</span>
-                            <span class="info-value">Manila, Philippines</span>
+                            <span class="info-value" id="info-birth-place">Manila, Philippines</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <span class="info-label">Address</span>
-                            <span class="info-value">123 Main St, Makati City, Metro Manila, Philippines 1000</span>
+                            <span class="info-value" id="info-address">123 Main St, Makati City, Metro Manila, Philippines 1000</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-ruler-vertical"></i>
                             <span class="info-label">Height</span>
-                            <span class="info-value">5'10" (178 cm)</span>
+                            <span class="info-value" id="info-height">5'10" (178 cm)</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-weight"></i>
                             <span class="info-label">Weight</span>
-                            <span class="info-value">165 lbs (75 kg)</span>
+                            <span class="info-value" id="info-weight">165 lbs (75 kg)</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-palette"></i>
                             <span class="info-label">Complexion</span>
-                            <span class="info-value">Fair</span>
+                            <span class="info-value" id="info-complexion">Fair</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-tint"></i>
                             <span class="info-label">Blood Type</span>
-                            <span class="info-value">O+</span>
+                            <span class="info-value" id="info-blood-type">O+</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-pray"></i>
                             <span class="info-label">Religion</span>
-                            <span class="info-value">Catholic</span>
+                            <span class="info-value" id="info-religion">Catholic</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-graduation-cap"></i>
                             <span class="info-label">Education</span>
-                            <span class="info-value">Bachelor's Degree</span>
+                            <span class="info-value" id="info-education">Bachelor's Degree</span>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-briefcase"></i>
                             <span class="info-label">Occupation</span>
-                            <span class="info-value">Software Developer</span>
+                            <span class="info-value" id="info-occupation">Software Developer</span>
                         </div>
                     </div>
                     <!-- Not updated by user, admin intervention needed -->
@@ -264,14 +243,14 @@
                         <div class="detail-item">
                             <span class="detail-label">Email Address</span>
                             <div class="detail-value-container">
-                                <span class="detail-value">example@email.com</span>
+                                <span class="detail-value" id="contact-email">example@email.com</span>
                                 <button class="change-btn" data-field="email">Change</button>
                             </div>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Phone Number</span>
                             <div class="detail-value-container">
-                                <span class="detail-value">+639123456789</span>
+                                <span class="detail-value" id="contact-phone">+639123456789</span>
                                 <button class="change-btn" data-field="phone">Change</button>
                             </div>
                         </div>
@@ -285,7 +264,7 @@
                         <div class="security-item">
                             <div class="security-info">
                                 <div class="security-title">Password</div>
-                                <div class="security-status">Last changed: 30 days ago</div>
+                                <div class="security-status" id="password-last-changed">Last changed: 30 days ago</div>
                             </div>
                             <button class="change-btn" data-field="password">Change Password</button>
                         </div>

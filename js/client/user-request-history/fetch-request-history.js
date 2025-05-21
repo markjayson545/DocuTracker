@@ -55,7 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const paymentAmountValue = document.getElementById("modal-payment-amount");
         const paymentStatusValue = document.getElementById("modal-payment-status");
 
-        // TODO: parse the document path and display the file name
         // Document Preview
         const documentFileNameValue = document.getElementById("modal-document-file-name");
         const documentFileSizeValue = document.getElementById("modal-document-file-size");
@@ -63,18 +62,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const documentFileStatusContainer = document.getElementById("modal-document-status-container");
         const documentFileStatusIconValue = document.getElementById("modal-document-status-icon");
         const documentFileStatusTextValue = document.getElementById("modal-document-status-text");
-        // const documentFilePathValue = document.getElementById("modal-document-file-path");
-
-        // Request Timeline
-        const requestTimelineContainerReqSubmitted = document.getElementById("timeline-container-request-submitted");
-        const requestTimelineContainerPaymentReceived = document.getElementById("timeline-container-payment-received");
-        const requestTimelineContainerProcessingStarted = document.getElementById("timeline-container-processing");
-        const requestTimelineContainerReadyToDownload = document.getElementById("timeline-container-ready-to-download");
-
-        const requestSubmittedValue = document.getElementById("timeline-request-submitted");
-        const paymentReceived = document.getElementById("timeline-payment-received");
-        const processingStarted = document.getElementById("timeline-processing-date");
-        const readyToDownload = document.getElementById("timeline-ready-to-download");
 
         const data = new FormData();
         data.append('request_id', reqId);
@@ -86,13 +73,17 @@ document.addEventListener("DOMContentLoaded", function () {
         )
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                console.log('Request Details: ' + data);
                 if (data.success) {
                     const requestDetails = data.data.request_details[0];
                     console.log(requestDetails);
                     requestIdValue.innerText = ('REQ-' + requestDetails.request_id);
                     documentTypeValue.innerText = requestDetails.document_type;
-                    dateRequestedValue.innerText = requestDetails.created_at;
+                    dateRequestedValue.innerText = new Date(requestDetails.created_at).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
                     lastUpdatedValue.innerText = parseDate(requestDetails.updated_at);
                     modeOfPaymentValue.innerText = requestDetails.mode_of_payment;
                     paymentAmountValue.innerText = '₱' + requestDetails.amount;
@@ -106,7 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         paymentStatusValue.innerText = 'Paid';
                     }
 
-                    // TODO: Implement the logic to display the file name, and download link button
                     const fileName = requestDetails.document_type + ' - REQ' + requestDetails.request_id + '.pdf'; // Temporary file name
                     if (requestDetails.document_path) {
                         documentFileNameValue.innerText = fileName;
@@ -115,11 +105,32 @@ document.addEventListener("DOMContentLoaded", function () {
                         documentFileStatusTextValue.innerText = 'File Available';
                         documentFileStatusContainer.classList.remove('status-pending');
                         documentFileStatusContainer.classList.add('status-approved');
+
+                        // Attempt to load and display document preview
+                        fetchDocumentPreview(requestDetails.document_path)
+                            .catch(error => {
+                                console.error('Error loading document preview:', error);
+                                // If preview fails, we still have the basic file info displayed
+                            });
+
+                        btnDownload = document.getElementById("download-document-btn");
+                        btnDownload.disabled = false;
+                        btnDownload.addEventListener('click', function () {
+                            downloadDocument(requestDetails.document_path);
+                        });
+
                     } else if (requestDetails.status === 'pending') {
                         documentFileNameValue.innerText = 'No file available';
                         documentFileSizeValue.innerText = '--.--.MB'; // Temporary file size
                         documentFileStatusTextValue.innerText = 'File Not Available';
-                        // documentFilePathValue.href = '#';
+                        btnDownload = document.getElementById("download-document-btn");
+                        btnDownload.disabled = true;
+
+                        // Clear any existing preview
+                        const previewContainer = document.getElementById('document-preview-container');
+                        if (previewContainer) {
+                            previewContainer.innerHTML = '';
+                        }
                     } else {
                         documentFileNameValue.innerText = 'No file available';
                         documentFileStatusIconValue.classList.remove('fa-clock');
@@ -127,36 +138,191 @@ document.addEventListener("DOMContentLoaded", function () {
                         documentFileStatusTextValue.innerText = 'File Not Available';
                         documentFileStatusContainer.classList.remove('status-pending');
                         documentFileStatusContainer.classList.add('status-rejected');
+                        btnDownload = document.getElementById("download-document-btn");
+                        btnDownload.disabled = true;
+
+                        // Clear any existing preview
+                        const previewContainer = document.getElementById('document-preview-container');
+                        if (previewContainer) {
+                            previewContainer.innerHTML = '';
+                        }
                     }
 
-                    // TODO: Implement the request timeline
-                    // Incomplete Implementation
-                    const requestHistory = data.data.request_history;
-                    if (requestHistory[0]){
-                        // Created
-                        requestTimelineContainerReqSubmitted.classList.add('active');
-                    } 
-                    if (requestHistory[1]){
-                        // Payment Received
-                        requestTimelineContainerReqSubmitted.classList.remove('active');
-                        requestTimelineContainerReqSubmitted.classList.add('complete');
-                        requestTimelineContainerPaymentReceived.classList.add('active');
-                    }
-                    if (requestHistory[2]){
-                        // Processing Started
-                        requestTimelineContainerPaymentReceived.classList.remove('active');
-                        requestTimelineContainerPaymentReceived.classList.add('complete');
-                        requestTimelineContainerProcessingStarted.classList.add('active');
-                    }
-                    if (requestHistory[3]){
-                        // Ready to Download
-                        requestTimelineContainerProcessingStarted.classList.remove('active');
-                        requestTimelineContainerProcessingStarted.classList.add('complete');
-                        requestTimelineContainerReadyToDownload.classList.add('complete');
-                    }
+                    const timelineTable = document.getElementById("timeline-table-body");
+                    const timelineData = data.data.request_history;
+                    console.log(timelineData);
+                    timelineTable.innerHTML = '';
+                    timelineData.forEach(timeline => {
+                        let icon, statusText, statusClass;
+
+                        // Set appropriate icon and text based on status
+                        switch (timeline.status) {
+                            case 'created':
+                                icon = 'fa-paper-plane';
+                                statusText = 'Request Submitted';
+                                break;
+                            case 'payment_received':
+                                icon = 'fa-credit-card';
+                                statusText = 'Payment Received';
+                                break;
+                            case 'processing':
+                                icon = 'fa-spinner';
+                                statusText = 'Processing Started';
+                                break;
+                            case 'completed':
+                                icon = 'fa-check-circle';
+                                statusText = 'File Available For Download';
+                                break;
+                            case 'updated':
+                                icon = 'fa-edit';
+                                statusText = 'Request Updated';
+                                break;
+                            case 'rejected':
+                                icon = 'fa-times-circle';
+                                statusText = 'Request Rejected';
+                                break;
+                            default:
+                                icon = 'fa-info-circle';
+                                statusText = timeline.status.replace('_', ' ');
+                        }
+                        
+
+                        // Format date
+                        const dateFormatted = new Date(timeline.created_at).toLocaleString();
+
+                        const rowTemplate = `
+                        <tr>
+                            <td><i class="fas ${icon}"></i> ${statusText}</td>
+                            <td>${dateFormatted}</td>
+                            <td><span class="status-badge status-completed">Completed</span></td>
+                        </tr>
+                        `;
+
+                        timelineTable.insertAdjacentHTML('beforeend', rowTemplate);
+                    });
+
 
                     requestDetailsModal.style.display = "block";
                 }
+            });
+    }
+
+    function downloadDocument(docPath) {
+        // Extract filename from document path
+        const pathParts = docPath.split('/');
+        const filename = pathParts[pathParts.length - 1];
+
+        const data = new FormData();
+        data.append('document_path', docPath);
+        fetch('php/services/client-only-get-document.php',
+            {
+                method: 'POST',
+                body: data
+            }).then(response => response.blob())
+            .then(blob => {
+                // Create a download URL from the blob
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename || 'document.pdf'; // Use parsed filename from path
+                document.body.appendChild(a); // Needed for Firefox
+                a.click();
+                document.body.removeChild(a); // Clean up
+                window.URL.revokeObjectURL(url);
+            }).catch(error => {
+                console.error('Error downloading document:', error);
+            });
+    }
+
+    function fetchDocumentPreview(docPath) {
+        // Check if document path exists
+        if (!docPath) {
+            return Promise.reject("No document path provided");
+        }
+
+        // Extract filename to determine file type
+        const pathParts = docPath.split('/');
+        const filename = pathParts[pathParts.length - 1];
+        const fileExtension = filename.split('.').pop().toLowerCase();
+
+        const data = new FormData();
+        data.append('document_path', docPath);
+
+        return fetch('php/services/client-only-get-document.php', {
+            method: 'POST',
+            body: data
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch document');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Calculate file size for display
+                const fileSizeInBytes = blob.size;
+                let fileSize;
+
+                if (fileSizeInBytes < 1024) {
+                    fileSize = fileSizeInBytes + ' bytes';
+                } else if (fileSizeInBytes < 1024 * 1024) {
+                    fileSize = (fileSizeInBytes / 1024).toFixed(2) + ' KB';
+                } else {
+                    fileSize = (fileSizeInBytes / (1024 * 1024)).toFixed(2) + ' MB';
+                }
+
+                // Update file size display
+                const documentFileSizeValue = document.getElementById("modal-document-file-size");
+                documentFileSizeValue.innerText = fileSize;
+
+                // Create a preview based on file type
+                const previewContainer = document.getElementById('document-preview-container');
+                if (!previewContainer) {
+                    // Create preview container if it doesn't exist
+                    const docPreviewSection = document.querySelector('.document-preview');
+                    const newPreviewContainer = document.createElement('div');
+                    newPreviewContainer.id = 'document-preview-container';
+                    newPreviewContainer.className = 'document-actual-preview';
+                    docPreviewSection.appendChild(newPreviewContainer);
+                }
+
+                // Clear any existing preview
+                const container = document.getElementById('document-preview-container');
+                container.innerHTML = '';
+
+                // Create URL for the blob
+                const url = window.URL.createObjectURL(blob);
+
+                // Create appropriate preview element based on file type
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(fileExtension)) {
+                    // Image preview
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'preview-image';
+                    img.alt = filename;
+                    container.appendChild(img);
+                } else if (fileExtension === 'pdf') {
+                    // PDF preview (embed if supported by browser)
+                    const embed = document.createElement('embed');
+                    embed.src = url;
+                    embed.type = 'application/pdf';
+                    embed.className = 'preview-pdf';
+                    container.appendChild(embed);
+
+                    // Fallback link for browsers that don't support PDF embedding
+                    const fallbackLink = document.createElement('p');
+                    fallbackLink.className = 'pdf-fallback';
+                    fallbackLink.innerHTML = 'PDF preview not available in your browser. <a href="' + url + '" target="_blank">Open in new tab</a>';
+                    container.appendChild(fallbackLink);
+                } else {
+                    // Generic file type - show icon only
+                    const fileTypeMessage = document.createElement('p');
+                    fileTypeMessage.className = 'unsupported-preview';
+                    fileTypeMessage.innerHTML = `<i class="fas fa-file"></i> Preview not available for ${fileExtension.toUpperCase()} files`;
+                    container.appendChild(fileTypeMessage);
+                }
+
+                return url; // Return the URL for potential cleanup later
             });
     }
 
@@ -218,5 +384,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fetchRequestHistory();
     setInterval(fetchRequestHistory, 60000);
-
 });

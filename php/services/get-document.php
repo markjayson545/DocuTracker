@@ -15,8 +15,7 @@ try {
         throw new Exception("Unauthorized access");
     }
 
-    // Check for both parameter names to ensure compatibility
-    $filePath = $_POST['file_path'] ?? $_POST['document_path'] ?? null;
+    $filePath = $_POST['file_path'] ?? null;
     
     // Validate file path
     if (!$filePath) {
@@ -50,20 +49,12 @@ try {
     header('Content-Type: ' . $mimeType);
     header('Content-Length: ' . $fileSize);
     header('Cache-Control: private, max-age=0, must-revalidate');
-    header('Content-Disposition: inline; filename="' . basename($requestedFile) . '"');
-    
-    // Make sure no content has been output before sending the file
-    if (ob_get_level()) ob_end_clean();
     
     // Output the file content
     readfile($requestedFile);
     exit; // Stop execution after sending file
     
 } catch (\Throwable $th) {
-    // Clear any output before sending error response
-    if (ob_get_level()) ob_end_clean();
-    
-    header('Content-Type: application/json');
     writeLog("Error in get-document.php: " . $th->getMessage(), "admin-dashboard.log");
     echo json_encode([
         'success' => false,

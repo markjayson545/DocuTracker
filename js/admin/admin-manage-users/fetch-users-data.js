@@ -9,6 +9,19 @@ document.addEventListener("DOMContentLoaded", function () {
     const userDetailsModal = document.getElementById("modal-overlay");
     const closeModalButton = document.getElementById("close-modal-btn");
 
+    // Add this to your <head> section or to an existing CSS file
+    document.head.insertAdjacentHTML('beforeend', `
+    <style>
+      .disabled-btn {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: #e9ecef;
+        border-color: #ced4da;
+        color: #6c757d;
+      }
+    </style>
+    `);
+
     // Event listeners setup
     closeModalButton.addEventListener("click", function () {
         userDetailsModal.style.display = "none";
@@ -40,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 if (data.success) {
                     const user = data.user;
                     // Populate user profile details
@@ -299,7 +313,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert("User details updated successfully!");
                         fetchUsersData();
                         fetchUserDetails(userId);
                     } else {
@@ -321,48 +334,124 @@ document.addEventListener("DOMContentLoaded", function () {
         const verifyUserButton = document.getElementById("verify-user-btn");
         const requestMoreInfoButton = document.getElementById("request-additional-info-btn");
         const rejectVerificationButton = document.getElementById("reject-user-btn");
+        const makeAdminButton = document.getElementById("make-admin-btn");
+        const makeClientButton = document.getElementById("make-client-btn");
+
+        // Function to update button states based on user status
+        function updateButtonStates(user) {
+            const isVerified = user.is_verified === 1 || user.is_verified === true;
+            const status = user.status;
+            
+            // Manage activation/suspension buttons
+            activateUserButton.disabled = !isVerified || status === 'active';
+            suspendUserButton.disabled = !isVerified || status === 'suspended';
+            
+            // Manage verification buttons
+            verifyUserButton.disabled = isVerified;
+            requestMoreInfoButton.disabled = isVerified;
+            rejectVerificationButton.disabled = isVerified;
+            
+            // Manage role buttons
+            makeAdminButton.disabled = !isVerified;
+            makeClientButton.disabled = !isVerified;
+            
+            // Add visual indication for disabled buttons
+            const buttons = [activateUserButton, suspendUserButton, verifyUserButton, 
+                             requestMoreInfoButton, rejectVerificationButton, 
+                             makeAdminButton, makeClientButton];
+            
+            buttons.forEach(btn => {
+                if (btn.disabled) {
+                    btn.classList.add('disabled-btn');
+                } else {
+                    btn.classList.remove('disabled-btn');
+                }
+            });
+        }
+
+        // Update button states when user details are loaded
+        fetch(`php/admin/admin-manage-users/fetch-admin-user-details.php`, {
+            method: "POST",
+            body: new FormData().append("user_id", userId)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateButtonStates(data.user);
+                }
+            })
+            .catch(error => console.log("Error fetching user details:", error));
 
         function handleAction(action) {
             const formData = new FormData();
             formData.append("user_id", userId);
             formData.append("action", action);
 
-            if (action === "request-more-info") {
-                const additionalInfo = prompt("Please specify what additional information you need from the user:");
-                if (additionalInfo === null) {
-                    return;
-                }
-                if (additionalInfo.trim() === "") {
-                    alert("You must provide details about what information is needed.");
-                    return;
-                }
-                formData.append("message", additionalInfo);
-            } else if (action === "reject-verification") {
-                const rejectionReason = prompt("Please specify the reason for rejecting the verification:");
-                if (rejectionReason === null) {
-                    return;
-                }
-                if (rejectionReason.trim() === "") {
-                    alert("You must provide a reason for rejecting the verification.");
-                    return;
-                }
-                formData.append("message", rejectionReason);
-            } else if (action === "reset-password") {
-                let newPassword = prompt("Enter new password for user ID: " + userId);
-                let confirmPassword = prompt("Confirm new password for user ID: " + userId);
-                if (newPassword === null || confirmPassword === null) {
-                    return;
-                }
-                if (newPassword.trim() === "" || confirmPassword.trim() === "") {
-                    alert("You must provide a new password.");
-                    return;
-                }
-                if (newPassword !== confirmPassword) {
-                    alert("Passwords do not match. Please try again.");
-                    return;
-                }
-                formData.append("new_password", newPassword);
-                formData.append("confirm_password", confirmPassword);
+            switch (action) {
+                case "request-more-info":
+                    const additionalInfo = prompt("Please specify what additional information you need from the user:");
+                    if (additionalInfo === null) {
+                        return;
+                    }
+                    if (additionalInfo.trim() === "") {
+                        alert("You must provide details about what information is needed.");
+                        return;
+                    }
+                    formData.append("message", additionalInfo);
+                    break;
+
+                case "reject-verification":
+                    const rejectionReason = prompt("Please specify the reason for rejecting the verification:");
+                    if (rejectionReason === null) {
+                        return;
+                    }
+                    if (rejectionReason.trim() === "") {
+                        alert("You must provide a reason for rejecting the verification.");
+                        return;
+                    }
+                    formData.append("message", rejectionReason);
+                    break;
+
+                case "reset-password":
+                    const newPassword = prompt("Enter new password for user ID: " + userId);
+                    const confirmPassword = prompt("Confirm new password for user ID: " + userId);
+                    if (newPassword === null || confirmPassword === null) {
+                        return;
+                    }
+                    if (newPassword.trim() === "" || confirmPassword.trim() === "") {
+                        alert("You must provide a new password.");
+                        return;
+                    }
+                    if (newPassword !== confirmPassword) {
+                        alert("Passwords do not match. Please try again.");
+                        return;
+                    }
+                    formData.append("new_password", newPassword);
+                    formData.append("confirm_password", confirmPassword);
+                    break;
+
+                case "make-admin":
+                case "make-client":
+                    const roleConfirmation = confirm(`Are you sure you want to make this user a ${action === "make-admin" ? "admin" : "client"}?`);
+                    if (!roleConfirmation) {
+                        return;
+                    }
+                    
+                    const adminPassword = prompt("Please enter your admin password to confirm this action:");
+                    if (!adminPassword) {
+                        alert("Admin password is required for role changes.");
+                        return;
+                    }
+                    
+                    formData.append("admin_password", adminPassword);
+                    break;
+
+                default:
+                    const confirmation = confirm(`Are you sure you want to ${action} this user?`);
+                    if (!confirmation) {
+                        return;
+                    }
+                    break;
             }
 
             fetch(`php/admin/admin-manage-users/user-actions.php`, {
@@ -375,11 +464,26 @@ document.addEventListener("DOMContentLoaded", function () {
                         alert(`User ${action} successfully!`);
                         fetchUsersData();
                         fetchUserDetails(userId);
+                        
+                        // Refresh button states after action
+                        fetch(`php/admin/admin-manage-users/fetch-admin-user-details.php`, {
+                            method: "POST",
+                            body: new FormData().append("user_id", userId)
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    updateButtonStates(data.user);
+                                }
+                            });
                     } else {
-                        alert(`Failed to ${action} user.`);
+                        alert(`Failed to ${action} user: ${data.message}`);
                     }
                 })
-                .catch(error => console.log(`Error ${action} user:`, error));
+                .catch(error => {
+                    console.log(`Error ${action} user:`, error);
+                    alert(`Error occurred while processing your request.`);
+                });
         }
 
         activateUserButton.addEventListener("click", function () {
@@ -399,6 +503,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         rejectVerificationButton.addEventListener("click", function () {
             handleAction("reject-verification");
+        });
+        makeAdminButton.addEventListener("click", function () {
+            handleAction("make-admin");
+        });
+        makeClientButton.addEventListener("click", function () {
+            handleAction("make-client");
         });
     }
 

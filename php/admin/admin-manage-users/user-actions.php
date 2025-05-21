@@ -133,6 +133,31 @@ function rejectUser($userId)
     return $success;
 }
 
+function updateUserRole($userId, $newRole)
+{
+    global $conn;
+    $sql = "UPDATE User SET role = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $newRole, $userId);
+    $result = $stmt->execute();
+    $stmt->close();
+
+    return $result;
+}
+
+function validateAdminPassword($adminId, $password){
+    global $conn;
+    $sql = "SELECT password FROM User WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $adminId);
+    $stmt->execute();
+    $stmt->bind_result($hashedPassword);
+    $stmt->fetch();
+    $stmt->close();
+
+    return password_verify($password, $hashedPassword);
+}
+
 
 try {
     $admin_id = $_SESSION['user_id'] ?? null;
@@ -183,6 +208,22 @@ try {
             break;
         case 'reject-verification':
             $success = rejectUser($user_id);
+            break;
+        case 'make-admin':
+        case 'make-client':
+            $adminPassword = $_POST['admin_password'] ?? null;
+            if (!$adminPassword) {
+                throw new Exception('Admin password not provided');
+            }
+            
+            // Validate admin password
+            if (!validateAdminPassword($admin_id, $adminPassword)) {
+                throw new Exception('Invalid admin password');
+            }
+            
+            // Determine new role based on action
+            $newRole = ($action == 'make-admin') ? 'admin' : 'client';
+            $success = updateUserRole($user_id, $newRole);
             break;
         default:
             throw new Exception('Invalid action');

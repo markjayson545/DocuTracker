@@ -93,37 +93,9 @@
                         </div>
                     </div>
                     <hr>
-                    <ul class="dropdown-menu">
-                        <li id="user-dashboard-btn">
-                            <a href="user-dashboard.html">
-                                <i class="fas fa-tachometer-alt"></i>
-                                Dashboard
-                            </a>
-                        </li>
-                        <li id="identity-verification-btn">
-                            <a href="identity-verification.html">
-                                <i class="fas fa-id-card"></i>
-                                Identity Verification
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="user-request-history.html">
-                                <i class="fas fa-history"></i>
-                                Request History
-                            </a>
-                        </li>
-                        <li>
-                            <a href="user-profile.html">
-                                <i class="fas fa-user"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="user-settings.html">
-                                <i class="fas fa-cog"></i>
-                                Settings
-                            </a>
-                        </li>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> -->
                     </ul>
                     <hr>
                     <button id="logout-button" class="logout-button">
@@ -370,10 +342,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="request-info-container">
-                        <div class="request-status-badge">
-                            <span class="status-badge status-pending">Pending</span>
-                        </div>
-
                         <div class="request-details">
                             <div class="detail-group">
                                 <h3><i class="fas fa-hashtag"></i> Request Information</h3>
@@ -447,54 +415,43 @@
 
                     <div class="tracking-timeline">
                         <h3><i class="fas fa-history"></i> Request Timeline</h3>
-                        <div class="timeline">
-                            <div class="timeline-item" id="timeline-container-request-submitted">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-paper-plane"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <h4>Request Submitted</h4>
-                                    <p id="timeline-request-submitted">2023-09-15 10:30 AM</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item" id="timeline-container-payment-received">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-credit-card"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <h4>Payment Received</h4>
-                                    <p id="timeline-payment-received">2023-09-15 10:45 AM</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item active" id="timeline-container-processing">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-cog fa-spin"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <h4>Processing</h4>
-                                    <p id="timeline-processing-date">Started on 2023-09-16</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item" id="timeline-container-ready-to-download">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <h4>Ready for Download</h4>
-                                    <p id="timeline-ready-to-download">Pending</p>
-                                </div>
-                            </div>
-                        </div>
+                        <table class="timeline-table">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>Date/Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timeline-table-body">
+                                <tr id="timeline-container-request-submitted">
+                                    <td><i class="fas fa-paper-plane"></i> Request Submitted</td>
+                                    <td id="timeline-request-submitted">2023-09-15 10:30 AM</td>
+                                    <td><span class="status-badge status-completed">Completed</span></td>
+                                </tr>
+                                <tr id="timeline-container-payment-received">
+                                    <td><i class="fas fa-credit-card"></i> Payment Received</td>
+                                    <td id="timeline-payment-received">2023-09-15 10:45 AM</td>
+                                    <td><span class="status-badge status-completed">Completed</span></td>
+                                </tr>
+                                <tr id="timeline-container-processing" class="active">
+                                    <td><i class="fas fa-cog fa-spin"></i> Processing</td>
+                                    <td id="timeline-processing-date">Started on 2023-09-16</td>
+                                    <td><span class="status-badge status-pending">In Progress</span></td>
+                                </tr>
+                                <tr id="timeline-container-ready-to-download">
+                                    <td><i class="fas fa-check"></i> Ready for Download</td>
+                                    <td id="timeline-ready-to-download">Pending</td>
+                                    <td><span class="status-badge status-pending">Pending</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="modal-actions">
-                        <button class="download-receipt-btn" id="download-receipt-btn">
+                        <button class="download-receipt-btn" id="download-document-btn">
                             <i class="fas fa-download"></i>
-                            Download Receipt
-                        </button>
-                        <button class="contact-support-btn">
-                            <i class="fas fa-headset"></i>
-                            Contact Support
+                            Download Document
                         </button>
                     </div>
                 </div>
