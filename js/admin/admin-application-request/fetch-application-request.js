@@ -18,216 +18,143 @@ document.addEventListener('DOMContentLoaded', function () {
         documentControls.style.display = 'none';
     });
 
-    // Helper functions
-    function parseDate(date) {
-        const now = new Date();
-        const updateDateTime = new Date(date);
-        const diffMs = now - updateDateTime;
-        const diffSec = Math.floor(diffMs / 1000);
-        const diffMin = Math.floor(diffSec / 60);
-        const diffHrs = Math.floor(diffMin / 60);
-        const diffDays = Math.floor(diffHrs / 24);
-
-        let formattedUpdateDate;
-        if (diffSec < 60) {
-            formattedUpdateDate = 'just now';
-        } else if (diffMin < 60) {
-            formattedUpdateDate = diffMin === 1 ? '1 minute ago' : `${diffMin} minutes ago`;
-        } else if (diffHrs < 24) {
-            formattedUpdateDate = diffHrs === 1 ? '1 hour ago' : `${diffHrs} hours ago`;
-        } else if (diffDays < 30) {
-            formattedUpdateDate = diffDays === 1 ? 'yesterday' : `${diffDays} days ago`;
-        } else {
-            formattedUpdateDate = updateDateTime.toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric'
-            });
-        }
-        return formattedUpdateDate;
-    }
-
-    function capitalizeFirstLetter(val) {
-        if (!val || typeof val !== 'string') return '';
-        let value = val.replace(/-/g, " ");
-        return String(value).charAt(0).toUpperCase() + String(value).slice(1);
-    }
-
-    // Table and UI management functions
-    function insertApplicationRequestRow(appId, fName, lName, docType, date, status) {
-        const formattedStatus = status
-            .split('-')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(' ');
-
-        return `
-            <tr>
-                <td>APP-${appId}</td>
-                <td>${fName} ${lName}</td>
-                <td>${capitalizeFirstLetter(docType)}</td>
-                <td>${parseDate(date)}</td>
-                <td><span class="status-badge status-${status}">${formattedStatus}</span></td>
-                <td class="actions-cell">
-                <button class="verify-btn" id="verifyBtn${appId}">Verify</button>
-                </td>
-            </tr>`;
-    }
-
+    // Create event listeners for verify buttons
     function createEventListenerForVerifyButton(btnId, appId) {
         const verifyBtn = document.getElementById(btnId);
         if (verifyBtn) {
             verifyBtn.addEventListener('click', async function () {
-                await fetchApplicationDetails(appId);
+                try {
+                    const applicationDetails = await fetchApplicationDetails(appId);
+                    openUserProfileModal(applicationDetails);
+                } catch (error) {
+                    alert('Failed to fetch application details: ' + error.message);
+                }
             });
         }
     }
 
-    // Document handling functions
-    function insertApplicationDocument(docPath) {
-        const form = new FormData();
-        form.append('file_path', docPath);
-
-        // Show loading indicator with improved styling
-        documentPlaceholder.innerHTML = `<p class="loading">Loading document...</p>`;
+    // Document display handler
+    function displayDocument(documentData) {
+        const { objectUrl, isImage, fileExt, docPath } = documentData;
         const documentControls = document.getElementById('document-controls');
 
-        // Get file extension to determine file type
-        const fileExt = docPath.split('.').pop().toLowerCase();
-        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExt);
+        if (isImage) {
+            // Display image
+            documentPlaceholder.innerHTML = `
+                <div class="document-container">
+                    <img src="${objectUrl}" alt="Document" class="document-image" id="document-image">
+                </div>
+            `;
+            // Show the controls
+            documentControls.style.display = 'flex';
 
-        fetch('php/services/get-document.php', {
-            method: 'POST',
-            body: form
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.blob(); // Get the response as binary data
-            })
-            .then(blob => {
-                // Create a URL for the blob
-                const objectUrl = URL.createObjectURL(blob);
+            setupImageControls(objectUrl, docPath);
+        } else {
+            // For non-image files, show appropriate icon based on file extension
+            let fileIcon = 'fa-file';
+            let fileColor = '#6c757d'; // default gray
 
-                // Display document based on file type
-                if (isImage) {
-                    // Display image as before
-                    documentPlaceholder.innerHTML = `
-                    <div class="document-container">
-                        <img src="${objectUrl}" alt="Document" class="document-image" id="document-image">
-                    </div>
-                `;
-                    // Show the controls
-                    documentControls.style.display = 'flex';
+            // Determine file type and set appropriate icon and color
+            switch (fileExt) {
+                case 'pdf':
+                    fileIcon = 'fa-file-pdf';
+                    fileColor = '#dc3545'; // red
+                    break;
+                case 'doc':
+                case 'docx':
+                    fileIcon = 'fa-file-word';
+                    fileColor = '#0d6efd'; // blue
+                    break;
+                case 'xls':
+                case 'xlsx':
+                case 'csv':
+                    fileIcon = 'fa-file-excel';
+                    fileColor = '#198754'; // green
+                    break;
+                case 'ppt':
+                case 'pptx':
+                    fileIcon = 'fa-file-powerpoint';
+                    fileColor = '#fd7e14'; // orange
+                    break;
+                case 'txt':
+                    fileIcon = 'fa-file-alt';
+                    fileColor = '#212529'; // dark
+                    break;
+                case 'zip':
+                case 'rar':
+                case '7z':
+                case 'tar':
+                case 'gz':
+                    fileIcon = 'fa-file-archive';
+                    fileColor = '#6610f2'; // purple
+                    break;
+                case 'html':
+                case 'htm':
+                case 'css':
+                case 'js':
+                case 'php':
+                case 'py':
+                case 'java':
+                case 'c':
+                case 'cpp':
+                    fileIcon = 'fa-file-code';
+                    fileColor = '#0dcaf0'; // info blue
+                    break;
+                case 'mp3':
+                case 'wav':
+                case 'ogg':
+                case 'flac':
+                case 'm4a':
+                    fileIcon = 'fa-file-audio';
+                    fileColor = '#6f42c1'; // purple
+                    break;
+                case 'mp4':
+                case 'mov':
+                case 'avi':
+                case 'wmv':
+                case 'flv':
+                case 'mkv':
+                case 'webm':
+                    fileIcon = 'fa-file-video';
+                    fileColor = '#d63384'; // pink
+                    break;
+                default:
+                    fileIcon = 'fa-file';
+                    fileColor = '#6c757d'; // gray
+            }
 
-                    setupImageControls(objectUrl, docPath);
-                }
-                else {
-                    // For non-image files, show appropriate icon based on file extension
-                    const fileExt = docPath.split('.').pop().toLowerCase();
+            const fileName = docPath.split('/').pop() || 'document';
 
-                    let fileIcon = 'fa-file';
-                    let fileColor = '#6c757d'; // default gray
-
-                    // Determine file type and set appropriate icon and color
-                    switch (fileExt) {
-                        case 'pdf':
-                            fileIcon = 'fa-file-pdf';
-                            fileColor = '#dc3545'; // red
-                            break;
-                        case 'doc':
-                        case 'docx':
-                            fileIcon = 'fa-file-word';
-                            fileColor = '#0d6efd'; // blue
-                            break;
-                        case 'xls':
-                        case 'xlsx':
-                        case 'csv':
-                            fileIcon = 'fa-file-excel';
-                            fileColor = '#198754'; // green
-                            break;
-                        case 'ppt':
-                        case 'pptx':
-                            fileIcon = 'fa-file-powerpoint';
-                            fileColor = '#fd7e14'; // orange
-                            break;
-                        case 'txt':
-                            fileIcon = 'fa-file-alt';
-                            fileColor = '#212529'; // dark
-                            break;
-                        case 'zip':
-                        case 'rar':
-                        case '7z':
-                        case 'tar':
-                        case 'gz':
-                            fileIcon = 'fa-file-archive';
-                            fileColor = '#6610f2'; // purple
-                            break;
-                        case 'html':
-                        case 'htm':
-                        case 'css':
-                        case 'js':
-                        case 'php':
-                        case 'py':
-                        case 'java':
-                        case 'c':
-                        case 'cpp':
-                            fileIcon = 'fa-file-code';
-                            fileColor = '#0dcaf0'; // info blue
-                            break;
-                        case 'mp3':
-                        case 'wav':
-                        case 'ogg':
-                        case 'flac':
-                        case 'm4a':
-                            fileIcon = 'fa-file-audio';
-                            fileColor = '#6f42c1'; // purple
-                            break;
-                        case 'mp4':
-                        case 'mov':
-                        case 'avi':
-                        case 'wmv':
-                        case 'flv':
-                        case 'mkv':
-                        case 'webm':
-                            fileIcon = 'fa-file-video';
-                            fileColor = '#d63384'; // pink
-                            break;
-                        case 'jpg':
-                        case 'jpeg':
-                        case 'png':
-                        case 'gif':
-                        case 'bmp':
-                        case 'svg':
-                        case 'webp':
-                            fileIcon = 'fa-file-image';
-                            fileColor = '#20c997'; // teal
-                            break;
-                        default:
-                            fileIcon = 'fa-file';
-                            fileColor = '#6c757d'; // gray
-                    }
-
-                    const fileName = docPath.split('/').pop() || 'document';
-
-                    documentPlaceholder.innerHTML = `
-                    <div class="document-container non-image-document">
-                        <div class="file-icon-container">
-                            <i class="fas ${fileIcon}" style="color: ${fileColor}"></i>
-                            <p>${fileName}</p>
-                            <div class="file-actions">
-                                <a href="${objectUrl}" download="${fileName}" class="download-link">
-                                    <i class="fas fa-download"></i> 
-                                    <p>Download File</p>
-                                </a>
-                            </div>
+            documentPlaceholder.innerHTML = `
+                <div class="document-container non-image-document">
+                    <div class="file-icon-container">
+                        <i class="fas ${fileIcon}" style="color: ${fileColor}"></i>
+                        <p>${fileName}</p>
+                        <div class="file-actions">
+                            <a href="${objectUrl}" download="${fileName}" class="download-link">
+                                <i class="fas fa-download"></i> 
+                                <p>Download File</p>
+                            </a>
                         </div>
                     </div>
-                `;
-                }
+                </div>
+            `;
+        }
+    }
+
+    // Display document with loading indicator
+    function viewDocument(docPath) {
+        // Show loading indicator
+        documentPlaceholder.innerHTML = `<p class="loading">Loading document...</p>`;
+        const documentControls = document.getElementById('document-controls');
+        documentControls.style.display = 'none';
+        
+        insertApplicationDocument(docPath)
+            .then(documentData => {
+                displayDocument(documentData);
             })
             .catch(error => {
-                console.error('Error fetching document:', error);
-                documentPlaceholder.innerHTML = `<p class="error-message">Error loading document. Please try again.</p>`;
-                documentControls.style.display = 'none';
+                documentPlaceholder.innerHTML = `<p class="error-message">Error loading document: ${error.message}</p>`;
             });
     }
 
@@ -239,8 +166,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const resetBtn = document.getElementById('reset-btn');
         const downloadBtn = document.getElementById('download-btn');
 
-        let currentZoom = 1;
-        let currentRotation = 0;
+        // Reset application utils zoom/rotation values
+        applicationUtils.currentZoom = 1;
+        applicationUtils.currentRotation = 0;
 
         // Reset any previous event listeners
         zoomInBtn.replaceWith(zoomInBtn.cloneNode(true));
@@ -257,25 +185,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const newDownloadBtn = document.getElementById('download-btn');
 
         newZoomInBtn.addEventListener('click', () => {
-            currentZoom += 0.1;
+            applicationUtils.currentZoom += 0.1;
             updateTransform();
         });
 
         newZoomOutBtn.addEventListener('click', () => {
-            if (currentZoom > 0.2) {
-                currentZoom -= 0.1;
+            if (applicationUtils.currentZoom > 0.2) {
+                applicationUtils.currentZoom -= 0.1;
                 updateTransform();
             }
         });
 
         newRotateBtn.addEventListener('click', () => {
-            currentRotation = (currentRotation + 90) % 360;
+            applicationUtils.currentRotation = (applicationUtils.currentRotation + 90) % 360;
             updateTransform();
         });
 
         newResetBtn.addEventListener('click', () => {
-            currentZoom = 1;
-            currentRotation = 0;
+            applicationUtils.currentZoom = 1;
+            applicationUtils.currentRotation = 0;
             updateTransform();
         });
 
@@ -290,42 +218,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         function updateTransform() {
-            docImage.style.transform = `scale(${currentZoom}) rotate(${currentRotation}deg)`;
+            docImage.style.transform = `scale(${applicationUtils.currentZoom}) rotate(${applicationUtils.currentRotation}deg)`;
         }
     }
 
     function addEventListenerForViewBtn(btnId, docPath) {
         const btn = document.getElementById(btnId);
         btn.addEventListener('click', function () {
-            insertApplicationDocument(docPath);
+            viewDocument(docPath);
         });
     }
 
-    // Application data functions
-    async function fetchApplicationDetails(applicationID) {
-        const body = new FormData();
-        body.append('application_id', applicationID);
-        await fetch('php/admin/admin-manage-applications/fetch-admin-application-details.php', {
-            body: body,
-            method: 'POST'
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    openUserProfileModal(data.data);
-                } else {
-                    alert('Failed to fetch application details: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching application details:', error);
-                alert('Error fetching application details. Please try again.');
-            });
-    }
-
     function openUserProfileModal(applicationDetails) {
-        // Add this line to store the current application ID in the modal
-        const userProfileModal = document.getElementById('modal-overlay');
+        // Store the current application ID in the modal
         if (userProfileModal) {
             userProfileModal.dataset.applicationId = applicationDetails.application_id;
         }
@@ -404,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
             verifiedUsersSection.style.display = 'none';
         }
 
-        // Profile Details
+        // Profile Details - using the helper function from global utilities
         profileSectionFullName.innerText = `${applicationDetails.first_name} ${applicationDetails.middle_name ? applicationDetails.middle_name + ' ' : ''}${applicationDetails.last_name} ${applicationDetails.qualifier === 'none' ? '' : applicationDetails.qualifier}`;
         profileSectionEmail.innerText = applicationDetails.email || 'N/A';
         profileSectionPhone.innerText = applicationDetails.phone || 'N/A';
@@ -464,59 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             case 'pdf':
                                 iconClass = 'fa-file-pdf';
                                 break;
-                            case 'doc':
-                            case 'docx':
-                                iconClass = 'fa-file-word';
-                                break;
-                            case 'xls':
-                            case 'xlsx':
-                            case 'csv':
-                                iconClass = 'fa-file-excel';
-                                break;
-                            case 'ppt':
-                            case 'pptx':
-                                iconClass = 'fa-file-powerpoint';
-                                break;
-                            case 'txt':
-                                iconClass = 'fa-file-alt';
-                                break;
-                            case 'zip':
-                            case 'rar':
-                            case '7z':
-                            case 'tar':
-                            case 'gz':
-                                iconClass = 'fa-file-archive';
-                                break;
-                            case 'html':
-                            case 'htm':
-                            case 'css':
-                            case 'js':
-                            case 'php':
-                            case 'py':
-                            case 'java':
-                            case 'c':
-                            case 'cpp':
-                                iconClass = 'fa-file-code';
-                                break;
-                            case 'mp3':
-                            case 'wav':
-                            case 'ogg':
-                            case 'flac':
-                            case 'm4a':
-                                iconClass = 'fa-file-audio';
-                                break;
-                            case 'mp4':
-                            case 'avi':
-                            case 'mov':
-                            case 'wmv':
-                            case 'flv':
-                            case 'mkv':
-                            case 'webm':
-                                iconClass = 'fa-file-video';
-                                break;
-                            default:
-                                iconClass = 'fa-file';
-                                break;
+                            // ...existing code for other file types...
                         }
 
                         // Format the date
@@ -543,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Load the main application document if available
         if (verificationDocPath) {
-            insertApplicationDocument(verificationDocPath);
+            viewDocument(verificationDocPath);
         } else {
             // Display a message if no document is available
             documentPlaceholder.innerHTML = `
@@ -558,38 +411,47 @@ document.addEventListener('DOMContentLoaded', function () {
         userProfileModal.style.display = 'block';
     }
 
-    function fetchApplicationRequests() {
-        fetch('php/admin/admin-manage-applications/fetch-admin-application-request.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    totalApplicationsValue.innerText = data.total_application;
-                    pendingApplicationsValue.innerText = data.total_pending_application;
-                    underReviewApplicationsValue.innerText = data.total_under_review_application;
-                    approvedApplicationsValue.innerText = data.total_approved_application;
-                    rejectedApplicationsValue.innerText = data.total_rejected_application;
+    // Update the application table
+    function updateApplicationTable(applications) {
+        let tableContent = '';
+        
+        applications.forEach(application => {
+            const appId = application.application_id;
+            const fName = application.first_name;
+            const lName = application.last_name;
+            const docType = application.document_type;
+            const status = application.status;
+            const date = application.created_at;
 
-                    let tableContent = '';
+            tableContent += createApplicationRow(appId, fName, lName, docType, date, status);
+        });
 
-                    data.applications.forEach(application => {
-                        const appId = application.application_id;
-                        const fName = application.first_name;
-                        const lName = application.last_name;
-                        const docType = application.document_type;
-                        const status = application.status;
-                        const date = application.created_at;
+        applicationRequestTable.innerHTML = tableContent;
 
-                        tableContent += insertApplicationRequestRow(appId, fName, lName, docType, date, status);
-                    });
+        // Attach event listeners after all rows are added to DOM
+        applications.forEach(application => {
+            const appId = application.application_id;
+            createEventListenerForVerifyButton(`verifyBtn${appId}`, appId);
+        });
+    }
 
-                    applicationRequestTable.innerHTML = tableContent;
-
-                    // Attach event listeners after all rows are added to DOM
-                    data.applications.forEach(application => {
-                        const appId = application.application_id;
-                        createEventListenerForVerifyButton(`verifyBtn${appId}`, appId);
-                    });
-                }
+    // Initialize application data
+    function initializeApplicationData() {
+        fetchApplicationRequests()
+            .then(applications => {
+                // Update the stats in the UI
+                totalApplicationsValue.innerText = applicationUtils.stats.totalApplications;
+                pendingApplicationsValue.innerText = applicationUtils.stats.pendingApplications;
+                underReviewApplicationsValue.innerText = applicationUtils.stats.underReviewApplications;
+                approvedApplicationsValue.innerText = applicationUtils.stats.approvedApplications;
+                rejectedApplicationsValue.innerText = applicationUtils.stats.rejectedApplications;
+                
+                // Update the application table
+                updateApplicationTable(applications);
+            })
+            .catch(error => {
+                console.error('Failed to load application data:', error);
+                applicationRequestTable.innerHTML = `<tr><td colspan="6">Error loading applications: ${error.message}</td></tr>`;
             });
     }
 
@@ -600,25 +462,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (approveBtn) {
         approveBtn.addEventListener('click', function () {
-            handleAdminAction('approve');
+            processAdminAction('approve');
         });
     }
 
     if (rejectBtn) {
         rejectBtn.addEventListener('click', function () {
-            handleAdminAction('reject');
+            processAdminAction('reject');
         });
     }
 
     if (requestInfoBtn) {
         requestInfoBtn.addEventListener('click', function () {
-            handleAdminAction('request_info');
+            processAdminAction('request_info');
         });
     }
 
-    // Function to handle admin actions
-    function handleAdminAction(action) {
-        const currentApplicationId = document.getElementById('modal-overlay').dataset.applicationId;
+    // Function to process the admin actions with UI feedback
+    function processAdminAction(action) {
+        const currentApplicationId = userProfileModal.dataset.applicationId;
         let adminNotes = '';
 
         if (!currentApplicationId) {
@@ -637,24 +499,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Create confirmation message
-        let confirmMessage = '';
-        switch (action) {
-            case 'approve':
-                confirmMessage = 'Are you sure you want to approve this application?';
-                break;
-            case 'reject':
-                confirmMessage = 'Are you sure you want to reject this application?';
-                break;
-            case 'request_info':
-                confirmMessage = 'Are you sure you want to request additional information?';
-                break;
-        }
-
-        if (!confirm(confirmMessage)) {
-            return; // User cancelled the confirmation
-        }
-
         // Show loading state on button
         const button = action === 'approve' ? approveBtn :
             action === 'reject' ? rejectBtn : requestInfoBtn;
@@ -668,24 +512,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (btn) btn.disabled = true;
         });
 
-        const formData = new FormData();
-        formData.append('action', action);
-        formData.append('application_id', currentApplicationId);
-        formData.append('admin_notes', adminNotes);
-
-        // Send request to server
-        fetch('php/admin/admin-manage-applications/handle-admin-action.php', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert(getSuccessMessage(action));
+        // Call the global handler function
+        handleAdminAction(action, currentApplicationId, adminNotes)
+            .then(result => {
+                if (result && result.success) {
+                    alert(result.message);
                     userProfileModal.style.display = 'none';
-                    fetchApplicationRequests(); // Refresh the applications list
-                } else {
-                    alert('Error: ' + data.message);
+                    initializeApplicationData(); // Refresh the applications list
+                } else if (result) {
+                    alert('Error: ' + result.message);
                 }
             })
             .catch(error => {
@@ -701,20 +536,9 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function getSuccessMessage(action) {
-        switch (action) {
-            case 'approve':
-                return 'Application has been approved successfully!';
-            case 'reject':
-                return 'Application has been rejected.';
-            case 'request_info':
-                return 'Additional information has been requested from the applicant.';
-            default:
-                return 'Action completed successfully.';
-        }
-    }
-
     // Initialize data fetch
-    fetchApplicationRequests();
-    setInterval(fetchApplicationRequests, 60000);
+    initializeApplicationData();
+    
+    // Set up refresh interval
+    setInterval(initializeApplicationData, 60000); // Refresh every minute
 });

@@ -31,20 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Helper functions
-    function parseDate(dateString) {
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
-    }
-
-    function capitalize(string) {
-        if (!string) return '';
-        string = string.replace(/-/g, ' ');
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
     // User data functions
-    function fetchUserDetails(userId) {
+    window.fetchUserDetails = function(userId) {
         const formData = new FormData();
         formData.append("user_id", userId);
         fetch(`php/admin/admin-manage-users/fetch-admin-user-details.php`, {
@@ -59,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Populate user profile details
                     document.getElementById("full-name-title").innerText = `${user.first_name} ${user.last_name}`;
                     document.getElementById("user-id-title").innerText = `USR-${user.user_id}`;
-                    document.getElementById("registered-on-title").innerText = parseDate(user.created_at);
+                    document.getElementById("registered-on-title").innerText = window.parseDate(user.created_at);
                     document.getElementById("verification-status").innerText = user.is_verified ? "Verified" : "Pending";
                     document.getElementById("verification-status-icon").className = user.is_verified
                         ? "fas fa-check-circle verified-icon"
@@ -95,9 +83,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(error => console.log("Error fetching user details:", error));
-    }
+    };
 
-    function fetchUserDocuments(userId) {
+    window.fetchUserDocuments = function(userId) {
         const formData = new FormData();
         formData.append("user_id", userId);
         fetch(`php/admin/admin-manage-users/fetch-admin-user-application-doc.php`, {
@@ -118,84 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                 const fileExt = doc.document_path.split('.').pop().toLowerCase();
                                 const filePath = doc.document_path;
 
-                                // Determine the appropriate icon based on file extension
-                                let iconClass = 'fa-file';
-
-                                // Map file extensions to Font Awesome icons
-                                switch (fileExt) {
-                                    // Images
-                                    case 'jpg':
-                                    case 'jpeg':
-                                    case 'png':
-                                    case 'gif':
-                                    case 'bmp':
-                                    case 'svg':
-                                    case 'webp':
-                                        iconClass = 'fa-file-image';
-                                        break;
-                                    // Documents
-                                    case 'pdf':
-                                        iconClass = 'fa-file-pdf';
-                                        break;
-                                    case 'doc':
-                                    case 'docx':
-                                        iconClass = 'fa-file-word';
-                                        break;
-                                    case 'xls':
-                                    case 'xlsx':
-                                    case 'csv':
-                                        iconClass = 'fa-file-excel';
-                                        break;
-                                    case 'ppt':
-                                    case 'pptx':
-                                        iconClass = 'fa-file-powerpoint';
-                                        break;
-                                    case 'txt':
-                                        iconClass = 'fa-file-alt';
-                                        break;
-                                    // Archives
-                                    case 'zip':
-                                    case 'rar':
-                                    case '7z':
-                                    case 'tar':
-                                    case 'gz':
-                                        iconClass = 'fa-file-archive';
-                                        break;
-                                    // Code
-                                    case 'html':
-                                    case 'htm':
-                                    case 'css':
-                                    case 'js':
-                                    case 'php':
-                                    case 'py':
-                                    case 'java':
-                                    case 'c':
-                                    case 'cpp':
-                                        iconClass = 'fa-file-code';
-                                        break;
-                                    // Audio
-                                    case 'mp3':
-                                    case 'wav':
-                                    case 'ogg':
-                                    case 'flac':
-                                    case 'm4a':
-                                        iconClass = 'fa-file-audio';
-                                        break;
-                                    // Video
-                                    case 'mp4':
-                                    case 'avi':
-                                    case 'mov':
-                                    case 'wmv':
-                                    case 'flv':
-                                    case 'mkv':
-                                    case 'webm':
-                                        iconClass = 'fa-file-video';
-                                        break;
-                                    // Default
-                                    default:
-                                        iconClass = 'fa-file';
-                                        break;
-                                }
+                                // Get icon class using the global utility function
+                                const iconClass = window.getFileIconClass(fileExt);
 
                                 // Format the date
                                 const createdDate = new Date(doc.uploaded_at).toLocaleString();
@@ -205,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <tr data-document-path="${doc.document_path}">
                                         <td>
                                             <div class="doc-preview-icon"><i class="fas ${iconClass}"></i></div>
-                                            ${capitalize(doc.document_type)}
+                                            ${window.capitalize(doc.document_type)}
                                         </td>
                                         <td>${createdDate}</td>
                                         <td><button class="view-document-btn" id="viewDoc${doc.document_id}">View</button></td>
@@ -227,9 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(error => console.log("Error fetching user documents:", error));
-    }
+    };
 
-    function fetchUsersData() {
+    window.fetchUsersData = function() {
         fetch('php/admin/admin-manage-users/fetch-admin-user-manage.php')
             .then(response => response.json())
             .then(data => {
@@ -258,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     attachViewEventListeners();
                 }
             });
-    }
+    };
 
     // UI/Table management functions
     function createUserRow(userId, fName, lName, email, role, status, isVerified, createdAt) {
@@ -275,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td><span class="role-badge role-${role}">${role}</span></td>
                 <td><span class="status-badge status-${status}">${status}</span></td>
                 <td><i class="fas ${icon}"></i></td>
-                <td>${parseDate(createdAt)}</td>
+                <td>${window.parseDate(createdAt)}</td>
                 <td class="actions-cell">
                     <button class="action-icon-btn view-user-btn" data-user-id="${userId}" title="View">
                         <i class="fas fa-eye"></i>View
@@ -289,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.view-user-btn').forEach(button => {
             button.addEventListener("click", function () {
                 const userId = this.getAttribute('data-user-id');
-                openModal(userId);
+                window.openUserModal(userId);
             });
         });
     }
@@ -557,79 +469,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     setupImageControls(objectUrl, docPath);
                 } else {
                     // For non-image files, show appropriate icon based on file extension
-                    const fileExt = docPath.split('.').pop().toLowerCase();
-                    let fileIcon = 'fa-file';
-                    let fileColor = '#6c757d'; // default gray
-
-                    // Determine file type and set appropriate icon and color
-                    switch (fileExt) {
-                        case 'pdf':
-                            fileIcon = 'fa-file-pdf';
-                            fileColor = '#dc3545'; // red
-                            break;
-                        case 'doc':
-                        case 'docx':
-                            fileIcon = 'fa-file-word';
-                            fileColor = '#0d6efd'; // blue
-                            break;
-                        case 'xls':
-                        case 'xlsx':
-                        case 'csv':
-                            fileIcon = 'fa-file-excel';
-                            fileColor = '#198754'; // green
-                            break;
-                        case 'ppt':
-                        case 'pptx':
-                            fileIcon = 'fa-file-powerpoint';
-                            fileColor = '#fd7e14'; // orange
-                            break;
-                        case 'txt':
-                            fileIcon = 'fa-file-alt';
-                            fileColor = '#212529'; // dark
-                            break;
-                        case 'zip':
-                        case 'rar':
-                        case '7z':
-                        case 'tar':
-                        case 'gz':
-                            fileIcon = 'fa-file-archive';
-                            fileColor = '#6610f2'; // purple
-                            break;
-                        case 'html':
-                        case 'htm':
-                        case 'css':
-                        case 'js':
-                        case 'php':
-                        case 'py':
-                        case 'java':
-                        case 'c':
-                        case 'cpp':
-                            fileIcon = 'fa-file-code';
-                            fileColor = '#0dcaf0'; // info blue
-                            break;
-                        case 'mp3':
-                        case 'wav':
-                        case 'ogg':
-                        case 'flac':
-                        case 'm4a':
-                            fileIcon = 'fa-file-audio';
-                            fileColor = '#6f42c1'; // purple
-                            break;
-                        case 'mp4':
-                        case 'avi':
-                        case 'mov':
-                        case 'wmv':
-                        case 'flv':
-                        case 'mkv':
-                        case 'webm':
-                            fileIcon = 'fa-file-video';
-                            fileColor = '#d63384'; // pink
-                            break;
-                        default:
-                            fileIcon = 'fa-file';
-                            fileColor = '#6c757d'; // gray
-                    }
-
+                    const fileIcon = window.getFileIconClass(fileExt);
+                    const fileColor = window.getFileColor(fileExt);
                     const fileName = docPath.split('/').pop() || 'document';
 
                     // Display appropriate file icon with download link
@@ -723,6 +564,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Initialize data fetch
-    fetchUsersData();
-    setInterval(fetchUsersData, 60000);
+    window.fetchUsersData();
+    setInterval(window.fetchUsersData, 60000);
 });

@@ -9,6 +9,7 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/logout.js"></script>
     <script src="js/services/sidebar.js"></script>
+    <script src="js/services/handle-user-notification.js"></script>
     <!-- Global CSS First -->
     <!-- Then Page-specific CSS -->
 
@@ -24,6 +25,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="js/admin/admin-settings/fetch-document-types.js"></script>
     <script src="js/admin/admin-settings/admin-credentials.js"></script>
+    <script src="js/admin/search-handler.js"></script>
 </head>
 
 <body>
@@ -34,15 +36,92 @@
             </h2>
         </a>
         <div class="search-container">
-            <input type="search" placeholder="Search documents, requests..." aria-label="Search">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search" id="search-input">
             <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+            <div class="search-results-dropdown" id="search-results-dropdown">
+                <div class="search-results-header">
+                    <h4>Search Results</h4>
+                </div>
+                <div class="search-results-list" id="search-results-list">
+                    <!-- Templates for search results that will be shown/hidden by JS -->
+                    <p id="search-message" class="search-message">Type at least 1 characters to search</p>
+
+                    <!-- User result template -->
+                    <div class="search-result-item template" id="user-result-template" data-type="user"
+                        style="display: none;">
+                        <i class="fas fa-user"></i>
+                        <div class="search-result-details">
+                            <p class="result-title" id="user-result-name">John Doe</p>
+                            <p class="result-meta">User • <span id="user-result-email">example@email.com</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Request result template -->
+                    <div class="search-result-item template" id="request-result-template" data-type="request"
+                        style="display: none;">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Document Request</p>
+                            <p class="result-meta">Request • REQ-<span id="request-result-id">001</span> • <span
+                                    id="request-result-status">Pending</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Application result template -->
+                    <div class="search-result-item template" id="application-result-template" data-type="application"
+                        style="display: none;">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Application</p>
+                            <p class="result-meta">Application • APP-<span id="application-result-id">001</span> • <span
+                                    id="application-result-status">Pending</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="header-actions">
             <div class="notification">
-                <button class="notification-button">
+                <button class="notification-button" id="notification-button" title="Notifications">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge" id="notification-badge-count">3</span>
                 </button>
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div class="notification-item success">
+                            <div class="notification-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a birth certificate has been approved.</p>
+                                <span class="notification-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item info">
+                            <div class="notification-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your payment for the marriage certificate is successful.</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item warning">
+                            <div class="notification-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a death certificate is pending.</p>
+                                <span class="notification-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <div class="login-or-create" id="login-or-create">
@@ -218,24 +297,26 @@
                             <form id="system-notification-form">
                                 <div class="form-group">
                                     <label for="system-notification-title">Notification Title</label>
-                                    <input type="text" id="system-notification-title" placeholder="e.g., System Maintenance" required>
+                                    <input type="text" id="system-notification-title"
+                                        placeholder="e.g., System Maintenance" required>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="system-notification-message">Notification Message</label>
-                                    <textarea id="system-notification-message" rows="3" placeholder="Enter notification message here..." required></textarea>
+                                    <textarea id="system-notification-message" rows="3"
+                                        placeholder="Enter notification message here..." required></textarea>
                                 </div>
-                                
+
                                 <div class="form-group">
-                                    <label for="system-notification-status">Status</label>
-                                    <select id="system-notification-status" required>
+                                    <label for="system-notification-type">Type</label>
+                                    <select id="system-notification-type" required>
                                         <option value="info">Info</option>
                                         <option value="success">Success</option>
                                         <option value="warning">Warning</option>
                                         <option value="error">Error</option>
                                     </select>
                                 </div>
-                                
+
                                 <div class="form-actions">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-paper-plane"></i> Send System Notification
@@ -244,57 +325,68 @@
                             </form>
                         </div>
                     </div>
-                    
+
                     <!-- User-specific Notifications Card -->
                     <div class="admin-card">
                         <h3><i class="fas fa-user"></i> User-specific Notifications</h3>
                         <p>Send targeted notifications to specific users</p>
-                        
+
                         <form id="user-notification-form">
                             <div class="form-group">
                                 <label for="user-notification-recipient">Select User</label>
-                                <select id="user-notification-recipient" required>
-                                    <option value="">-- Select a user --</option>
-                                    <option value="1">John Doe (john.doe@example.com)</option>
-                                    <option value="2">Jane Smith (jane.smith@example.com)</option>
-                                    <option value="3">Robert Johnson (robert.j@example.com)</option>
-                                    <option value="4">Emily Wilson (emily.w@example.com)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="user-notification-title">Notification Title</label>
-                                <input type="text" id="user-notification-title" placeholder="e.g., Document Approval" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="user-notification-message">Notification Message</label>
-                                <textarea id="user-notification-message" rows="3" placeholder="Enter personalized message here..." required></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="user-notification-status">Status</label>
-                                <select id="user-notification-status" required>
-                                    <option value="info">Info</option>
-                                    <option value="success">Success</option>
-                                    <option value="warning">Warning</option>
-                                    <option value="error">Error</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-paper-plane"></i> Send User Notification
-                                </button>
-                            </div>
+                                <div class="user-search-container">
+                                    <input type="text" id="user-search-input" placeholder="Search for a user...">
+                                    <div id="user-search-results" class="user-search-results">
+                                        <div class="user-search-result">
+                                            <i class="fas fa-user"></i>
+                                            <div class="user-details">
+                                                <p class="result-title">John Doe</p>
+                                                <p class="result-meta">User • <span
+                                                        id="user-result-email">johndoe@gmail.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select id="user-notification-recipient" required>
+                                        <option value="">-- Select a user --</option>
+                                        <!-- User options will be loaded here -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-notification-title">Notification Title</label>
+                                    <input type="text" id="user-notification-title"
+                                        placeholder="e.g., Document Approval" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-notification-message">Notification Message</label>
+                                    <textarea id="user-notification-message" rows="3"
+                                        placeholder="Enter personalized message here..." required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-notification-status">Status</label>
+                                    <select id="user-notification-status" required>
+                                        <option value="info">Info</option>
+                                        <option value="success">Success</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="error">Error</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i> Send User Notification
+                                    </button>
+                                </div>
                         </form>
                     </div>
-                    
+
                     <!-- Notification History Card -->
                     <div class="admin-card">
                         <h3><i class="fas fa-history"></i> Recent Notifications</h3>
                         <p>History of recently sent notifications</p>
-                        
+
                         <div class="notifications-table-container">
                             <table class="notifications-table">
                                 <thead>
@@ -306,47 +398,20 @@
                                         <th>Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>2023-09-14 10:30 AM</td>
-                                        <td>System</td>
-                                        <td>Scheduled Maintenance</td>
-                                        <td>All Users</td>
-                                        <td><span class="status-badge status-info">Info</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-09-13 03:45 PM</td>
-                                        <td>User</td>
-                                        <td>Document Request Approved</td>
-                                        <td>John Doe</td>
-                                        <td><span class="status-badge status-success">Success</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-09-12 11:20 AM</td>
-                                        <td>System</td>
-                                        <td>New Feature Announcement</td>
-                                        <td>All Users</td>
-                                        <td><span class="status-badge status-info">Info</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2023-09-10 09:15 AM</td>
-                                        <td>User</td>
-                                        <td>Payment Overdue</td>
-                                        <td>Jane Smith</td>
-                                        <td><span class="status-badge status-warning">Warning</span></td>
-                                    </tr>
+                                <tbody id="notifications-table-body">
+                                    <!-- Notification data will be loaded here -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Data & Privacy Panel -->
                 <div class="admin-panel" id="data-privacy">
                     <div class="admin-card">
                         <h3><i class="fas fa-user-shield"></i> Personal Information</h3>
                         <p>Manage your personal information and account security</p>
-                        
+
                         <!-- Username Change Form -->
                         <div class="form-section">
                             <h4><i class="fas fa-user"></i> Change Username</h4>
@@ -367,7 +432,7 @@
                                 </div>
                             </form>
                         </div>
-                        
+
                         <!-- Email Change Form -->
                         <div class="form-section">
                             <h4><i class="fas fa-envelope"></i> Change Email Address</h4>
@@ -391,7 +456,7 @@
                                 </div>
                             </form>
                         </div>
-                        
+
                         <!-- Password Change Form -->
                         <div class="form-section">
                             <h4><i class="fas fa-lock"></i> Change Password</h4>
@@ -416,11 +481,11 @@
                             </form>
                         </div>
                     </div>
-                    
+
                     <div class="admin-card">
                         <h3><i class="fas fa-database"></i> Data Management</h3>
                         <p>Import and Export system Database for backup</p>
-                        
+
                         <div class="data-management-options">
 
                             <div class="data-option">
@@ -432,17 +497,18 @@
                                     <i class="fas fa-upload"></i> Import Database
                                 </button>
                             </div>
-                            
+
                             <div class="data-option">
                                 <div class="data-option-info">
                                     <h4><i class="fas fa-database"></i> Export Database</h4>
-                                    <p>Export the entire database as a SQL dump file for backup or migration purposes</p>
+                                    <p>Export the entire database as a SQL dump file for backup or migration purposes
+                                    </p>
                                 </div>
                                 <button class="btn btn-secondary" id="export-database-btn">
                                     <i class="fas fa-database"></i> Export Database
                                 </button>
                             </div>
-                            
+
                             <!-- No Deletion? Still thinking about it... -->
                             <!-- <div class="data-option danger-zone">
                                 <div class="data-option-info">
@@ -453,7 +519,7 @@
                                     <i class="fas fa-trash"></i> Delete Account
                                 </button>
                             </div> -->
-                            
+
                         </div>
                     </div>
                 </div>
@@ -504,7 +570,6 @@
                     <button class="modal-close">&times;</button>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
                         <label for="modal-doc-name">Document Name</label>
                         <input type="text" id="modal-doc-name" required>
@@ -560,5 +625,7 @@
             });
         }
     </script>
+    <script src="js/admin/admin-settings/handle-notification-settings.js"></script>
 </body>
+
 </html>

@@ -1828,48 +1828,6 @@ main {
 }
 
 /* Notification styling */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: white;
-    padding: 15px 25px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    z-index: 9999;
-    transform: translateY(-100px);
-    opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.notification.show {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.notification.success {
-    border-left: 4px solid var(--success-color);
-}
-
-.notification.success i {
-    color: var(--success-color);
-}
-
-.notification.error {
-    border-left: 4px solid var(--error-color);
-}
-
-.notification.error i {
-    color: var(--error-color);
-}
-
-.notification i {
-    font-size: 1.5em;
-}
-
 /* Edit actions styling */
 .edit-actions {
     display: flex;

@@ -56,6 +56,21 @@ function getApplicationDocuments($applicationId)
     return $documents;
 }
 
+function getUserIdFromApplication($applicationId)
+{
+    global $conn;
+    $sql = "SELECT user_id FROM Application WHERE application_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $applicationId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if ($row) {
+        return $row['user_id'];
+    }
+    return null;
+}
+
 
 
 try {

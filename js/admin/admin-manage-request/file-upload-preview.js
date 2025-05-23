@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", function() {
             // Update file name display
             fileNameDisplay.textContent = file.name;
             
-            // Update file size display
-            fileSizeDisplay.textContent = formatFileSize(file.size);
+            // Update file size display - using utility function
+            fileSizeDisplay.textContent = AdminRequestUtils.formatFileSize(file.size);
             
             // For image files, show preview and hide icon
             if (file.type.match('image.*')) {
@@ -61,29 +61,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     
-    function formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
-    
     function updateFileIcon(file) {
-        let iconClass = 'fas fa-file';
-        
-        // Determine appropriate icon based on file type
-        if (file.type.match('image.*')) {
-            iconClass = 'fas fa-file-image';
-        } else if (file.type === 'application/pdf') {
-            iconClass = 'fas fa-file-pdf';
-        } else if (file.type.includes('word')) {
-            iconClass = 'fas fa-file-word';
-        } else if (file.type.includes('excel') || file.type.includes('spreadsheet')) {
-            iconClass = 'fas fa-file-excel';
-        } else if (file.type.includes('text')) {
-            iconClass = 'fas fa-file-alt';
-        }
+        // Use the utility function to get the appropriate icon class
+        let iconClass = AdminRequestUtils.getFileIconClass(file);
         
         // Update the icon
         if (fileIcon) {

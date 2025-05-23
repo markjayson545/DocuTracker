@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("php/services/check-session.php")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("Data: " + data);
         if (data.status === "success") {
           loginButton[0].style.display = "none";
           userInfo[0].style.display = "flex";
@@ -72,6 +72,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         userEmail[1].innerHTML = data.data.email;
         userName[1].innerHTML = data.data.username;
+        const dashboardLink = document.getElementById("dashboard-btn-link");
+        if (dashboardLink) {
+          if (data.data.role === "admin") {
+            dashboardLink.href = "admin-dashboard.html";
+          } else {
+            dashboardLink.href = "user-dashboard.html";
+          }
+        }
 
         updateVerificationUI(data.data.is_verified);
 

@@ -1722,3 +1722,160 @@ textarea {
     bottom: -5px;
     left: -12px;
 }
+
+/*------------------------------------*\
+  #USER SEARCH STYLES
+\*------------------------------------*/
+.user-search-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.user-search-container input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.user-search-container input:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 3px rgba(74, 144, 226, 0.3);
+}
+
+.user-search-results {
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    margin-top: 2px;
+}
+
+.user-search-results .user-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.user-search-results .user-item:hover {
+    background-color: #f5f5f5;
+}
+
+.user-search-result {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.user-search-result:hover {
+    background-color: rgba(58, 12, 163, 0.05);
+}
+
+.user-search-result:last-child {
+    border-bottom: none;
+}
+
+.user-search-result i {
+    font-size: 1.2em;
+    color: var(--admin-primary);
+    background-color: rgba(58, 12, 163, 0.08);
+    padding: 10px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.user-details {
+    flex: 1;
+}
+
+.result-title {
+    margin: 0 0 5px 0;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.result-meta {
+    margin: 0;
+    color: var(--light-text);
+    font-size: 0.9em;
+}
+
+#user-result-email {
+    color: var(--admin-primary);
+}
+
+.user-search-results .user-item .user-name {
+    font-weight: bold;
+    display: block;
+}
+
+.user-search-results .user-item .user-email {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.user-search-results .no-results,
+.user-search-results .loading,
+.user-search-results .error {
+    padding: 10px;
+    text-align: center;
+}
+
+.user-search-results .loading {
+    color: #4a90e2;
+}
+
+.user-search-results .error {
+    color: #e74c3c;
+}
+
+/* Enhanced Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-info {
+    background-color: #3498db;
+    color: white;
+}
+
+.status-success {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.status-warning {
+    background-color: #f39c12;
+    color: white;
+}
+
+.status-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* Table loading and error states */
+.loading-cell,
+.error-cell {
+    text-align: center;
+    padding: 15px !important;
+}
+
+.error-cell {
+    color: #e74c3c;
+}

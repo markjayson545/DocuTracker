@@ -131,65 +131,6 @@ header h2 {
     transition: var(--transition);
 }
 
-/* Notification Dropdown */
-
-.notification .notification-dropdown {
-    display: none;
-    position: absolute;
-}
-
-/* User Profile */
-.user-profile {
-    position: relative;
-}
-
-.profile-button {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 8px 15px;
-    border-radius: 25px;
-}
-
-.profile-button:hover {
-    background: var(--primary-dark);
-    transition: var(--transition);
-}
-
-.avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.profile-dropdown {
-    position: absolute;
-    top: 55px;
-    right: 0;
-    width: 220px;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: var(--shadow-hover);
-    padding: 10px;
-    z-index: 10;
-    display: none;
-}
-
-.profile-name {
-    text-align: left;
-    font-weight: 600;
-}
-
-.profile-name .email {
-    font-size: 0.9em;
-    font-weight: 400;
-}
-
 /*------------------------------------*\
   #MAIN LAYOUT
 \*------------------------------------*/

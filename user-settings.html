@@ -14,7 +14,10 @@
     <script src="js/services/open-user-menu.js"></script>
     <script src="js/services/logout.js"></script>
     <script src="js/services/sidebar.js"></script>
+    <script src="js/services/handle-user-notification.js"></script>
     <script src="js/client/user-settings/fetch-user-settings.js"></script>
+    <script src="js/client/search-handler.js"></script>
+
     <!-- Global CSS First -->
     <!-- Then Page-specific CSS -->
 
@@ -39,15 +42,92 @@
             </h2>
         </a>
         <div class="search-container">
-            <input type="search" placeholder="Search documents, requests..." aria-label="Search">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search" id="search-input">
             <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+            <div class="search-results-dropdown" id="search-results-dropdown">
+                <div class="search-results-header">
+                    <h4>Search Results</h4>
+                </div>
+                <div class="search-results-list" id="search-results-list">
+                    <!-- Templates for search results that will be shown/hidden by JS -->
+                    <p id="search-message" class="search-message">Type at least 1 characters to search</p>
+
+                    <!-- User result template -->
+                    <div class="search-result-item template" id="user-result-template" data-type="user"
+                        style="display: none;">
+                        <i class="fas fa-user"></i>
+                        <div class="search-result-details">
+                            <p class="result-title" id="user-result-name">John Doe</p>
+                            <p class="result-meta">User • <span id="user-result-email">example@email.com</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Request result template -->
+                    <div class="search-result-item template" id="request-result-template" data-type="request"
+                        style="display: none;">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Document Request</p>
+                            <p class="result-meta">Request • REQ-<span id="request-result-id">001</span> • <span
+                                    id="request-result-status">Pending</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Application result template -->
+                    <div class="search-result-item template" id="application-result-template" data-type="application"
+                        style="display: none;">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Application</p>
+                            <p class="result-meta">Application • APP-<span id="application-result-id">001</span> • <span
+                                    id="application-result-status">Pending</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="header-actions">
             <div class="notification">
-                <button class="notification-button">
+                <button class="notification-button" id="notification-button" title="Notifications">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge" id="notification-badge-count">3</span>
                 </button>
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div class="notification-item success">
+                            <div class="notification-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a birth certificate has been approved.</p>
+                                <span class="notification-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item info">
+                            <div class="notification-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your payment for the marriage certificate is successful.</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item warning">
+                            <div class="notification-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a death certificate is pending.</p>
+                                <span class="notification-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
             <div class="login-or-create" id="login-or-create">
@@ -80,7 +160,7 @@
                     <hr>
                     <!-- <ul class="dropdown-menu">
 
-                    </ul> -->                        <!-- <li id="identity-verification-btn">
+                    </ul> --> <!-- <li id="identity-verification-btn">
                             <a href="identity-verification.html">
                                 <i class="fas fa-id-card"></i>
                                 Identity Verification
@@ -236,7 +316,7 @@
                                 <label for="confirm-password">Confirm New Password</label>
                                 <input type="password" id="confirm-password" name="confirm-password" required>
                                 <span id="confirm-password-validation" class="validation-message">
-                                    
+
 
                                 </span>
                             </div>
@@ -434,7 +514,8 @@
                                 <div class="theme-preview light">
                                     <div class="theme-header"></div>
                                     <div class="theme-content">
-                                        <div style="width: 70%; height: 8px; background: #e1e1e1; margin-bottom: 5px;"></div>
+                                        <div style="width: 70%; height: 8px; background: #e1e1e1; margin-bottom: 5px;">
+                                        </div>
                                         <div style="width: 40%; height: 8px; background: #e1e1e1;"></div>
                                     </div>
                                 </div>
@@ -444,7 +525,8 @@
                                 <div class="theme-preview dark">
                                     <div class="theme-header"></div>
                                     <div class="theme-content">
-                                        <div style="width: 70%; height: 8px; background: #555; margin-bottom: 5px;"></div>
+                                        <div style="width: 70%; height: 8px; background: #555; margin-bottom: 5px;">
+                                        </div>
                                         <div style="width: 40%; height: 8px; background: #555;"></div>
                                     </div>
                                 </div>
@@ -519,16 +601,16 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabButtons = document.querySelectorAll('.tab-button');
             const settingsPanels = document.querySelectorAll('.settings-panel');
-            
+
             // Function to activate a specific tab
             function activateTab(tabId) {
                 // Remove active class from all buttons and panels
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 settingsPanels.forEach(panel => panel.classList.remove('active'));
-                
+
                 // Add active class to selected button and panel
                 const selectedButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
                 if (selectedButton) {
@@ -539,7 +621,7 @@
                     }
                 }
             }
-            
+
             // Function to highlight a specific field
             function highlightField(fieldId) {
                 const field = document.getElementById(fieldId);
@@ -547,10 +629,10 @@
                     field.focus();
                     field.style.boxShadow = '0 0 8px 2px #4d90fe';
                     field.style.border = '1px solid #4d90fe';
-                    
+
                     // Scroll to the field
                     field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
+
                     // Remove highlight after 3 seconds
                     setTimeout(() => {
                         field.style.boxShadow = '';
@@ -558,38 +640,38 @@
                     }, 3000);
                 }
             }
-            
+
             // Check URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const tabParam = urlParams.get('tab');
             const fieldParam = urlParams.get('field');
-            
+
             // Activate tab based on URL parameter
             if (tabParam) {
                 activateTab(tabParam);
-                
+
                 // Highlight field if specified
                 if (fieldParam) {
                     // Small delay to ensure DOM is fully rendered
                     setTimeout(() => highlightField(fieldParam), 300);
                 }
             }
-            
+
             // Regular tab switching functionality
             tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const tabId = button.getAttribute('data-tab');
                     activateTab(tabId);
                 });
             });
-            
+
             // Theme selection
             const themeOptions = document.querySelectorAll('.theme-option');
             themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function () {
                     themeOptions.forEach(opt => opt.classList.remove('selected'));
                     option.classList.add('selected');
-                    
+
                     // Here you would implement actual theme change
                     const theme = option.getAttribute('data-theme');
                     console.log('Theme changed to:', theme);

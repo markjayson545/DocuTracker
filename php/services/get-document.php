@@ -15,7 +15,7 @@ try {
         throw new Exception("Unauthorized access");
     }
 
-    $filePath = $_POST['file_path'] ?? null;
+    $filePath = $_POST['file_path'] ?? $_POST['document_path'] ?? null;
     
     // Validate file path
     if (!$filePath) {

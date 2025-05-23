@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    function fetchDocumentPreview(docPath) {
+    async function fetchDocumentPreview(docPath) {
         // Check if document path exists
         if (!docPath) {
             return Promise.reject("No document path provided");
@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = new FormData();
         data.append('document_path', docPath);
 
-        return fetch('php/services/client-only-get-document.php', {
+        return await fetch('php/services/client-only-get-document.php', {
             method: 'POST',
             body: data
         })
@@ -347,7 +347,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <td>
                                         <div class="action-buttons">
                                             <button class="view-btn" title="View Details" id="view-${reqId}"><i class="fas fa-eye"></i></button>
-                                            <button class="download-btn" title="Download File" disabled><i class="fas fa-download"></i></button>
                                         </div>
                                     </td>
                                 </tr>
@@ -380,6 +379,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 }
             });
+    }
+
+
+    const urlString = window.location.href;
+    const url = new URL(urlString);
+    const requestId = url.searchParams.get("id");
+
+    if (requestId) {
+        showDetailsModal(requestId);
     }
 
     fetchRequestHistory();
