@@ -36,6 +36,7 @@ try {
                     FROM User user
                     JOIN ClientProfile client_profile ON user.id = client_profile.user_id
                     ORDER BY user.created_at DESC";
+    // TODO fetch even client profile for user_id does not exists
 
     // Fetch total users
     $stmt = mysqli_prepare($conn, $sqlTotalUsers);

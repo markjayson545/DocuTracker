@@ -1,0 +1,25 @@
+/* Add this CSS to ensure the Report button is properly styled */
+.admin-reports-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 1rem;
+    border: none;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.admin-reports-btn:hover, 
+.admin-reports-btn.active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #4CAF50;
+}
+
+.admin-reports-btn i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}

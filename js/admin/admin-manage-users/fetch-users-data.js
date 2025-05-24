@@ -145,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch('php/admin/admin-manage-users/fetch-admin-user-manage.php')
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 if (data.success) {
                     totalUsersValue.innerText = data.totalUsers;
                     activeUsersValue.innerText = data.totalActiveUsers;
