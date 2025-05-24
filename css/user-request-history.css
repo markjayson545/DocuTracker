@@ -1,32 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-:root {
-    /* Colors */
-    --primary-color: #4361ee;
-    --primary-light: rgba(67, 97, 238, 0.1);
-    --primary-dark: #3a56d4;
-    --primary-gradient: linear-gradient(135deg, #4361ee, #3a56d4);
-    --secondary-color: #3a0ca3;
-    --accent-color: #4cc9f0;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f5f7fb;
-    --input-bg: #ffffff;
-    --border-color: #e1e5eb;
-
-    /* Status colors */
-    --success-color: #4CAF50;
-    --warning-color: #ff9800;
-    --error-color: #f44336;
-    --info-color: #2196F3;
-    --completed-color: #607d8b;
-
-    /* Effects */
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --transition: all 0.3s ease-in-out;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
 
 body {
     background-color: var(--bg-color);
@@ -35,6 +8,10 @@ body {
 }
 
 /* Main layout */
+
+/* Import global variables */
+@import url("../css/global/variables.css");
+
 .main-container {
     display: flex;
     min-height: calc(100vh - 160px); /* Adjusting for header and footer */
@@ -315,7 +292,7 @@ body {
 }
 
 .requests-table th {
-    text-align: left;
+    text-align: center; /* Change from left to center */
     padding: 18px 20px;
     font-weight: 600;
     color: white;
@@ -326,6 +303,7 @@ body {
 }
 
 .requests-table td {
+    text-align: center; /* Add this to center all content */
     padding: 16px 20px;
     border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
@@ -887,15 +865,13 @@ body {
 
 .document-status-badge.status-approved {
     background-color: rgba(76, 175, 80, 0.15);
-    color: var(--success-color);
+    color: var (--success-color);
 }
 
 .document-status-badge.status-rejected {
     background-color: rgba(244, 67, 54, 0.15);
     color: var(--error-color);
 }
-
-
 
 /* Timeline Styling */
 .tracking-timeline {
@@ -988,6 +964,101 @@ body {
 
 .timeline-item.active .timeline-content {
     border-left: 3px solid var(--warning-color);
+}
+
+/* Timeline Table Styling */
+.timeline-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+}
+
+.timeline-table thead {
+    background: var(--primary-gradient);
+}
+
+.timeline-table th {
+    text-align: center; /* Change from left to center */
+    padding: 15px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.5px;
+    font-size: 0.9em;
+}
+
+.timeline-table tbody tr {
+    transition: var(--transition);
+    background-color: var(--bg-color);
+}
+
+.timeline-table tbody tr:nth-child(even) {
+    background-color: rgba(245, 247, 251, 0.5);
+}
+
+.timeline-table td {
+    text-align: center; /* Add this to center all content */
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.timeline-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.timeline-table tbody tr.active {
+    background-color: rgba(255, 152, 0, 0.05);
+    border-left: 3px solid var(--warning-color);
+}
+
+.timeline-table tbody tr:hover {
+    background-color: var(--primary-light);
+    transform: translateX(3px);
+}
+
+/* Center table icons for better alignment */
+.timeline-table i {
+    color: var(--primary-color);
+    margin-right: 0; /* Remove right margin for better centering */
+    vertical-align: middle; /* Add this for better vertical alignment */
+    font-size: 1.1em;
+}
+
+.timeline-table tbody tr.active i {
+    color: var(--warning-color);
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive styling for timeline table */
+@media (max-width: 768px) {
+    .timeline-table {
+        font-size: 0.9em;
+    }
+    
+    .timeline-table th,
+    .timeline-table td {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .timeline-table {
+        font-size: 0.8em;
+    }
+    
+    .timeline-table th,
+    .timeline-table td {
+        padding: 8px;
+    }
 }
 
 /* Modal Actions */
@@ -1084,4 +1155,55 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Add this to the end of your CSS file */
+
+.document-actual-preview {
+    margin-top: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    text-align: center;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.preview-pdf {
+    width: 100%;
+    height: 400px;
+    border: none;
+}
+
+.pdf-fallback {
+    padding: 20px;
+    color: #555;
+}
+
+.pdf-fallback a {
+    color: #1a73e8;
+    text-decoration: underline;
+}
+
+.unsupported-preview {
+    padding: 30px;
+    color: #666;
+    font-size: 16px;
+}
+
+.unsupported-preview i {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+    color: #999;
 }

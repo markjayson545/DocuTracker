@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuTracker: User Settings</title>
+    <!-- Global CSS Files -->
+    <!-- Page-specific CSS -->
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/1.4.3/lottie-player.js"></script>
+    <!-- JavaScript Services -->
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/logout.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <script src="js/services/handle-user-notification.js"></script>
+    <script src="js/client/user-settings/fetch-user-settings.js"></script>
+    <script src="js/client/search-handler.js"></script>
+
+    <!-- Global CSS First -->
+    <!-- Then Page-specific CSS -->
+
+    <!-- External Libraries -->
+
+    <!-- Global CSS First -->
+    <link rel="stylesheet" href="css/global/master.css">
+    <!-- Then Page-specific CSS -->
+    <link rel="stylesheet" href="css/user-dashboard.css">
+    <link rel="stylesheet" href="css/user-settings.css">
+
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search" id="search-input">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+            <div class="search-results-dropdown" id="search-results-dropdown">
+                <div class="search-results-header">
+                    <h4>Search Results</h4>
+                </div>
+                <div class="search-results-list" id="search-results-list">
+                    <!-- Templates for search results that will be shown/hidden by JS -->
+                    <p id="search-message" class="search-message">Type at least 1 characters to search</p>
+
+                    <!-- User result template -->
+                    <div class="search-result-item template" id="user-result-template" data-type="user"
+                        style="display: none;">
+                        <i class="fas fa-user"></i>
+                        <div class="search-result-details">
+                            <p class="result-title" id="user-result-name">John Doe</p>
+                            <p class="result-meta">User • <span id="user-result-email">example@email.com</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Request result template -->
+                    <div class="search-result-item template" id="request-result-template" data-type="request"
+                        style="display: none;">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Document Request</p>
+                            <p class="result-meta">Request • REQ-<span id="request-result-id">001</span> • <span
+                                    id="request-result-status">Pending</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Application result template -->
+                    <div class="search-result-item template" id="application-result-template" data-type="application"
+                        style="display: none;">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Application</p>
+                            <p class="result-meta">Application • APP-<span id="application-result-id">001</span> • <span
+                                    id="application-result-status">Pending</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="notification">
+                <button class="notification-button" id="notification-button" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-badge-count">3</span>
+                </button>
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div class="notification-item success">
+                            <div class="notification-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a birth certificate has been approved.</p>
+                                <span class="notification-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item info">
+                            <div class="notification-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your payment for the marriage certificate is successful.</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item warning">
+                            <div class="notification-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a death certificate is pending.</p>
+                                <span class="notification-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="sign-in.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">John Doe</p>
+                    <p class="user-email" id="user-email">example@email.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">John Doe</p>
+                            <p class="user-email" id="user-email">example@email.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> --> <!-- <li id="identity-verification-btn">
+                            <a href="identity-verification.html">
+                                <i class="fas fa-id-card"></i>
+                                Identity Verification
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="user-settings.html">
+                                <i class="fas fa-cog"></i>
+                                Settings
+                            </a>
+                        </li> -->
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-table-columns"></i> Dashboard
+                </h3>
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="dashboard-home-sidebar-btn" id="dashboard-home-sidebar-btn">
+                        <i class="fas fa-home"></i> Dashboard Home
+                    </button>
+                </li>
+                <li>
+                    <button class="request-history-sidebar-btn" id="request-history-sidebar-btn">
+                        <i class="fas fa-envelope"></i> Request History
+                    </button>
+                </li>
+                <li>
+                    <button class="profile-sidebar-btn" id="profile-sidebar-btn">
+                        <i class="fas fa-user"></i> Profile
+                    </button>
+                </li>
+                <li>
+                    <button class="active settings-sidebar-btn" id="settings-sidebar-btn">
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dashboard-body">
+            <div class="settings-container">
+                <div class="settings-header">
+                    <div>
+                        <h2>Account Settings</h2>
+                        <p>Manage your account settings and preferences</p>
+                    </div>
+                </div>
+
+                <div class="settings-tabs">
+                    <button class="tab-button active" data-tab="profile-identity">
+                        <i class="fas fa-user"></i> Profile & Identity
+                    </button>
+                    <button class="tab-button" data-tab="security">
+                        <i class="fas fa-shield-alt"></i> Security
+                    </button>
+                    <button class="tab-button" data-tab="privacy">
+                        <i class="fas fa-user-shield"></i> Privacy & Data
+                    </button>
+                </div>
+
+                <!-- Profile & Identity Panel -->
+                <div class="settings-panel active" id="profile-identity">
+                    <div class="settings-card">
+                        <h3><i class="fas fa-user-circle"></i> Personal Information</h3>
+                        <form id="personal-info-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" name="username" value="johndoe" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" value="example@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" value="+639123456789" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-id-card"></i> Identity Verification</h3>
+                        <div class="verification-status verified">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Verification Status: Verified</h4>
+                                <p>Your identity has been successfully verified. Last verified on July 12, 2023.</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Verified Documents</label>
+                            <ul class="verification-documents">
+                                <li>National ID (Uploaded on: July 10, 2023)</li>
+                                <li>Utility Bill (Uploaded on: July 10, 2023)</li>
+                            </ul>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fas fa-sync"></i> Re-upload Documents
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Panel -->
+                <div class="settings-panel" id="security">
+                    <div class="settings-card">
+                        <h3><i class="fas fa-lock"></i> Password Management</h3>
+                        <form id="password-form">
+                            <div class="form-group">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" name="current-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" name="new-password" required>
+                                <span id="password-validation" class="validation-message">
+
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password" name="confirm-password" required>
+                                <span id="confirm-password-validation" class="validation-message">
+
+
+                                </span>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="change-password-btn">
+                                    <i class="fas fa-key"></i> Change Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 2FA Not yet Supported -->
+                    <!-- <div class="settings-card">
+                        <h3><i class="fas fa-user-shield"></i> Two-Factor Authentication</h3>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>Enable Two-Factor Authentication</strong>
+                                <span>Add an extra layer of security to your account</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="enable-2fa">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group" id="2fa-options" style="margin-top: 20px;">
+                            <label>Authentication Method</label>
+                            <div style="margin-top: 10px;">
+                                <label style="font-weight: normal; display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                    <input type="radio" name="2fa-method" value="sms" checked> SMS Verification
+                                </label>
+                                <label style="font-weight: normal; display: flex; align-items: center; gap: 10px;">
+                                    <input type="radio" name="2fa-method" value="email"> Email Verification
+                                </label>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-laptop"></i> Active Sessions</h3>
+                        <div class="session-item current-session">
+                            <div class="session-info">
+                                <div class="session-icon">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                                <div class="session-details">
+                                    <h4>Current Session</h4>
+                                    <p>Chrome on Windows • Manila, Philippines • IP: 203.177.xxx.xxx</p>
+                                </div>
+                            </div>
+                            <span class="session-badge">Current</span>
+                        </div>
+                        <div class="session-item">
+                            <div class="session-info">
+                                <div class="session-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="session-details">
+                                    <h4>Mobile Device</h4>
+                                    <p>Safari on iPhone • Manila, Philippines • Last active: 2 hours ago</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary">Sign Out</button>
+                        </div>
+                        <div class="form-actions" style="margin-top: 20px;">
+                            <button type="button" class="btn btn-danger">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out All Other Devices
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Panel -->
+                <div class="settings-panel" id="notifications">
+                    <div class="settings-card">
+                        <h3><i class="fas fa-bell"></i> Notification Preferences</h3>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>Email Notifications</strong>
+                                <span>Receive updates and alerts via email</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>SMS Notifications</strong>
+                                <span>Receive updates and alerts via SMS</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>Push Notifications</strong>
+                                <span>Receive updates and alerts on your devices</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-envelope"></i> Notification Types</h3>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>Request Updates</strong>
+                                <span>Get notified when your document request status changes</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>Verification Reminders</strong>
+                                <span>Reminders to complete identity verification steps</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>Payment Notifications</strong>
+                                <span>Notifications about payment receipts and confirmations</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-option">
+                            <div class="toggle-option-text">
+                                <strong>System Announcements</strong>
+                                <span>Important system updates and maintenance notices</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-clock"></i> Digest Frequency</h3>
+                        <div class="form-group">
+                            <label>Email Digest Frequency</label>
+                            <select id="digest-frequency" name="digest-frequency">
+                                <option value="instant">Instant (As they happen)</option>
+                                <option value="daily" selected>Daily Summary</option>
+                                <option value="weekly">Weekly Summary</option>
+                                <option value="never">Never</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Preferences
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy & Data Panel -->
+                <div class="settings-panel" id="privacy">
+                    <div class="settings-card">
+                        <h3><i class="fas fa-download"></i> Data Export & Management</h3>
+                        <p>Download a copy of your personal data or request data deletion.</p>
+                        <div class="form-actions" style="margin-top: 20px;">
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Download My Data
+                            </button>
+                            <button type="button" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Request Account Deletion
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Display & Localization Panel -->
+                <div class="settings-panel" id="display">
+                    <div class="settings-card">
+                        <h3><i class="fas fa-palette"></i> Theme Settings</h3>
+                        <p>Choose your preferred theme for the application.</p>
+                        <div class="theme-options">
+                            <div class="theme-option selected" data-theme="light">
+                                <div class="theme-preview light">
+                                    <div class="theme-header"></div>
+                                    <div class="theme-content">
+                                        <div style="width: 70%; height: 8px; background: #e1e1e1; margin-bottom: 5px;">
+                                        </div>
+                                        <div style="width: 40%; height: 8px; background: #e1e1e1;"></div>
+                                    </div>
+                                </div>
+                                <div class="theme-label">Light Theme</div>
+                            </div>
+                            <div class="theme-option" data-theme="dark">
+                                <div class="theme-preview dark">
+                                    <div class="theme-header"></div>
+                                    <div class="theme-content">
+                                        <div style="width: 70%; height: 8px; background: #555; margin-bottom: 5px;">
+                                        </div>
+                                        <div style="width: 40%; height: 8px; background: #555;"></div>
+                                    </div>
+                                </div>
+                                <div class="theme-label">Dark Theme</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fas fa-language"></i> Language Settings</h3>
+                        <div class="form-group">
+                            <label for="language">Select Language</label>
+                            <select id="language" name="language">
+                                <option value="en" selected>English</option>
+                                <option value="fil">Filipino</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date-format">Date Format</label>
+                            <select id="date-format" name="date-format">
+                                <option value="mdy" selected>MM/DD/YYYY</option>
+                                <option value="dmy">DD/MM/YYYY</option>
+                                <option value="ymd">YYYY/MM/DD</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Preferences
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const settingsPanels = document.querySelectorAll('.settings-panel');
+
+            // Function to activate a specific tab
+            function activateTab(tabId) {
+                // Remove active class from all buttons and panels
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                settingsPanels.forEach(panel => panel.classList.remove('active'));
+
+                // Add active class to selected button and panel
+                const selectedButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('active');
+                    const panel = document.getElementById(tabId);
+                    if (panel) {
+                        panel.classList.add('active');
+                    }
+                }
+            }
+
+            // Function to highlight a specific field
+            function highlightField(fieldId) {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.focus();
+                    field.style.boxShadow = '0 0 8px 2px #4d90fe';
+                    field.style.border = '1px solid #4d90fe';
+
+                    // Scroll to the field
+                    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Remove highlight after 3 seconds
+                    setTimeout(() => {
+                        field.style.boxShadow = '';
+                        field.style.border = '';
+                    }, 3000);
+                }
+            }
+
+            // Check URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            const fieldParam = urlParams.get('field');
+
+            // Activate tab based on URL parameter
+            if (tabParam) {
+                activateTab(tabParam);
+
+                // Highlight field if specified
+                if (fieldParam) {
+                    // Small delay to ensure DOM is fully rendered
+                    setTimeout(() => highlightField(fieldParam), 300);
+                }
+            }
+
+            // Regular tab switching functionality
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const tabId = button.getAttribute('data-tab');
+                    activateTab(tabId);
+                });
+            });
+
+            // Theme selection
+            const themeOptions = document.querySelectorAll('.theme-option');
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    themeOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+
+                    // Here you would implement actual theme change
+                    const theme = option.getAttribute('data-theme');
+                    console.log('Theme changed to:', theme);
+                    // document.body.setAttribute('data-theme', theme);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

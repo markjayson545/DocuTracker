@@ -1,30 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-:root {
-    /* Colors */
-    --primary-color: #4361ee;
-    --primary-light: rgba(67, 97, 238, 0.1);
-    --primary-dark: #3a56d4;
-    --primary-gradient: linear-gradient(135deg, #4361ee, #3a56d4);
-    --secondary-color: #3a0ca3;
-    --accent-color: #4cc9f0;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f5f7fb;
-    --input-bg: #ffffff;
-    --border-color: #e1e5eb;
-
-    /* Status colors */
-    --success-color: #4CAF50;
-    --warning-color: #ff9800;
-    --error-color: #f44336;
-
-    /* Effects */
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --transition: all 0.3s ease-in-out;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
 
 * {
     margin: 0;
@@ -41,38 +16,11 @@ body {
 
 /* header */
 
-header {
-    background-color: white;
-    padding: 15px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+/* Import global variables */
+@import url("../css/global/variables.css");
 
-header a {
-    text-decoration: none;
-}
 
-header h2 {
-    color: var(--primary-color);
-    font-size: 1.5em;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
 
-/* Search Bar */
-.search-container {
-    display: flex;
-    align-items: center;
-    flex: 0 1 500px;
-    position: relative;
-}
 
 .search-container input {
     width: 100%;

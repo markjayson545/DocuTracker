@@ -1,29 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-:root {
-    --primary-color: #4361ee;
-    --accent-color: #4cc9f0;
-    --primary-dark: #3a56d4;
-    --secondary-color: #7209b7;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f8f9fa;
-    --gray-text: #6c757d;
-    --input-bg: #ffffff;
-    --border-color: #cacbcc;
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --success-color: #4CAF50;
-    --success-color-light: #d4edda;
-    --error-color: #f44336;
-    --error-color-light: #f8d7da;
-    --warning-color: #FFC107;
-    --warning-color-light: #fff3cd;
-    --transition: all 0.3s ease;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.123);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-    /* Footer */
-    --text-color-footer: #e6e6f0
-}
 
 * {
     margin: 0;
@@ -586,3 +562,5 @@ footer a:hover {
         height: 250px;
     }
 }
+/* Warning: Could not find a good place to add variables import. Please add manually: */
+/* @import url("../css/global/variables.css"); */

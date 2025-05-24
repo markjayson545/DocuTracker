@@ -1,39 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-:root {
-    /* Typography */
-    --font-primary: 'Poppins', sans-serif;
-
-    /* Colors */
-    --primary-color: #4361ee;
-    --primary-light: rgba(67, 97, 238, 0.1);
-    --primary-dark: #3a56d4;
-    --primary-gradient: linear-gradient(135deg, #4361ee, #3a56d4);
-    --secondary-color: #3a0ca3;
-    --accent-color: #4cc9f0;
-    --text-color: #333;
-    --light-text: #777;
-    --bg-color: #f5f7fb;
-    --input-bg: #ffffff;
-    --border-color: #e1e5eb;
-
-    /* Status colors */
-    --success-color: #4CAF50;
-    --warning-color: #ff9800;
-    --error-color: #f44336;
-    --info-color: #2196F3;
-
-    /* Priority colors */
-    --priority-high: #f44336;
-    --priority-medium: #ff9800;
-    --priority-low: #4CAF50;
-
-    /* Effects */
-    --shadow-color: rgba(0, 0, 0, 0.05);
-    --transition: all 0.3s ease-in-out;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
 
 body {
     background-color: var(--bg-color);
@@ -42,6 +8,10 @@ body {
 }
 
 /* Main layout */
+
+/* Import global variables */
+@import url("../css/global/variables.css");
+
 main {
     display: flex;
     flex-direction: row;

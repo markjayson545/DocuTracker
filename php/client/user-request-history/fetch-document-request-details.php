@@ -57,7 +57,7 @@ try {
         throw new Exception('No request details found.');
     }
 
-    $sqlGetRequestHistory = "SELECT * FROM RequestLog WHERE request_id = ?";
+    $sqlGetRequestHistory = "SELECT * FROM RequestLog WHERE request_id = ? ORDER BY created_at ASC";
     // Fetch request history
     $stmt = $conn->prepare($sqlGetRequestHistory);
     $stmt->bind_param("i", $requestId);
@@ -66,7 +66,7 @@ try {
     $requestHistory = [];
     while ($row = $result->fetch_assoc()) {
         $requestHistory[] = [
-            'log_id' => $row['history_id'],
+            'log_id' => $row['log_id'],
             'request_id' => $row['request_id'],
             'status' => $row['status'],
             'created_at' => $row['created_at']

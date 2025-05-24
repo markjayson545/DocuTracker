@@ -1,0 +1,406 @@
+/* Global Button Styles */
+
+/* Import variables directly for use in this file */
+@import url("variables.css");
+
+/* Base Button */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    letter-spacing: 0.3px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.btn i {
+    font-size: 0.95em;
+}
+
+/* Button Sizes */
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+.btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* Button Types */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border-color: #e2e8f0;
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+    background-color: #cbd5e0;
+    border-color: #cbd5e0;
+    color: #2d3748;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+.btn-success:hover, .btn-success:focus {
+    background-color: #43a047;
+    border-color: #43a047;
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--error-color);
+    color: white;
+    border-color: var(--error-color);
+}
+
+.btn-danger:hover, .btn-danger:focus {
+    background-color: #d32f2f;
+    border-color: #d32f2f;
+    color: white;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+    color: white;
+    border-color: var(--warning-color);
+}
+
+.btn-warning:hover, .btn-warning:focus {
+    background-color: #f57c00;
+    border-color: #f57c00;
+    color: white;
+}
+
+.btn-info {
+    background-color: var(--info-color);
+    color: white;
+    border-color: var(--info-color);
+}
+
+.btn-info:hover, .btn-info:focus {
+    background-color: #1e88e5;
+    border-color: #1e88e5;
+    color: white;
+}
+
+/* Outline Buttons */
+.btn-outline-primary {
+    color: var(--primary-color);
+    background-color: transparent;
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    color: white;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-secondary {
+    color: #4a5568;
+    background-color: transparent;
+    border-color: #cbd5e0;
+}
+
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+    color: #2d3748;
+    background-color: #e2e8f0;
+    border-color: #cbd5e0;
+}
+
+.btn-outline-success {
+    color: var(--success-color);
+    background-color: transparent;
+    border-color: var(--success-color);
+}
+
+.btn-outline-success:hover, .btn-outline-success:focus {
+    color: white;
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-outline-danger {
+    color: var(--error-color);
+    background-color: transparent;
+    border-color: var(--error-color);
+}
+
+.btn-outline-danger:hover, .btn-outline-danger:focus {
+    color: white;
+    background-color: var(--error-color);
+    border-color: var(--error-color);
+}
+
+.btn-outline-warning {
+    color: var(--warning-color);
+    background-color: transparent;
+    border-color: var(--warning-color);
+}
+
+.btn-outline-warning:hover, .btn-outline-warning:focus {
+    color: white;
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+}
+
+.btn-outline-info {
+    color: var(--info-color);
+    background-color: transparent;
+    border-color: var(--info-color);
+}
+
+.btn-outline-info:hover, .btn-outline-info:focus {
+    color: white;
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+}
+
+/* Link Button */
+.btn-link {
+    font-weight: 400;
+    color: var(--primary-color);
+    text-decoration: none;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.btn-link:hover, .btn-link:focus {
+    color: var(--primary-dark);
+    text-decoration: underline;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+/* Text Button */
+.btn-text {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.btn-text.primary {
+    color: var(--primary-color);
+}
+
+.btn-text.danger {
+    color: var(--error-color);
+}
+
+.btn-text:hover {
+    text-decoration: underline;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Disabled state */
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+}
+
+/* Button with Icon */
+.btn.icon-only {
+    padding: 0.625rem;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+
+.btn.icon-only.btn-sm {
+    padding: 0.375rem;
+    width: 2rem;
+    height: 2rem;
+}
+
+.btn.icon-only.btn-lg {
+    padding: 0.75rem;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.btn.icon-only i {
+    margin: 0;
+}
+
+/* Button Group */
+.btn-group {
+    display: inline-flex;
+    position: relative;
+}
+
+.btn-group .btn {
+    position: relative;
+    flex: 1 1 auto;
+}
+
+.btn-group .btn:not(:first-child) {
+    margin-left: -1px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.btn-group .btn:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Button loading state */
+.btn.loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    top: calc(50% - 0.5rem);
+    left: calc(50% - 0.5rem);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Block Button (full-width) */
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Floating Action Button */
+.btn-floating {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-floating i {
+    font-size: 1.5rem;
+}
+
+/* Social Media Buttons */
+.btn-facebook {
+    background-color: #1877f2;
+    border-color: #1877f2;
+    color: white;
+}
+
+.btn-facebook:hover, .btn-facebook:focus {
+    background-color: #166fe5;
+    border-color: #166fe5;
+    color: white;
+}
+
+.btn-google {
+    background-color: #ea4335;
+    border-color: #ea4335;
+    color: white;
+}
+
+.btn-google:hover, .btn-google:focus {
+    background-color: #d33426;
+    border-color: #d33426;
+    color: white;
+}
+
+.btn-twitter {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+    color: white;
+}
+
+.btn-twitter:hover, .btn-twitter:focus {
+    background-color: #0d95e8;
+    border-color: #0d95e8;
+    color: white;
+}
+
+/* Responsiveness */
+@media (max-width: 576px) {
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-lg {
+        padding: 0.65rem 1.25rem;
+        font-size: 1rem;
+    }
+}

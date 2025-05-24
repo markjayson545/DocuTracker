@@ -1,9 +1,7 @@
-:root {
-    --dark-text: #212529;
-    --transition: all 0.3s ease;
-    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
+/* User Dropdown Menu Styles */
+
+/* Import variables directly for use in this file */
+@import url("variables.css");
 
 .user-info {
     display: none;

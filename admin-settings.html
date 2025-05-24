@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuTracker: Admin Settings</title>
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/logout.js"></script>
+    <script src="js/services/sidebar.js"></script>
+    <script src="js/services/handle-user-notification.js"></script>
+    <!-- Global CSS First -->
+    <!-- Then Page-specific CSS -->
+
+    <!-- External Libraries -->
+
+    <!-- Global CSS First -->
+    <link rel="stylesheet" href="css/global/master.css">
+    <!-- Then Page-specific CSS -->
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/admin-settings.css">
+
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="js/admin/admin-settings/fetch-document-types.js"></script>
+    <script src="js/admin/admin-settings/admin-credentials.js"></script>
+    <script src="js/admin/search-handler.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <div class="search-container">
+            <input type="search" placeholder="Search documents, requests..." aria-label="Search" id="search-input">
+            <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+            <div class="search-results-dropdown" id="search-results-dropdown">
+                <div class="search-results-header">
+                    <h4>Search Results</h4>
+                </div>
+                <div class="search-results-list" id="search-results-list">
+                    <!-- Templates for search results that will be shown/hidden by JS -->
+                    <p id="search-message" class="search-message">Type at least 1 characters to search</p>
+
+                    <!-- User result template -->
+                    <div class="search-result-item template" id="user-result-template" data-type="user"
+                        style="display: none;">
+                        <i class="fas fa-user"></i>
+                        <div class="search-result-details">
+                            <p class="result-title" id="user-result-name">John Doe</p>
+                            <p class="result-meta">User • <span id="user-result-email">example@email.com</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Request result template -->
+                    <div class="search-result-item template" id="request-result-template" data-type="request"
+                        style="display: none;">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Document Request</p>
+                            <p class="result-meta">Request • REQ-<span id="request-result-id">001</span> • <span
+                                    id="request-result-status">Pending</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Application result template -->
+                    <div class="search-result-item template" id="application-result-template" data-type="application"
+                        style="display: none;">
+                        <i class="fas fa-clipboard-list"></i>
+                        <div class="search-result-details">
+                            <p class="result-title">Application</p>
+                            <p class="result-meta">Application • APP-<span id="application-result-id">001</span> • <span
+                                    id="application-result-status">Pending</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="notification">
+                <button class="notification-button" id="notification-button" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-badge-count">3</span>
+                </button>
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read" id="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <div class="notification-item success">
+                            <div class="notification-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a birth certificate has been approved.</p>
+                                <span class="notification-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item info">
+                            <div class="notification-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your payment for the marriage certificate is successful.</p>
+                                <span class="notification-time">1 day ago</span>
+                            </div>
+                        </div>
+                        <div class="notification-item warning">
+                            <div class="notification-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="notification-content">
+                                <p>Your request for a death certificate is pending.</p>
+                                <span class="notification-time">3 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="login-or-create" id="login-or-create">
+                <div class="login-button">
+                    <a href="sign-in.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </div>
+                <div class="signup-button">
+                    <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+            </div>
+
+            <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">Admin User</p>
+                    <p class="user-email" id="user-email">admin@example.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">Admin User</p>
+                            <p class="user-email" id="user-email">admin@example.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> -->
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <button class="dashboard-button" id="sidebar-toggle">
+                <i class="fas fa-solid fa-bars" id="toggle-icon"></i>
+                <h3>
+                    <i class="fa-solid fa-shield-alt"></i> Admin
+                </h3>
+            </button>
+            <ul id="sidebar-menu">
+                <li>
+                    <button class="admin-dashboard-home" id="admin-dashboard-home">
+                        <i class="fas fa-home"></i> Admin Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button class="admin-manage-applications-sidebar-btn" id="admin-manage-applications-sidebar-btn">
+                        <i class="fas fa-envelope"></i> Manage Applications
+                    </button>
+                </li>
+                <li>
+                    <button class="admin-manage-requests-sidebar-btn" id="admin-manage-requests-sidebar-btn">
+                        <i class="fas fa-credit-card"></i> Manage Requests
+                    </button>
+                </li>
+                <li>
+                    <button class="admin-manage-users-sidebar-btn" id="admin-manage-users-sidebar-btn">
+                        <i class="fas fa-user-circle"></i> Manage Users
+                    </button>
+                </li>
+
+                <li>
+                    <button class="active admin-settings-sidebar-btn" id="admin-settings-sidebar-btn">
+                        <i class="fas fa-cogs"></i> Settings
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dashboard-body">
+            <div class="admin-container">
+                <div class="dashboard-title">
+                    <h3>
+                        <i class="fas fa-cog"></i> System Configuration
+                    </h3>
+                    <p>
+                        <i class="fas fa-shield-alt"></i> Manage application settings and configurations
+                    </p>
+                </div>
+
+                <div class="admin-tabs">
+                    <button class="tab-button active" data-tab="document-types">
+                        <i class="fas fa-file-alt"></i> Document Types
+                    </button>
+                    <button class="tab-button" data-tab="notifications-templates">
+                        <i class="fas fa-envelope"></i> Notifications
+                    </button>
+                    <button class="tab-button" data-tab="data-privacy">
+                        <i class="fas fa-user-shield"></i> Data & Privacy
+                    </button>
+                </div>
+
+                <!-- Document Types Panel -->
+                <div class="admin-panel active" id="document-types">
+                    <div class="admin-card">
+                        <h3><i class="fas fa-file-invoice"></i> Document Types Management</h3>
+                        <p>Add, edit, or remove document types and set their prices.</p>
+
+                        <div class="document-types-list">
+                            <table class="doc-types-table">
+                                <thead>
+                                    <tr>
+                                        <th>Document Name</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doc-types-list-body">
+                                    <tr>
+                                        <td>Birth Certificate</td>
+                                        <td>$15.00</td>
+                                        <td>
+                                            <div class="doc-actions">
+                                                <button title="Edit Document"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Marriage Certificate</td>
+                                        <td>$25.00</td>
+                                        <td>
+                                            <div class="doc-actions">
+                                                <button title="Edit Document"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Property Title</td>
+                                        <td>$35.00</td>
+                                        <td>
+                                            <div class="doc-actions">
+                                                <button title="Edit Document"><i class="fas fa-edit"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="add-document-type">
+                            <button class="btn btn-primary" id="add-doc-type-btn">
+                                <i class="fas fa-plus"></i> Add Document Type
+                            </button>
+                        </div>
+
+                        <!-- Removing the inline form since we'll use a modal instead -->
+                    </div>
+                </div>
+
+                <!-- Notifications & Templates Panel -->
+                <div class="admin-panel" id="notifications-templates">
+                    <div class="admin-card">
+                        <h3><i class="fas fa-bullhorn"></i> Send System-wide Notification</h3>
+                        <p>Send a notification to all users in the system</p>
+                        <!-- New System Notification Section -->
+                        <div class="notification-section">
+                            <form id="system-notification-form">
+                                <div class="form-group">
+                                    <label for="system-notification-title">Notification Title</label>
+                                    <input type="text" id="system-notification-title"
+                                        placeholder="e.g., System Maintenance" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="system-notification-message">Notification Message</label>
+                                    <textarea id="system-notification-message" rows="3"
+                                        placeholder="Enter notification message here..." required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="system-notification-type">Type</label>
+                                    <select id="system-notification-type" required>
+                                        <option value="info">Info</option>
+                                        <option value="success">Success</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="error">Error</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i> Send System Notification
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- User-specific Notifications Card -->
+                    <div class="admin-card">
+                        <h3><i class="fas fa-user"></i> User-specific Notifications</h3>
+                        <p>Send targeted notifications to specific users</p>
+
+                        <form id="user-notification-form">
+                            <div class="form-group">
+                                <label for="user-notification-recipient">Select User</label>
+                                <div class="user-search-container">
+                                    <input type="text" id="user-search-input" placeholder="Search for a user...">
+                                    <div id="user-search-results" class="user-search-results">
+                                        <div class="user-search-result">
+                                            <i class="fas fa-user"></i>
+                                            <div class="user-details">
+                                                <p class="result-title">John Doe</p>
+                                                <p class="result-meta">User • <span
+                                                        id="user-result-email">johndoe@gmail.com</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select id="user-notification-recipient" required>
+                                        <option value="">-- Select a user --</option>
+                                        <!-- User options will be loaded here -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-notification-title">Notification Title</label>
+                                    <input type="text" id="user-notification-title"
+                                        placeholder="e.g., Document Approval" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-notification-message">Notification Message</label>
+                                    <textarea id="user-notification-message" rows="3"
+                                        placeholder="Enter personalized message here..." required></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user-notification-status">Status</label>
+                                    <select id="user-notification-status" required>
+                                        <option value="info">Info</option>
+                                        <option value="success">Success</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="error">Error</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i> Send User Notification
+                                    </button>
+                                </div>
+                        </form>
+                    </div>
+
+                    <!-- Notification History Card -->
+                    <div class="admin-card">
+                        <h3><i class="fas fa-history"></i> Recent Notifications</h3>
+                        <p>History of recently sent notifications</p>
+
+                        <div class="notifications-table-container">
+                            <table class="notifications-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date/Time</th>
+                                        <th>Type</th>
+                                        <th>Title</th>
+                                        <th>Recipient</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="notifications-table-body">
+                                    <!-- Notification data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data & Privacy Panel -->
+                <div class="admin-panel" id="data-privacy">
+                    <div class="admin-card">
+                        <h3><i class="fas fa-user-shield"></i> Personal Information</h3>
+                        <p>Manage your personal information and account security</p>
+
+                        <!-- Username Change Form -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-user"></i> Change Username</h4>
+                            <form id="change-username-form">
+                                <div class="form-group">
+                                    <label for="current-username">Current Username</label>
+                                    <input type="text" id="current-username" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-username">New Username</label>
+                                    <input type="text" id="new-username" required>
+                                </div>
+                                <!-- Password will be prompted via JavaScript -->
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update Username
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Email Change Form -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-envelope"></i> Change Email Address</h4>
+                            <form id="change-email-form">
+                                <div class="form-group">
+                                    <label for="current-email">Current Email</label>
+                                    <input type="email" id="current-email" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-email">New Email</label>
+                                    <input type="email" id="new-email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-password-email">Confirm Password</label>
+                                    <input type="password" id="confirm-password-email" required>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update Email
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Password Change Form -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-lock"></i> Change Password</h4>
+                            <form id="change-password-form">
+                                <div class="form-group">
+                                    <label for="current-password">Current Password</label>
+                                    <input type="password" id="current-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-password">New Password</label>
+                                    <input type="password" id="new-password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-new-password">Confirm New Password</label>
+                                    <input type="password" id="confirm-new-password" required>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Update Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3><i class="fas fa-database"></i> Data Management</h3>
+                        <p>Import and Export system Database for backup</p>
+
+                        <div class="data-management-options">
+
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <h4><i class="fas fa-upload"></i> Import Database</h4>
+                                    <p>Import a SQL dump file to restore or update the database</p>
+                                </div>
+                                <button class="btn btn-secondary" id="import-database-btn">
+                                    <i class="fas fa-upload"></i> Import Database
+                                </button>
+                            </div>
+
+                            <div class="data-option">
+                                <div class="data-option-info">
+                                    <h4><i class="fas fa-database"></i> Export Database</h4>
+                                    <p>Export the entire database as a SQL dump file for backup or migration purposes
+                                    </p>
+                                </div>
+                                <button class="btn btn-secondary" id="export-database-btn">
+                                    <i class="fas fa-database"></i> Export Database
+                                </button>
+                            </div>
+
+                            <!-- No Deletion? Still thinking about it... -->
+                            <!-- <div class="data-option danger-zone">
+                                <div class="data-option-info">
+                                    <h4><i class="fas fa-exclamation-triangle"></i> Delete Account</h4>
+                                    <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                                </div>
+                                <button class="btn btn-danger" id="delete-account-btn">
+                                    <i class="fas fa-trash"></i> Delete Account
+                                </button>
+                            </div> -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Document Type Modal (used for both adding and editing) -->
+    <div id="document-modal" class="modal">
+        <form id="document-add-edit">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4><i class="fas fa-file-alt"></i> <span id="modal-title">Add Document Type</span></h4>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modal-doc-name">Document Name</label>
+                        <input type="text" id="modal-doc-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modal-doc-price">Price ($)</label>
+                        <input type="number" id="modal-doc-price" min="0" step="0.01" required>
+                    </div>
+                    <input type="hidden" id="modal-doc-id">
+                    <input type="hidden" id="modal-action" value="add">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="save-doc-type">
+                        <i class="fas fa-save"></i> <span id="modal-save-btn-text">Save</span>
+                    </button>
+                    <button class="btn btn-danger" id="delete-doc-type-btn">
+                        <i class="fas fa-trash"></i> Delete Document
+                    </button>
+                    <button class="btn btn-secondary modal-close-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize tab switching only
+            initializeTabSwitching();
+        });
+
+        /**
+         * Initialize tab switching functionality
+         */
+        function initializeTabSwitching() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const adminPanels = document.querySelectorAll('.admin-panel');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Remove active class from all buttons and panels
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    adminPanels.forEach(panel => panel.classList.remove('active'));
+
+                    // Add active class to current button
+                    button.classList.add('active');
+
+                    // Show the corresponding panel
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+    </script>
+    <script src="js/admin/admin-settings/handle-notification-settings.js"></script>
+</body>
+
+</html>

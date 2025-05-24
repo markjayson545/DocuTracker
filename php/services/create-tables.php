@@ -25,6 +25,7 @@ function createTable($conn, $sql)
 $userSql = "CREATE TABLE IF NOT EXISTS User(
             id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             username VARCHAR(30) NOT NULL UNIQUE,
+            profile_picture VARCHAR(255) NULL,
             phone VARCHAR(15) NOT NULL UNIQUE,
             email VARCHAR(50) NOT NULL UNIQUE,
             role VARCHAR(255) DEFAULT 'client',
@@ -91,8 +92,8 @@ $userDetailsSql = "CREATE TABLE IF NOT EXISTS UserDetails(
             details_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT(6) UNSIGNED UNIQUE NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
-            height DECIMAL(15) NOT NULL,
-            weight DECIMAL(15) NOT NULL,
+            height DECIMAL(15, 0) NOT NULL,
+            weight DECIMAL(15, 0) NOT NULL,
             complexion VARCHAR(20) NOT NULL,
             blood_type VARCHAR(10) NOT NULL,
             religion VARCHAR(20) NOT NULL,
@@ -145,6 +146,7 @@ $notificationSql = "CREATE TABLE IF NOT EXISTS Notification(
             notification_id BIGINT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT(6) UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES User(id),
+            title VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
             status VARCHAR(50) DEFAULT 'unread',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -192,7 +194,7 @@ $requestLogSql = "CREATE TABLE IF NOT EXISTS RequestLog(
 function createDefaultAdmin(){
     global $conn;
     $username = "admin";
-    $password = password_hash("admin123", PASSWORD_BCRYPT);
+    $password = password_hash("admin123", PASSWORD_DEFAULT);
     $phone = "09123456789";
     $email = "admin@docutracker.com";
     $role = "admin";
@@ -210,6 +212,32 @@ function createDefaultAdmin(){
     $stmt->close();
 }
 
+function createDefaultDocumentTypes(){
+    global $conn;
+    $sql = "INSERT INTO DocumentTypes (document_type, price) 
+            VALUES ('Police Clearance', 135.00)";
+    $stmt = $conn->prepare($sql);
+    if ($stmt->execute()) {
+        writeLog("Default document type created successfully", "create-tables.log");
+    } else {
+        writeLog("Error creating default document type: " . $stmt->error, "create-tables.log");
+    }
+    $stmt->close();
+}
+
+function checkDuplicate($value, $column, $userId)
+{
+    global $conn;
+    $sql = "SELECT COUNT(*) FROM User WHERE $column = ? AND id != ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $value, $userId);
+    $stmt->execute();
+    $stmt->bind_result($count);
+    $stmt->fetch();
+    $stmt->close();
+    return $count > 0;
+}
+
 try {
     createTable($conn, $userSql);
     createTable($conn, $applicationSql);
@@ -225,9 +253,13 @@ try {
     createTable($conn, $systemNotificationSql);
     createTable($conn, $sessionTokensSql);
     createTable($conn, $requestLogSql);
-
-    writeAuditLog(1, "System", "Created tables");
     writeLog("Tables created successfully", "create-tables.log");
+    // Create default admin user    
+    createDefaultDocumentTypes();
+    // Check if the default admin user already exists to do later mwehehehhe
+    createDefaultAdmin();
+    // Create default document types
+
     echo json_encode(
         [
             "status" => "success",

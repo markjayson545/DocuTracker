@@ -1,0 +1,157 @@
+/* Global CSS Variables
+   This file contains all the global variables used throughout the application.
+   Import this file at the beginning of your CSS files to use these variables.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Typography */
+    --font-primary: 'Poppins', sans-serif;
+    --font-size-xs: 0.75rem;      /* 12px */
+    --font-size-sm: 0.875rem;     /* 14px */
+    --font-size-base: 1rem;       /* 16px */
+    --font-size-lg: 1.125rem;     /* 18px */
+    --font-size-xl: 1.25rem;      /* 20px */
+    --font-size-2xl: 1.5rem;      /* 24px */
+    --font-size-3xl: 1.875rem;    /* 30px */
+    --font-size-4xl: 2.25rem;     /* 36px */
+    --font-size-5xl: 3rem;        /* 48px */
+    
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Line Heights */
+    --line-height-none: 1;
+    --line-height-tight: 1.25;
+    --line-height-snug: 1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.625;
+    --line-height-loose: 2;
+    
+    /* Colors */
+    --primary-color: #4361ee;
+    --primary-light: rgba(67, 97, 238, 0.1);
+    --primary-dark: #3a56d4;
+    --primary-gradient: linear-gradient(135deg, #4361ee, #3a56d4);
+    --secondary-color: #3a0ca3;
+    --accent-color: #4cc9f0;
+    
+    /* Text Colors */
+    --text-color: #333;
+    --light-text: #777;
+    --gray-text: #6c757d;
+    --dark-text: #212529;
+    --muted-text: #6c757d;
+    --light-text-color: #f8f9fa;
+    
+    /* Background Colors */
+    --bg-color: #f5f7fb;
+    --light-bg: #f8f9fa;
+    --light-gray-bg: #ececec5c;
+    --light-gray-bg-alt: #f9fafd;
+    --dark-bg: #343a40;
+    --input-bg: #ffffff;
+    
+    /* Border Colors */
+    --border-color: #e1e5eb;
+    --border-light: #e9ecef;
+    --border-dark: #343a40;
+    
+    /* Status Colors */
+    --success-color: #4CAF50;
+    --success-color-light: #DFF2E7;
+    --warning-color: #ff9800;
+    --warning-color-light: #FFF3E0;
+    --error-color: #f44336;
+    --error-color-light: #FBE9E7;
+    --info-color: #2196F3;
+    --danger-color: #f44336; /* Synonym for error */
+    --completed-color: #607d8b;
+    
+    /* Role Colors */
+    --admin-color: #9c27b0;
+    --staff-color: #3f51b5;
+    --user-color: #0d6efd;
+    
+    /* Admin-specific Colors */
+    --admin-primary: #3a0ca3;
+    --admin-secondary: #7209b7;
+    --admin-primary-gradient: linear-gradient(135deg, #3a0ca3, #7209b7);
+    --admin-accent: #f72585;
+    
+    /* Priority Colors */
+    --priority-high: #f44336;
+    --priority-medium: #ff9800; 
+    --priority-low: #4CAF50;
+    
+    /* Effects */
+    --transition: all 0.3s ease-in-out;
+    --transition-fast: all 0.15s ease-in-out;
+    --transition-slow: all 0.5s ease-in-out;
+    
+    /* Shadows */
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --primary-shadow-light: rgba(67, 97, 238, 0.3);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.15);
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    
+    /* Border Radius */
+    --border-radius-sm: 0.2rem;
+    --border-radius: 0.375rem;
+    --border-radius-md: 0.5rem;
+    --border-radius-lg: 0.75rem;
+    --border-radius-xl: 1rem;
+    --border-radius-2xl: 1.5rem;
+    --border-radius-pill: 50rem;
+    --border-radius-circle: 50%;
+    
+    /* Spacing */
+    --spacing-0: 0;
+    --spacing-1: 0.25rem;
+    --spacing-2: 0.5rem;
+    --spacing-3: 0.75rem;
+    --spacing-4: 1rem;
+    --spacing-5: 1.25rem;
+    --spacing-6: 1.5rem;
+    --spacing-8: 2rem;
+    --spacing-10: 2.5rem;
+    --spacing-12: 3rem;
+    --spacing-16: 4rem;
+    --spacing-20: 5rem;
+    
+    /* Z-index */
+    --z-index-dropdown: 1000;
+    --z-index-sticky: 1020;
+    --z-index-fixed: 1030;
+    --z-index-modal-backdrop: 1040;
+    --z-index-modal: 1050;
+    --z-index-popover: 1060;
+    --z-index-tooltip: 1070;
+    
+    /* Animations */
+    --animation-duration-fast: 150ms;
+    --animation-duration: 300ms;
+    --animation-duration-slow: 500ms;
+    --animation-duration-slower: 1000ms;
+    
+    /* Container Widths */
+    --container-sm: 540px;
+    --container-md: 720px;
+    --container-lg: 960px;
+    --container-xl: 1140px;
+    --container-xxl: 1320px;
+    
+    /* Card Styles */
+    --card-bg: #ffffff;
+    --card-border-radius: 16px;
+    --text-color-footer: #e6e6f0;
+}

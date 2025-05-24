@@ -56,26 +56,56 @@ function getApplicationDocuments($applicationId)
     return $documents;
 }
 
+function getUserIdFromApplication($applicationId)
+{
+    global $conn;
+    $sql = "SELECT user_id FROM Application WHERE application_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $applicationId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    if ($row) {
+        return $row['user_id'];
+    }
+    return null;
+}
+
 
 
 try {
 
     $loggedInUserId = $_SESSION['user_id'] ?? null;
     $loggedInUserRole = $_SESSION['role'] ?? null;
-    $userId = $_POST['user_id'] ?? null;
+    
+    // If no user_id is provided in the request, use the logged-in user's ID
+    $userId = $_POST['user_id'] ?? $loggedInUserId;
     $action = $_POST['action'] ?? null;
 
+    // Validate session - if not logged in, return error
+    if (!$loggedInUserId) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Not logged in',
+            'redirect' => 'sign-in.html'
+        ]);
+        exit();
+    }
 
     // Prevent user accessing other users' data
     // Only admin can access other users' data
-    if ($loggedInUserRole !== 'admin' && $loggedInUserId !== $userId) {
-        throw new Exception('Unauthorized access');
+    if ($loggedInUserRole !== 'admin' && $loggedInUserId != $userId) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Unauthorized access'
+        ]);
+        exit();
     }
 
     if (!$userId) {
         echo json_encode([
             'success' => false,
-            'message' => 'User ID not provided'
+            'message' => 'User ID not available'
         ]);
         exit();
     }
