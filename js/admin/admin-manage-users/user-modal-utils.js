@@ -7,12 +7,18 @@
 window.openUserModal = function(userId) {
     const userDetailsModal = document.getElementById("modal-overlay");
     
+    // Clear any previous warnings or messages
+    const existingWarning = document.querySelector('.profile-incomplete-warning');
+    if (existingWarning) {
+        existingWarning.remove();
+    }
+    
+    // Display the modal before fetching details to show loading state
+    userDetailsModal.style.display = "block";
+    
     // Fetch user details and documents
     window.fetchUserDetails(userId);
     window.fetchUserDocuments(userId);
-    
-    // Display the modal
-    userDetailsModal.style.display = "block";
 
     // Event listener for the "Save Changes" button
     const personalInfoForm = document.getElementById("personal-info-form");
@@ -27,10 +33,11 @@ window.openUserModal = function(userId) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    alert("User information updated successfully!");
                     window.fetchUsersData && window.fetchUsersData();
                     window.fetchUserDetails(userId);
                 } else {
-                    alert("Failed to update user details.");
+                    alert("Failed to update user details: " + (data.message || "Unknown error"));
                 }
             })
             .catch(error => console.log("Error updating user details:", error));
@@ -144,6 +151,18 @@ window.handleUserAction = function(action, userId) {
     formData.append("action", action);
 
     switch (action) {
+        case "suspend":
+            const suspensionReason = prompt("Please specify the reason for suspending the user:");
+            if (suspensionReason === null) {
+                return;
+            }
+            if (suspensionReason.trim() === "") {
+                alert("You must provide a reason for suspending the user.");
+                return;
+            }
+            formData.append("message", suspensionReason);
+            break;
+
         case "request-more-info":
             const additionalInfo = prompt("Please specify what additional information you need from the user:");
             if (additionalInfo === null) {
@@ -155,7 +174,7 @@ window.handleUserAction = function(action, userId) {
             }
             formData.append("message", additionalInfo);
             break;
-
+        
         case "reject-verification":
             const rejectionReason = prompt("Please specify the reason for rejecting the verification:");
             if (rejectionReason === null) {

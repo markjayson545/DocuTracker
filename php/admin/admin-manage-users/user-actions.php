@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../../services/open-db.php';
 include __DIR__ . '/../../services/logger.php';
+include __DIR__ . '/../../services/audit-log.php';
 session_start();
 
 // User Actions
@@ -12,7 +13,8 @@ function activateUser($userId)
     $stmt->bind_param("i", $userId);
     $result = $stmt->execute();
     $stmt->close();
-    return $result;
+    $writeAudit = writeAuditLog($userId, "User activated", "User activated by admin");
+    return $result && $writeAudit;
 }
 
 function resetPassword($userId, $newPassword, $confirmPassword)
@@ -31,19 +33,24 @@ function resetPassword($userId, $newPassword, $confirmPassword)
         }
         $stmt->close();
     }
-    return $success;
+    $writeAudit = writeAuditLog($userId, "Password reset", "Password reset by admin");
+    return $success && $writeAudit;
 }
 
 function suspendUser($userId)
 {
     global $conn;
+
+    $message = $_POST['message'] ?? "User suspended";
+
     $sql = "UPDATE User SET status = 'suspended' WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $result = $stmt->execute();
     $stmt->close();
     // Notify user about suspension
-    return $result;
+    $writeAudit = writeAuditLog($userId, "User suspended", "User suspended by admin: $message");
+    return $result && $writeAudit;
 }
 
 // Verification actions
@@ -72,7 +79,10 @@ function verifyUser($userId)
 
     // Notify user about verification
     // Send email or notification
-    return $success;
+    
+    $writeAudit = writeAuditLog($userId, "User verified", "User verified by admin");
+
+    return $success && $writeAudit;
 }
 
 function requestMoreInfo($userId)
@@ -101,7 +111,9 @@ function requestMoreInfo($userId)
     }
     $stmt->close();
 
-    return $success;
+    $writeAudit = writeAuditLog($userId, "Additional information requested", "Admin requested additional information: $message");
+
+    return $success && $writeAudit; 
 }
 
 function rejectUser($userId)
@@ -130,7 +142,11 @@ function rejectUser($userId)
     }
     $stmt->close();
 
-    return $success;
+    // Notify user about rejection
+
+    $writeAudit = writeAuditLog($userId, "User rejected", "User application rejected by admin: $message");
+
+    return $success && $writeAudit;
 }
 
 function updateUserRole($userId, $newRole)
@@ -141,6 +157,9 @@ function updateUserRole($userId, $newRole)
     $stmt->bind_param("si", $newRole, $userId);
     $result = $stmt->execute();
     $stmt->close();
+
+    // Notify user about role change
+    $writeAudit = writeAuditLog($userId, "User role updated", "User role changed to $newRole by admin");
 
     return $result;
 }

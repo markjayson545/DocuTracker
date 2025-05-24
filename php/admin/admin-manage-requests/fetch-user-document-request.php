@@ -24,11 +24,21 @@ try {
         throw new Exception("Unauthorized access");
     }
 
+    // Pagination parameters
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $limit = 10; // Fixed limit of 10 results per page
+    $offset = ($page - 1) * $limit;
+
+    // Search parameter
+    $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+    $hasSearch = !empty($search);
+
     $sqlTotalRequest = "SELECT COUNT(*) as total FROM Request";
     $sqlTotalApprovedRequests = "SELECT COUNT(*) as total FROM Request WHERE status = 'approved'";
     $sqlTotalPendingRequests = "SELECT COUNT(*) as total FROM Request WHERE status = 'pending'";
     $sqlTotalRejectedRequests = "SELECT COUNT(*) as total FROM Request WHERE status = 'rejected'";
 
+    // Base SQL for fetching requests
     $sqlGetRequests = "SELECT request.request_id, request.user_id, request.document_type_id, request.status, request.updated_at, request.created_at, 
                         client_profile.first_name, client_profile.last_name, 
                         document_type.document_type AS document_type_name,
@@ -36,8 +46,41 @@ try {
                         FROM Request request
                         JOIN ClientProfile client_profile ON request.user_id = client_profile.user_id
                         JOIN DocumentTypes document_type ON request.document_type_id = document_type.document_type_id
-                        JOIN Payment payment ON request.request_id = payment.request_id
-                        ORDER BY request.updated_at DESC";
+                        JOIN Payment payment ON request.request_id = payment.request_id";
+    
+    // Count SQL for pagination with search parameters
+    $sqlCountRequests = "SELECT COUNT(*) as total
+                        FROM Request request
+                        JOIN ClientProfile client_profile ON request.user_id = client_profile.user_id
+                        JOIN DocumentTypes document_type ON request.document_type_id = document_type.document_type_id";
+    
+    // Add search conditions if search term exists
+    if ($hasSearch) {
+        // Check if search is likely a request ID (numeric only or starts with REQ-)
+        if (is_numeric($search) || preg_match('/^REQ-(\d+)$/i', $search, $matches)) {
+            // Extract numeric part if it starts with REQ-
+            $searchId = is_numeric($search) ? $search : $matches[1];
+            
+            $searchCondition = " WHERE (request.request_id = ? OR 
+                                      client_profile.first_name LIKE ? OR 
+                                      client_profile.last_name LIKE ? OR 
+                                      CONCAT(client_profile.first_name, ' ', client_profile.last_name) LIKE ? OR
+                                      document_type.document_type LIKE ?)";
+            $sqlGetRequests .= $searchCondition;
+            $sqlCountRequests .= $searchCondition;
+        } else {
+            $searchCondition = " WHERE (client_profile.first_name LIKE ? OR 
+                                      client_profile.last_name LIKE ? OR 
+                                      CONCAT(client_profile.first_name, ' ', client_profile.last_name) LIKE ? OR
+                                      document_type.document_type LIKE ? OR
+                                      CAST(request.request_id AS CHAR) LIKE ?)";
+            $sqlGetRequests .= $searchCondition;
+            $sqlCountRequests .= $searchCondition;
+        }
+    }
+    
+    // Add order by and pagination
+    $sqlGetRequests .= " ORDER BY request.updated_at DESC LIMIT ? OFFSET ?";
 
     // Fetch total requests
     $stmt = mysqli_prepare($conn, $sqlTotalRequest);
@@ -46,7 +89,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalRequest = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total requests fetched: $totalRequest", "manage-request.log");
 
     // Fetch total approved requests
     $stmt = mysqli_prepare($conn, $sqlTotalApprovedRequests);
@@ -55,7 +97,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalApprovedRequests = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total approved requests fetched: $totalApprovedRequests", "manage-request.log");
 
     // Fetch total pending requests
     $stmt = mysqli_prepare($conn, $sqlTotalPendingRequests);
@@ -64,7 +105,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalPendingRequests = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total pending requests fetched: $totalPendingRequests", "manage-request.log");
 
     // Fetch total rejected requests
     $stmt = mysqli_prepare($conn, $sqlTotalRejectedRequests);
@@ -73,10 +113,43 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalRejectedRequests = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total rejected requests fetched: $totalRejectedRequests", "manage-request.log");
+
+    // Get total count of filtered requests for pagination
+    $stmtCount = mysqli_prepare($conn, $sqlCountRequests);
+    if ($hasSearch) {
+        if (is_numeric($search) || preg_match('/^REQ-(\d+)$/i', $search, $matches)) {
+            $searchId = is_numeric($search) ? $search : $matches[1];
+            $fuzzySearch = "%$search%";
+            mysqli_stmt_bind_param($stmtCount, "issss", $searchId, $fuzzySearch, $fuzzySearch, $fuzzySearch, $fuzzySearch);
+        } else {
+            $searchParam = "%$search%";
+            mysqli_stmt_bind_param($stmtCount, "sssss", $searchParam, $searchParam, $searchParam, $searchParam, $searchParam);
+        }
+    }
+    mysqli_stmt_execute($stmtCount);
+    $resultCount = mysqli_stmt_get_result($stmtCount);
+    $rowCount = mysqli_fetch_assoc($resultCount);
+    $totalFilteredRequests = $rowCount['total'];
+    mysqli_stmt_close($stmtCount);
+
+    // Calculate total pages for pagination
+    $totalPages = ceil($totalFilteredRequests / $limit);
     
-    // Fetch requests
+    // Fetch requests with pagination and search
     $stmt = mysqli_prepare($conn, $sqlGetRequests);
+    if ($hasSearch) {
+        if (is_numeric($search) || preg_match('/^REQ-(\d+)$/i', $search, $matches)) {
+            $searchId = is_numeric($search) ? $search : $matches[1];
+            $fuzzySearch = "%$search%";
+            mysqli_stmt_bind_param($stmt, "issssii", $searchId, $fuzzySearch, $fuzzySearch, $fuzzySearch, $fuzzySearch, $limit, $offset);
+        } else {
+            $searchParam = "%$search%";
+            mysqli_stmt_bind_param($stmt, "sssssii", $searchParam, $searchParam, $searchParam, $searchParam, $searchParam, $limit, $offset);
+        }
+    } else {
+        mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
+    }
+    
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     while ($row = mysqli_fetch_assoc($result)) {
@@ -95,7 +168,8 @@ try {
         ];
     }
     mysqli_stmt_close($stmt);
-    writeLog("Requests fetched successfully", "manage-request.log");
+    
+    writeLog("Requests fetched: " . count($requests) . ", Page: $page, Search: $search", "manage-request.log");
 
     echo json_encode([
         'success' => true,
@@ -103,7 +177,13 @@ try {
         'total_approved_requests' => $totalApprovedRequests,
         'total_pending_requests' => $totalPendingRequests,
         'total_rejected_requests' => $totalRejectedRequests,
-        'requests' => $requests
+        'requests' => $requests,
+        'pagination' => [
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_results' => $totalFilteredRequests,
+            'limit' => $limit
+        ]
     ]);
 
 } catch (\Throwable $th) {
@@ -117,6 +197,4 @@ try {
 } finally {
     $conn->close();
 }
-
-
 ?>

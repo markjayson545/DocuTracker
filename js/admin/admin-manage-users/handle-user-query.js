@@ -4,7 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const userId = url.searchParams.get("id");
 
     if (userId) {
-        openUserModal(userId);
+        // Wait a short time to ensure all scripts have loaded
+        setTimeout(function() {
+            if (window.openUserModal) {
+                window.openUserModal(userId);
+            } else {
+                console.error("openUserModal function not available");
+            }
+        }, 100);
     }
-
 });

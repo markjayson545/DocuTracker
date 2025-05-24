@@ -80,6 +80,10 @@
     color: var(--text-color);
 }
 
+.sidebar ul li button:hover {
+    color: var(--primary-color);
+}
+
 .sidebar ul li button.active {
     background: var(--primary-gradient);
     color: white;

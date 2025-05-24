@@ -15,6 +15,12 @@ try {
     $userId = $_SESSION['user_id'];
     $role = $_SESSION['role'];
 
+    // Get page number and search term from request
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    $pageSize = 10; // Fixed page size of 10
+    $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+    $offset = ($page - 1) * $pageSize;
+
     if ($role !== 'admin') {
         writeLog("Unauthorized access attempt by user ID: $userId", "manage-users.log");
         echo json_encode([
@@ -31,12 +37,21 @@ try {
     $sqlTotalSuspendedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'suspended'";
     $sqlTotalVerifiedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'active' AND is_verified = 1";
 
-    $sqlGetUsers = "SELECT user.id AS user_id, user.email, user.role, user.is_verified, user.status, user.created_at,
-                    client_profile.first_name, client_profile.last_name
-                    FROM User user
-                    JOIN ClientProfile client_profile ON user.id = client_profile.user_id
-                    ORDER BY user.created_at DESC";
-    // TODO fetch even client profile for user_id does not exists
+    // Base query for users
+    $sqlGetUsers = "SELECT user.id AS user_id, user.email, user.username, user.role, user.is_verified, user.status, user.created_at
+                    FROM User user";
+                    
+    // Add search condition if search term is provided
+    $searchCondition = "";
+    if (!empty($searchTerm)) {
+        $searchCondition = " WHERE user.username LIKE ? OR user.email LIKE ? OR user.role LIKE ? OR user.status LIKE ?";
+    }
+    
+    // Count total matching records for pagination
+    $sqlCountUsers = "SELECT COUNT(*) as total FROM User user" . $searchCondition;
+    
+    // Complete the query with order by and pagination
+    $sqlGetUsers .= $searchCondition . " ORDER BY user.created_at DESC LIMIT ? OFFSET ?";
 
     // Fetch total users
     $stmt = mysqli_prepare($conn, $sqlTotalUsers);
@@ -83,24 +98,45 @@ try {
     mysqli_stmt_close($stmt);
     writeLog("Total verified users fetched: $totalVerifiedUsers", "manage-users.log");
 
-    // Fetch users
+    // Count total users matching search criteria for pagination
+    $totalMatchingUsers = 0;
+    $stmt = mysqli_prepare($conn, $sqlCountUsers);
+    if (!empty($searchTerm)) {
+        $searchParam = "%$searchTerm%";
+        mysqli_stmt_bind_param($stmt, "ssss", $searchParam, $searchParam, $searchParam, $searchParam);
+    }
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $row = mysqli_fetch_assoc($result);
+    $totalMatchingUsers = $row['total'];
+    mysqli_stmt_close($stmt);
+    
+    // Calculate total pages
+    $totalPages = ceil($totalMatchingUsers / $pageSize);
+    
+    // Fetch users with pagination and search
     $stmt = mysqli_prepare($conn, $sqlGetUsers);
+    if (!empty($searchTerm)) {
+        $searchParam = "%$searchTerm%";
+        mysqli_stmt_bind_param($stmt, "ssssii", $searchParam, $searchParam, $searchParam, $searchParam, $pageSize, $offset);
+    } else {
+        mysqli_stmt_bind_param($stmt, "ii", $pageSize, $offset);
+    }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     while ($row = mysqli_fetch_assoc($result)) {
         $users[] = [
             'user_id' => $row['user_id'],
             'email' => $row['email'],
+            'username' => $row['username'],
             'role' => $row['role'],
             'is_verified' => $row['is_verified'],
             'status' => $row['status'],
-            'created_at' => $row['created_at'],
-            'first_name' => $row['first_name'],
-            'last_name' => $row['last_name']
+            'created_at' => $row['created_at']
         ];
     }
     mysqli_stmt_close($stmt);
-    writeLog("Users fetched successfully", "manage-users.log");
+    writeLog("Users fetched successfully with pagination", "manage-users.log");
 
     echo json_encode([
         'success' => true,
@@ -110,7 +146,13 @@ try {
         'totalSuspendedUsers' => $totalSuspendedUsers,
         'totalVerifiedUsers' => $totalVerifiedUsers,
         'users' => $users,
-        'isAdmin' => true
+        'isAdmin' => true,
+        'pagination' => [
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'pageSize' => $pageSize,
+            'totalMatchingUsers' => $totalMatchingUsers
+        ]
     ]);
 
 } catch (\Throwable $th) {
@@ -124,7 +166,4 @@ try {
 } finally{
     mysqli_close($conn);
 }
-
-
-
 ?>

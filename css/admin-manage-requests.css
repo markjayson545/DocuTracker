@@ -1230,6 +1230,115 @@ main {
     box-shadow: 0 5px 12px rgba(58, 12, 163, 0.2);
 }
 
+/* Add these styles to your CSS file if they don't already exist */
+
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 5px;
+}
+
+.pagination-btn {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(.disabled):not(.active) {
+    background-color: #f5f5f5;
+    border-color: #aaa;
+}
+
+.pagination-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+    font-weight: bold;
+}
+
+.pagination-btn.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: #eee;
+}
+
+.pagination-ellipsis {
+    padding: 0 5px;
+}
+
+/* Search box improvements */
+.request-search {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.request-search input {
+    padding: 10px 15px;
+    padding-right: 70px; /* Space for two buttons */
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.request-search input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.request-search button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    display: none; /* Hidden by default */
+    font-size: 14px;
+}
+
+.search-clear-btn:hover {
+    color: #555;
+}
+
+/* Loading indicator */
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    margin: 10px auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 @keyframes pulseEffect {
     0% {
         opacity: 0.8;

@@ -68,8 +68,10 @@ if ($token) {
         'success' => true, // Change to true since we're still performing logout actions
         'message' => 'Logout completed'
     ]);
+    // Redirect to index.html
+    
 }
-
+header("Location: /docutracker/index.html");
 // Close database connection
 mysqli_close($conn);
 exit;

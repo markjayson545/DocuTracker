@@ -39,6 +39,7 @@ try {
             $_SESSION['is_verified'] = $user['is_verified'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['email'] = $user['email'];
+            $_SESSION['status'] = $user['status'];
             $_SESSION['username'] = $user['username'];
 
             writeLog("Session token for $email: $token", "sign-in.log");

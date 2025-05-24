@@ -266,8 +266,9 @@
                 </div>
                 <div class="requests-container">
                     <div class="request-search">
-                        <input type="search" placeholder="Search requests..." aria-label="Search">
-                        <button title="submit" type="submit"><i class="fas fa-search"></i></button>
+                        <input type="search" placeholder="Search by Request ID (e.g., REQ-123), Name, Document Type..." 
+                               aria-label="Search" id="request-search-input">
+                        <button title="submit" type="submit" id="request-search-button"><i class="fas fa-search"></i></button>
                     </div>
                     <div class="request-table-container">
                         <table class="request-table">
@@ -347,6 +348,18 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <!-- Add pagination container -->
+                    <div class="pagination">
+                        <button class="pagination-btn" disabled title="Previous Page">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="pagination-btn active">1</button>
+                        <button class="pagination-btn">2</button>
+                        <button class="pagination-btn">3</button>
+                        <button class="pagination-btn" title="Next Page">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
 

@@ -488,5 +488,141 @@ const AdminRequestUtils = {
                     document.getElementById('document-controls').style.display = 'none';
                 }
             });
+    },
+
+    /**
+     * Fetch requests with pagination and search
+     * @param {number} page - The page number to fetch
+     * @param {string} searchTerm - The search term to filter by
+     * @returns {Promise<Array>} - Array of request objects
+     */
+    fetchRequests: async function(page = 1, searchTerm = '') {
+        try {
+            let url = 'php/admin/admin-manage-requests/fetch-user-document-request.php';
+            
+            // Add query parameters for pagination and search
+            const params = new URLSearchParams();
+            if (page > 1) params.append('page', page);
+            
+            // Handle the case where user enters "REQ-123" instead of just "123"
+            if (searchTerm) {
+                const cleanedSearch = searchTerm.replace(/^REQ-/i, '');
+                params.append('search', cleanedSearch);
+            }
+            
+            // Append parameters to URL if they exist
+            if (params.toString()) {
+                url += '?' + params.toString();
+            }
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.success) {
+                // Store pagination data for access elsewhere
+                this.pagination = data.pagination;
+                
+                // Store request stats
+                this.stats = {
+                    totalRequests: data.total_requests,
+                    pendingRequests: data.total_pending_requests,
+                    approvedRequests: data.total_approved_requests,
+                    rejectedRequests: data.total_rejected_requests
+                };
+                
+                return data.requests;
+            } else {
+                throw new Error(data.message || 'Failed to fetch requests');
+            }
+        } catch (error) {
+            console.error('Error fetching requests:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Create pagination HTML
+     * @param {HTMLElement} container - The container for pagination controls
+     * @param {Function} callback - Callback function when page is clicked
+     * @returns {void}
+     */
+    renderPagination: function(container, callback) {
+        if (!container || !this.pagination) return;
+        
+        const { current_page, total_pages } = this.pagination;
+        
+        let paginationHTML = '';
+        
+        // Previous button
+        paginationHTML += `
+            <button class="pagination-btn ${current_page === 1 ? 'disabled' : ''}" 
+                    ${current_page === 1 ? 'disabled' : ''} 
+                    data-page="${current_page - 1}" 
+                    title="Previous Page">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        
+        // First page
+        if (current_page > 3) {
+            paginationHTML += `
+                <button class="pagination-btn" data-page="1">1</button>
+                ${current_page > 4 ? '<span class="pagination-ellipsis">...</span>' : ''}
+            `;
+        }
+        
+        // Page numbers
+        for (let i = Math.max(1, current_page - 2); i <= Math.min(total_pages, current_page + 2); i++) {
+            paginationHTML += `
+                <button class="pagination-btn ${i === current_page ? 'active' : ''}" 
+                        data-page="${i}">${i}</button>
+            `;
+        }
+        
+        // Last page
+        if (current_page < total_pages - 2) {
+            paginationHTML += `
+                ${current_page < total_pages - 3 ? '<span class="pagination-ellipsis">...</span>' : ''}
+                <button class="pagination-btn" data-page="${total_pages}">${total_pages}</button>
+            `;
+        }
+        
+        // Next button
+        paginationHTML += `
+            <button class="pagination-btn ${current_page === total_pages ? 'disabled' : ''}" 
+                    ${current_page === total_pages ? 'disabled' : ''} 
+                    data-page="${current_page + 1}" 
+                    title="Next Page">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+        
+        container.innerHTML = paginationHTML;
+        
+        // Add event listeners to pagination buttons
+        document.querySelectorAll('.pagination-btn').forEach(btn => {
+            if (!btn.disabled && btn.dataset.page) {
+                btn.addEventListener('click', function() {
+                    if (typeof callback === 'function') {
+                        callback(parseInt(this.dataset.page));
+                    }
+                });
+            }
+        });
+    },
+
+    /**
+     * Add debounce function to limit API calls during real-time search
+     * @param {Function} func - Function to debounce
+     * @param {number} wait - Milliseconds to wait
+     * @returns {Function} Debounced function
+     */
+    debounce: function(func, wait) {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
     }
 };

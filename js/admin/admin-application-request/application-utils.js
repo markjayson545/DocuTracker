@@ -78,9 +78,21 @@ async function fetchApplicationDetails(applicationID) {
     }
 }
 
-async function fetchApplicationRequests() {
+async function fetchApplicationRequests(page = 1, searchTerm = '') {
     try {
-        const response = await fetch('php/admin/admin-manage-applications/fetch-admin-application-request.php');
+        let url = 'php/admin/admin-manage-applications/fetch-admin-application-request.php';
+        
+        // Add query parameters for pagination and search
+        const params = new URLSearchParams();
+        if (page > 1) params.append('page', page);
+        if (searchTerm) params.append('search', searchTerm);
+        
+        // Append parameters to URL if they exist
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        const response = await fetch(url);
         const data = await response.json();
         
         if (data.success) {
@@ -90,6 +102,9 @@ async function fetchApplicationRequests() {
             applicationUtils.stats.underReviewApplications = data.total_under_review_application;
             applicationUtils.stats.approvedApplications = data.total_approved_application;
             applicationUtils.stats.rejectedApplications = data.total_rejected_application;
+            
+            // Store pagination data in applicationUtils for access elsewhere
+            applicationUtils.pagination = data.pagination;
             
             return data.applications;
         } else {
@@ -640,6 +655,16 @@ function setupModalCloseHandlers() {
     }
 }
 
+// Add debounce function to limit API calls during real-time search
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
 // Export all functions and variables globally
 window.applicationUtils = applicationUtils;
 window.parseDate = parseDate;
@@ -654,6 +679,9 @@ window.handleAdminAction = handleAdminAction;
 window.createApplicationRow = createApplicationRow;
 window.openUserProfileModal = openUserProfileModal;
 window.setupModalCloseHandlers = setupModalCloseHandlers;
+
+// Export the debounce function
+window.debounce = debounce;
 
 // Auto-setup modal handlers when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {

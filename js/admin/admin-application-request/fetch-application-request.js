@@ -10,12 +10,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const userProfileModal = document.getElementById('modal-overlay');
     const userProfileModalCloseBtn = document.getElementById('close-modal-btn');
     const documentPlaceholder = document.getElementById('document-placeholder');
+    
+    // Pagination elements
+    const paginationContainer = document.querySelector('.pagination');
+    
+    // Application search
+    const applicationSearch = document.querySelector('.application-search input');
+    const applicationSearchBtn = document.querySelector('.application-search button');
+    
+    // Current page and search state
+    let currentPage = 1;
+    let currentSearch = '';
 
     // Event listener setup
     userProfileModalCloseBtn.addEventListener('click', function () {
         userProfileModal.style.display = 'none';
         const documentControls = document.getElementById('document-controls');
-        documentControls.style.display = 'none';
+        if (documentControls) {
+            documentControls.style.display = 'none';
+        }
     });
 
     // Create event listeners for verify buttons
@@ -31,6 +44,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
+    }
+
+    // Setup real-time search with debounce
+    if (applicationSearch) {
+        applicationSearch.addEventListener('input', debounce(function() {
+            currentSearch = applicationSearch.value.trim();
+            currentPage = 1; // Reset to first page when searching
+            initializeApplicationData(currentPage, currentSearch);
+        }, 500)); // 500ms debounce delay
+    }
+    
+    if (applicationSearchBtn) {
+        applicationSearchBtn.addEventListener('click', function() {
+            currentSearch = applicationSearch.value.trim();
+            currentPage = 1;
+            initializeApplicationData(currentPage, currentSearch);
+        });
     }
 
     // Document display handler
@@ -413,6 +443,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Update the application table
     function updateApplicationTable(applications) {
+        if (!applications || applications.length === 0) {
+            applicationRequestTable.innerHTML = '<tr style="color: red; text-align: center;"><td colspan="6">No applications found.</td></tr>';
+            return;
+        }
+        
         let tableContent = '';
         
         applications.forEach(application => {
@@ -434,10 +469,78 @@ document.addEventListener('DOMContentLoaded', function () {
             createEventListenerForVerifyButton(`verifyBtn${appId}`, appId);
         });
     }
+    
+    // Render pagination controls
+    function renderPagination() {
+        if (!paginationContainer || !applicationUtils.pagination) return;
+        
+        const { current_page, total_pages } = applicationUtils.pagination;
+        
+        let paginationHTML = '';
+        
+        // Previous button
+        paginationHTML += `
+            <button class="pagination-btn ${current_page === 1 ? 'disabled' : ''}" 
+                    ${current_page === 1 ? 'disabled' : ''} 
+                    data-page="${current_page - 1}" 
+                    title="Previous Page">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        
+        // First page
+        if (current_page > 3) {
+            paginationHTML += `
+                <button class="pagination-btn" data-page="1">1</button>
+                ${current_page > 4 ? '<span class="pagination-ellipsis">...</span>' : ''}
+            `;
+        }
+        
+        // Page numbers
+        for (let i = Math.max(1, current_page - 2); i <= Math.min(total_pages, current_page + 2); i++) {
+            paginationHTML += `
+                <button class="pagination-btn ${i === current_page ? 'active' : ''}" 
+                        data-page="${i}">${i}</button>
+            `;
+        }
+        
+        // Last page
+        if (current_page < total_pages - 2) {
+            paginationHTML += `
+                ${current_page < total_pages - 3 ? '<span class="pagination-ellipsis">...</span>' : ''}
+                <button class="pagination-btn" data-page="${total_pages}">${total_pages}</button>
+            `;
+        }
+        
+        // Next button
+        paginationHTML += `
+            <button class="pagination-btn ${current_page === total_pages ? 'disabled' : ''}" 
+                    ${current_page === total_pages ? 'disabled' : ''} 
+                    data-page="${current_page + 1}" 
+                    title="Next Page">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+        
+        paginationContainer.innerHTML = paginationHTML;
+        
+        // Add event listeners to pagination buttons
+        document.querySelectorAll('.pagination-btn').forEach(btn => {
+            if (!btn.disabled && btn.dataset.page) {
+                btn.addEventListener('click', function() {
+                    currentPage = parseInt(this.dataset.page);
+                    initializeApplicationData(currentPage, currentSearch);
+                });
+            }
+        });
+    }
 
-    // Initialize application data
-    function initializeApplicationData() {
-        fetchApplicationRequests()
+    // Initialize application data with pagination and search
+    function initializeApplicationData(page = 1, searchTerm = '') {
+        // Show loading state
+        applicationRequestTable.innerHTML = '<tr><td colspan="6"><div class="loading-spinner"></div><p>Loading applications...</p></td></tr>';
+        
+        fetchApplicationRequests(page, searchTerm)
             .then(applications => {
                 // Update the stats in the UI
                 totalApplicationsValue.innerText = applicationUtils.stats.totalApplications;
@@ -448,6 +551,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 // Update the application table
                 updateApplicationTable(applications);
+                
+                // Render pagination
+                renderPagination();
             })
             .catch(error => {
                 console.error('Failed to load application data:', error);
@@ -518,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (result && result.success) {
                     alert(result.message);
                     userProfileModal.style.display = 'none';
-                    initializeApplicationData(); // Refresh the applications list
+                    initializeApplicationData(currentPage, currentSearch); // Refresh with current page and search
                 } else if (result) {
                     alert('Error: ' + result.message);
                 }
@@ -537,8 +643,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialize data fetch
-    initializeApplicationData();
+    initializeApplicationData(currentPage, currentSearch);
     
-    // Set up refresh interval
-    setInterval(initializeApplicationData, 60000); // Refresh every minute
+    // Set up refresh interval - reduced frequency to avoid excessive API calls
+    const refreshInterval = 5 * 60 * 1000; // 5 minutes
+    setInterval(() => {
+        initializeApplicationData(currentPage, currentSearch);
+    }, refreshInterval);
 });
