@@ -19,6 +19,7 @@
             }
         }
     </script>
+    <script src="js/services/check-session.js"></script>
     <!-- Global CSS First -->
     <!-- Then Page-specific CSS -->
 
@@ -70,6 +71,39 @@
                 </button>
             </div>
         </div>
+                    <div class="user-info" id="user-info">
+                <div class="user-icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name" id="user-name">Admin User</p>
+                    <p class="user-email" id="user-email">admin@example.com</p>
+                </div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-info-dropdown">
+                        <div class="user-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name" id="user-name">Admin User</p>
+                            <p class="user-email" id="user-email">admin@example.com</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- <ul class="dropdown-menu">
+
+                    </ul> -->
+                    </ul>
+                    <hr>
+                    <button id="logout-button" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+                <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+            </div>
     </header>
 
     <main>

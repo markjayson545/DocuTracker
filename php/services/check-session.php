@@ -29,6 +29,7 @@ try {
                 $_SESSION['token'] = $cookieToken;
                 $_SESSION['is_verified'] = $userData['is_verified'];
                 $_SESSION['role'] = $userData['role'];
+                $_SESSION['status'] = $userData['status'];
                 $_SESSION['email'] = $userData['email'];
                 $_SESSION['username'] = $userData['username'];
 

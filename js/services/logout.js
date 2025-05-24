@@ -19,5 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Still redirect even if there's an error
                 window.location.href = 'index.html';
             });
+            
     });
 });

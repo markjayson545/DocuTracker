@@ -1,0 +1,450 @@
+/* Account Suspended Page Styles */
+@import url('../css/global/variables.css');
+
+/*------------------------------------*\
+  #BASE STYLES
+\*------------------------------------*/
+body {
+    background: linear-gradient(135deg, #f5f7ff 0%, #e9efff 100%);
+    font-family: var(--font-primary);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+
+/*------------------------------------*\
+  #MAIN CONTAINER
+\*------------------------------------*/
+main {
+    min-height: calc(100vh - 70px - 150px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.suspension-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.suspension-card {
+    background: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease;
+}
+
+/*------------------------------------*\
+  #SUSPENSION ICON
+\*------------------------------------*/
+.suspension-icon {
+    background: linear-gradient(135deg, var(--error-color), #d32f2f);
+    padding: 40px;
+    text-align: center;
+    color: white;
+}
+
+.suspension-icon i {
+    font-size: 4rem;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+/*------------------------------------*\
+  #CONTENT AREA
+\*------------------------------------*/
+.suspension-content {
+    padding: 40px;
+}
+
+.suspension-title {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--error-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.suspension-message {
+    font-size: 1.1rem;
+    color: var(--light-text);
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: var(--line-height-relaxed);
+}
+
+/*------------------------------------*\
+  #SUSPENSION DETAILS
+\*------------------------------------*/
+.suspension-details {
+    background: var(--light-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 25px;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--error-color);
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    gap: 15px;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.detail-item i {
+    color: var(--error-color);
+    font-size: 1.2rem;
+    margin-top: 2px;
+    min-width: 20px;
+}
+
+.detail-content strong {
+    display: block;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.detail-content span {
+    color: var(--light-text);
+}
+
+/*------------------------------------*\
+  #SUSPENSION ACTIONS
+\*------------------------------------*/
+.suspension-actions {
+    margin-bottom: 30px;
+}
+
+.suspension-actions h3 {
+    color: var(--text-color);
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.suspension-actions h3 i {
+    color: var(--primary-color);
+}
+
+.action-list {
+    list-style: none;
+    padding: 0;
+}
+
+.action-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--light-text);
+}
+
+.action-list li:last-child {
+    border-bottom: none;
+}
+
+.action-list li i {
+    color: var(--primary-color);
+    min-width: 16px;
+}
+
+/*------------------------------------*\
+  #CONTACT SUPPORT
+\*------------------------------------*/
+.contact-support {
+    background: linear-gradient(135deg, var(--primary-light), rgba(76, 201, 240, 0.1));
+    border-radius: var(--border-radius-lg);
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+}
+
+.contact-support h3 {
+    color: var(--text-color);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-support h3 i {
+    color: var(--primary-color);
+}
+
+.contact-support p {
+    color: var(--light-text);
+    margin-bottom: 20px;
+    line-height: var(--line-height-relaxed);
+}
+
+.support-options {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.support-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition);
+    flex: 1;
+    min-width: 150px;
+    justify-content: center;
+}
+
+.email-support {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.email-support:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.phone-support {
+    background: var(--success-color);
+    color: white;
+}
+
+.phone-support:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+    background: #45a049;
+}
+
+.reference-number {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.reference-number strong {
+    color: var(--text-color);
+}
+
+.reference-number span {
+    color: var(--primary-color);
+    font-family: monospace;
+    font-weight: var(--font-weight-medium);
+}
+
+.copy-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 8px 10px;
+    cursor: pointer;
+    color: var(--light-text);
+    transition: var(--transition);
+}
+
+.copy-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/*------------------------------------*\
+  #ADDITIONAL INFO
+\*------------------------------------*/
+.additional-info {
+    margin-bottom: 30px;
+}
+
+.info-box {
+    display: flex;
+    gap: 15px;
+    padding: 20px;
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 15px;
+    border-left: 4px solid;
+}
+
+.info-box:last-child {
+    margin-bottom: 0;
+}
+
+.info-box.warning {
+    background: var(--warning-color-light);
+    border-left-color: var(--warning-color);
+}
+
+.info-box.info {
+    background: rgba(33, 150, 243, 0.1);
+    border-left-color: var(--info-color);
+}
+
+.info-box i {
+    font-size: 1.3rem;
+    margin-top: 2px;
+    min-width: 20px;
+}
+
+.info-box.warning i {
+    color: var(--warning-color);
+}
+
+.info-box.info i {
+    color: var(--info-color);
+}
+
+.info-box strong {
+    display: block;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.info-box p {
+    color: var(--light-text);
+    margin: 0;
+    line-height: var(--line-height-relaxed);
+}
+
+/*------------------------------------*\
+  #BACK TO HOME
+\*------------------------------------*/
+.back-to-home {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+/*------------------------------------*\
+  #ANIMATIONS
+\*------------------------------------*/
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/*------------------------------------*\
+  #RESPONSIVE DESIGN
+\*------------------------------------*/
+@media (max-width: 768px) {
+    main {
+        padding: 20px 15px;
+    }
+    
+    .suspension-content {
+        padding: 25px 20px;
+    }
+    
+    .suspension-title {
+        font-size: 2rem;
+    }
+    
+    .suspension-icon {
+        padding: 30px;
+    }
+    
+    .suspension-icon i {
+        font-size: 3rem;
+    }
+    
+    .support-options {
+        flex-direction: column;
+    }
+    
+    .support-btn {
+        min-width: auto;
+    }
+    
+    .reference-number {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .detail-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .detail-item i {
+        align-self: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .suspension-title {
+        font-size: 1.8rem;
+    }
+    
+    .suspension-message {
+        font-size: 1rem;
+    }
+    
+    .suspension-details,
+    .contact-support {
+        padding: 20px;
+    }
+    
+    .info-box {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

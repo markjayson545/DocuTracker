@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Suspended | DocuTracker</title>
+
+    <!-- Global CSS First -->
+    <link rel="stylesheet" href="css/global/master.css">
+    <!-- Then Page-specific CSS -->
+    <link rel="stylesheet" href="css/account-suspended.css">
+
+    <script src="js/services/logout.js"></script>
+    <script src="js/services/open-user-menu.js"></script>
+    <script src="js/services/check-session.js"></script>
+    <script src="js/services/fetch-suspension-details.js"></script>
+
+
+    <!-- External Libraries -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <a href="index.html">
+            <h2>
+                <i class="fas fa-file-invoice"></i> DocuTrack
+            </h2>
+        </a>
+        <ul>
+            <li>
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+                <a href="#HowitWorks"><i class="fas fa-cogs"></i> How it Works</a>
+            </li>
+            <li>
+                <a href="#FAQ"><i class="fas fa-question-circle"></i> FAQ</a>
+            </li>
+            <li>
+                <a href="#Contact"><i class="fas fa-envelope"></i> Contact</a>
+            </li>
+        </ul>
+        <div class="login-or-create">
+            <div class="login-button">
+                <a href="sign-in.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            </div>
+            <div class="signup-button">
+                <a href="sign-up.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+        </div>
+
+        <div class="user-info" id="user-info">
+            <div class="user-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="user-details">
+                <p class="user-name" id="user-name">John Doe</p>
+                <p class="user-email" id="user-email">example@email.com</p>
+            </div>
+            <div class="user-dropdown" id="user-dropdown">
+                <div class="user-info-dropdown">
+                    <div class="user-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name" id="user-name">John Doe</p>
+                        <p class="user-email" id="user-email">markjayson545@gmail.com</p>
+                        <p class="verification-status" id="verification-status"></p>
+                    </div>
+                </div>
+                <hr>
+                <ul class="dropdown-menu">
+                    <li id="user-dashboard-btn">
+                        <a href="admin-dashboard.html" id="dashboard-btn-link">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li id="identity-verification-btn">
+                        <a href="identity-verification.html">
+                            <i class="fas fa-id-card"></i>
+                            Identity Verification
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <button id="logout-button" class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+            <button title="dropdown-button" id="dropdown-button" class="dropdown-button">
+                <i class="fa-solid fa-caret-down"></i>
+            </button>
+        </div>
+
+    </header>
+
+    <main>
+        <div class="suspension-container">
+            <div class="suspension-card">
+                <div class="suspension-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+
+                <div class="suspension-content">
+                    <h1 class="suspension-title">Account Suspended</h1>
+                    <p class="suspension-message">
+                        Your account has been temporarily suspended due to a violation of our terms of service or
+                        suspicious activity.
+                    </p>
+
+                    <div class="suspension-details">
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="detail-content">
+                                <strong>Suspension Date:</strong>
+                                <span id="suspension-date">May 24, 2025</span>
+                            </div>
+                        </div>
+
+                        <div class="detail-item">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="detail-content">
+                                <strong>Reason:</strong>
+                                <span id="suspension-reason">Multiple failed login attempts detected</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="suspension-actions">
+                        <h3><i class="fas fa-info-circle"></i> What can you do?</h3>
+                        <ul class="action-list">
+                            <li><i class="fas fa-envelope"></i> Contact our support team to appeal this suspension</li>
+                            <li><i class="fas fa-file-alt"></i> Review our Terms of Service and Privacy Policy</li>
+                            <li><i class="fas fa-user-check"></i> Verify your identity if requested</li>
+                        </ul>
+                    </div>
+
+                    <div class="contact-support">
+                        <h3><i class="fas fa-headset"></i> Need Help?</h3>
+                        <p>If you believe this suspension is in error, please contact our support team immediately.</p>
+
+                        <div class="support-options">
+                            <a href="mailto:support@docutrack.com" class="support-btn email-support">
+                                <i class="fas fa-envelope"></i>
+                                Email Support
+                            </a>
+                            <a href="tel:+639123456789" class="support-btn phone-support">
+                                <i class="fas fa-phone"></i>
+                                Call Support
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="additional-info">
+                        <div class="info-box warning">
+                            <i class="fas fa-shield-alt"></i>
+                            <div>
+                                <strong>Security Notice:</strong>
+                                <p>For your account's security, please do not share your login credentials with anyone.
+                                    If you suspect unauthorized access, change your password immediately after
+                                    reinstatement.</p>
+                            </div>
+                        </div>
+
+                        <div class="info-box info">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>Stay Updated:</strong>
+                                <p>You will receive email notifications regarding the status of your account review.
+                                    Please check your email regularly, including your spam folder.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="back-to-home">
+                        <a href="index.html" class="btn btn-primary">
+                            <i class="fas fa-home"></i>
+                            Return to Homepage
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="about-us">
+            <h3><i class="fas fa-info-circle"></i> About Us</h3>
+            <p>Providing secure and efficient document<br> processing services.</p>
+            <div class="social-media">
+                <div class="social-media-icons">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <h3><i class="fas fa-link"></i> Quick Links</h3>
+            <ul>
+                <li><a href="terms"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                <li><a href="privacy-policy"><i class="fas fa-user-shield"></i> Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="contacts">
+            <h3><i class="fas fa-address-book"></i> Contact Us</h3>
+            <div class="email">
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:example@email.com">example@email.com</a>
+            </div>
+            <div class="telephone">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+639123456789">+639123456789</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyReferenceNumber() {
+            const referenceNumber = document.getElementById('reference-number').textContent;
+            navigator.clipboard.writeText(referenceNumber).then(function () {
+                // Change button icon temporarily to show success
+                const copyBtn = document.querySelector('.copy-btn i');
+                const originalClass = copyBtn.className;
+                copyBtn.className = 'fas fa-check';
+
+                setTimeout(() => {
+                    copyBtn.className = originalClass;
+                }, 2000);
+            }).catch(function (err) {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Set current date for suspension date
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('suspension-date').textContent = formattedDate;
+        });
+    </script>
+</body>
+
+</html>

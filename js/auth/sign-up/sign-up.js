@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function validateUsername() {
         const username = usernameInput.value.trim();
+        // Regex to allow only alphanumeric characters, underscores and hyphens
+        const validUsernamePattern = /^[a-zA-Z0-9_-]+$/;
 
         if (username.length < 3) {
             usernameError.textContent = 'Username must be at least 3 characters long';
@@ -85,6 +87,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         else if (username.includes(' ')) {
             usernameError.textContent = 'Username cannot contain spaces';
+            errorFields[1] = true;
+        }
+        else if (!validUsernamePattern.test(username)) {
+            usernameError.textContent = 'Username can only contain letters, numbers, underscores, and hyphens';
             errorFields[1] = true;
         }
         else {
@@ -174,7 +180,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success == true) {
-                        showSystemMessage('User created successfully', 'success');
+                        showSystemMessage('User created successfully... \n Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'sign-ing.html';
+                        }, 2000);
                     }
                     else {
                         showSystemMessage(data.message, 'error');

@@ -45,7 +45,7 @@ try {
             'document_id' => $row['document_id'],
             'document_type' => $row['document_type'],
             'document_path' => $row['document_path'],
-            'uploaded_at' => $row['uploaded_at']
+            'uploaded_at' => $row['updated_at'],
         ];
     }
 

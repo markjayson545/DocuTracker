@@ -8,8 +8,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const userTableBody = document.getElementById("user-table-body");
     const userDetailsModal = document.getElementById("modal-overlay");
     const closeModalButton = document.getElementById("close-modal-btn");
+    const userSearchInput = document.querySelector(".user-search input");
+    const userSearchButton = document.querySelector(".user-search button");
+    const paginationContainer = document.querySelector(".pagination");
+    const userTableContainer = document.querySelector(".user-table-container");
 
-    // Add this to your <head> section or to an existing CSS file
+    // Pagination state
+    let currentPage = 1;
+    let totalPages = 1;
+    let currentSearchTerm = "";
+    let searchTimeout = null;
+    let lastSearchTime = 0;
+    const minSearchInterval = 300; // Minimum time between API calls in milliseconds
+    
+    // Add styles for search feedback
     document.head.insertAdjacentHTML('beforeend', `
     <style>
       .disabled-btn {
@@ -19,8 +31,48 @@ document.addEventListener("DOMContentLoaded", function () {
         border-color: #ced4da;
         color: #6c757d;
       }
+      
+      .searching-indicator {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: none;
+        z-index: 10;
+      }
+      
+      .searching-indicator i {
+        margin-right: 8px;
+        animation: spin 1s infinite linear;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      .user-table-container {
+        position: relative;
+        min-height: 200px;
+      }
+      
+      .no-results {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+      }
     </style>
     `);
+
+    // Create a searching indicator element
+    const searchingIndicator = document.createElement('div');
+    searchingIndicator.className = 'searching-indicator';
+    searchingIndicator.innerHTML = '<i class="fas fa-spinner"></i> Searching...';
+    userTableContainer.appendChild(searchingIndicator);
 
     // Event listeners setup
     closeModalButton.addEventListener("click", function () {
@@ -31,10 +83,53 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Debounce function to limit API calls
+    function debounce(func, delay) {
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => func.apply(context, args), delay);
+        };
+    }
+
+    // Rate limiting function
+    function rateLimitedSearch() {
+        const now = Date.now();
+        if (now - lastSearchTime < minSearchInterval) {
+            // If called too soon, delay the call
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performSearch, minSearchInterval - (now - lastSearchTime));
+            return;
+        }
+        performSearch();
+    }
+
+    // Function to perform the actual search
+    function performSearch() {
+        lastSearchTime = Date.now();
+        currentSearchTerm = userSearchInput.value.trim();
+        currentPage = 1; // Reset to first page on new search
+        fetchUsersData(currentPage, currentSearchTerm);
+    }
+
+    // Setup search event listeners with debouncing
+    userSearchInput.addEventListener("input", debounce(rateLimitedSearch, 500));
+
+    userSearchButton.addEventListener("click", function(e) {
+        e.preventDefault();
+        rateLimitedSearch();
+    });
+
     // User data functions
     window.fetchUserDetails = function(userId) {
         const formData = new FormData();
         formData.append("user_id", userId);
+        
+        // Show loading indicators in modal
+        document.getElementById("full-name-title").innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        document.getElementById("user-id-title").innerText = `USR-${userId}`;
+        
         fetch(`php/admin/admin-manage-users/fetch-admin-user-details.php`, {
             method: "POST",
             body: formData,
@@ -44,8 +139,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log(data);
                 if (data.success) {
                     const user = data.user;
-                    // Populate user profile details
-                    document.getElementById("full-name-title").innerText = `${user.first_name} ${user.last_name}`;
+                    const hasClientProfile = data.hasClientProfile;
+                    
+                    // Always display basic user information
+                    const displayName = user.username || "N/A";
+                    const fullNameTitle = document.getElementById("full-name-title");
+                    
+                    // Set name based on available data
+                    if (user.first_name && user.last_name) {
+                        fullNameTitle.innerText = `${user.first_name} ${user.last_name}`;
+                    } else {
+                        fullNameTitle.innerText = displayName;
+                    }
+                    
+                    // Add a visual indicator if profile is incomplete
+                    if (!hasClientProfile) {
+                        fullNameTitle.innerHTML += ' <span class="profile-incomplete-badge" title="Profile Incomplete"><i class="fas fa-exclamation-triangle"></i></span>';
+                        
+                        // Add an inline style for the badge if it doesn't exist in CSS
+                        if (!document.querySelector('style#profile-incomplete-style')) {
+                            const style = document.createElement('style');
+                            style.id = 'profile-incomplete-style';
+                            style.textContent = `
+                                .profile-incomplete-badge {
+                                    display: inline-block;
+                                    color: #ff9900;
+                                    font-size: 0.8em;
+                                    margin-left: 8px;
+                                    vertical-align: middle;
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    }
+                    
                     document.getElementById("user-id-title").innerText = `USR-${user.user_id}`;
                     document.getElementById("registered-on-title").innerText = window.parseDate(user.created_at);
                     document.getElementById("verification-status").innerText = user.is_verified ? "Verified" : "Pending";
@@ -57,11 +184,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("verification-date").innerText = user.verification_date || "N/A";
                     document.getElementById("verified-by").innerText = user.verified_by || "N/A";
 
-                    // Populate personal information form
-                    document.getElementById("first-name").value = user.first_name;
-                    document.getElementById("last-name").value = user.last_name;
+                    // Populate personal information form with safe defaults
+                    document.getElementById("first-name").value = user.first_name || "";
+                    document.getElementById("last-name").value = user.last_name || "";
                     document.getElementById("middle-name").value = user.middle_name || "";
-                    document.getElementById("email").value = user.email;
+                    document.getElementById("email").value = user.email || "";
                     document.getElementById("phone").value = user.phone || "";
                     document.getElementById("house-num").value = user.house_number || "";
                     document.getElementById("street").value = user.street || "";
@@ -70,20 +197,78 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("province").value = user.province || "";
                     document.getElementById("dob").value = user.date_of_birth || "";
                     document.getElementById("birth-place").value = user.birth_place || "";
-                    document.getElementById("sex").value = user.sex || "prefer-not-to-say";
-                    document.getElementById("civil-status").value = user.civil_status || "single";
-                    document.getElementById("height").value = user.height || "";
-                    document.getElementById("weight").value = user.weight || "";
-                    document.getElementById("nationality").value = user.nationality || "other";
-                    document.getElementById("complexion").value = user.complexion || "medium";
-                    document.getElementById("blood-type").value = user.blood_type || "unknown";
-                    document.getElementById("religion").value = user.religion || "other";
-                    document.getElementById("education").value = user.education || "high-school";
-                    document.getElementById("occupation").value = user.occupation || "unemployed";
+                    
+                    // For select inputs, make sure the value exists or use default
+                    setSelectValueSafely("sex", user.sex, "prefer-not-to-say");
+                    setSelectValueSafely("civil-status", user.civil_status, "single");
+                    setSelectValueSafely("nationality", user.nationality, "other");
+                    setSelectValueSafely("complexion", user.complexion, "medium");
+                    setSelectValueSafely("blood-type", user.blood_type, "unknown");
+                    setSelectValueSafely("religion", user.religion, "other");
+                    setSelectValueSafely("education", user.education, "high-school");
+                    setSelectValueSafely("occupation", user.occupation, "unemployed");
+                    
+                    // If no profile, display a friendly message to the admin
+                    if (!hasClientProfile) {
+                        const profileForm = document.getElementById("personal-info-form");
+                        const warningMsg = document.createElement('div');
+                        warningMsg.className = 'profile-incomplete-warning';
+                        warningMsg.innerHTML = `
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <strong>Profile Incomplete:</strong> This user hasn't completed their profile setup.
+                                You can add their information manually and save it.
+                            </div>
+                        `;
+                        profileForm.insertBefore(warningMsg, profileForm.firstChild);
+                        
+                        // Add styling for the warning
+                        if (!document.querySelector('style#warning-style')) {
+                            const style = document.createElement('style');
+                            style.id = 'warning-style';
+                            style.textContent = `
+                                .profile-incomplete-warning .alert {
+                                    background-color: #fff3cd;
+                                    color: #856404;
+                                    padding: 12px;
+                                    border-radius: 4px;
+                                    margin-bottom: 20px;
+                                    border-left: 4px solid #ffc107;
+                                }
+                                .profile-incomplete-warning .alert i {
+                                    margin-right: 8px;
+                                }
+                            `;
+                            document.head.appendChild(style);
+                        }
+                    } else {
+                        // Remove any existing warning if user has a profile
+                        const existingWarning = document.querySelector('.profile-incomplete-warning');
+                        if (existingWarning) {
+                            existingWarning.remove();
+                        }
+                    }
+                } else {
+                    alert("Error loading user details: " + (data.message || "Unknown error"));
                 }
             })
             .catch(error => console.log("Error fetching user details:", error));
     };
+    
+    // Helper function to safely set select input values
+    function setSelectValueSafely(selectId, value, defaultValue) {
+        const selectElement = document.getElementById(selectId);
+        if (!selectElement) return;
+        
+        // Check if the value exists in the options
+        const optionExists = Array.from(selectElement.options).some(option => option.value === value);
+        
+        if (value && optionExists) {
+            selectElement.value = value;
+        } else {
+            selectElement.value = defaultValue;
+        }
+    }
 
     window.fetchUserDocuments = function(userId) {
         const formData = new FormData();
@@ -105,6 +290,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             data.documents.forEach(doc => {
                                 const fileExt = doc.document_path.split('.').pop().toLowerCase();
                                 const filePath = doc.document_path;
+
+                                console.log("Document file path:", filePath);
 
                                 // Get icon class using the global utility function
                                 const iconClass = window.getFileIconClass(fileExt);
@@ -141,39 +328,133 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.log("Error fetching user documents:", error));
     };
 
-    window.fetchUsersData = function() {
-        fetch('php/admin/admin-manage-users/fetch-admin-user-manage.php')
+    window.fetchUsersData = function(page = 1, searchTerm = "") {
+        // Store the current page and search term in global variables to maintain state
+        currentPage = page;
+        currentSearchTerm = searchTerm;
+        
+        // Show searching indicator
+        searchingIndicator.style.display = 'block';
+        
+        // Build URL with query parameters
+        let url = `php/admin/admin-manage-users/fetch-admin-user-manage.php?page=${page}`;
+        if (searchTerm) {
+            url += `&search=${encodeURIComponent(searchTerm)}`;
+        }
+        
+        fetch(url)
             .then(response => response.json())
             .then(data => {
+                // Hide searching indicator
+                searchingIndicator.style.display = 'none';
+                
+                console.log(data);
                 if (data.success) {
+                    // Update summary cards
                     totalUsersValue.innerText = data.totalUsers;
                     activeUsersValue.innerText = data.totalActiveUsers;
                     pendingVerificationValue.innerText = data.totalPendingVerificationUsers;
                     suspendedUsersValue.innerText = data.totalSuspendedUsers;
                     verifiedUsersValue.innerText = data.totalVerifiedUsers;
 
+                    // Update table content
                     let tableContent = '';
-                    data.users.forEach(user => {
-                        const userId = user.user_id;
-                        const fName = user.first_name;
-                        const lName = user.last_name;
-                        const email = user.email;
-                        const role = user.role;
-                        const status = user.status;
-                        const isVerified = user.is_verified;
-                        const createdAt = user.created_at;
+                    if (data.users.length === 0) {
+                        tableContent = '<tr style="color: red; text-align: center;"><td colspan="8" class="no-results">No users found matching your search criteria.</td></tr>';
+                    } else {
+                        data.users.forEach(user => {
+                            const userId = user.user_id;
+                            const username = user.username;
+                            const email = user.email;
+                            const role = user.role;
+                            const status = user.status;
+                            const isVerified = user.is_verified;
+                            const createdAt = user.created_at;
 
-                        tableContent += createUserRow(userId, fName, lName, email, role, status, isVerified, createdAt);
-                    });
+                            tableContent += createUserRow(userId, username, email, role, status, isVerified, createdAt);
+                        });
+                    }
 
                     userTableBody.innerHTML = tableContent;
                     attachViewEventListeners();
+                    
+                    // Update pagination
+                    totalPages = data.pagination.totalPages;
+                    updatePagination(currentPage, totalPages);
+                } else {
+                    // Handle error state
+                    searchingIndicator.style.display = 'none';
+                    userTableBody.innerHTML = '<tr><td colspan="8" class="no-results">Error loading users. Please try again.</td></tr>';
                 }
+            })
+            .catch(error => {
+                console.error("Error fetching users data:", error);
+                searchingIndicator.style.display = 'none';
+                userTableBody.innerHTML = '<tr><td colspan="8" class="no-results">Connection error. Please check your internet connection and try again.</td></tr>';
             });
     };
 
+    // Pagination functions
+    function updatePagination(currentPageNum, totalPagesNum) {
+        // Clear existing pagination
+        paginationContainer.innerHTML = '';
+        
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'pagination-btn';
+        prevBtn.title = 'Previous Page';
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevBtn.disabled = currentPageNum <= 1;
+        if (prevBtn.disabled) prevBtn.classList.add('disabled-btn');
+        prevBtn.addEventListener('click', function() {
+            if (currentPageNum > 1) {
+                window.fetchUsersData(currentPageNum - 1, currentSearchTerm);
+            }
+        });
+        paginationContainer.appendChild(prevBtn);
+        
+        // Determine which page numbers to show
+        let startPage = Math.max(1, currentPageNum - 2);
+        let endPage = Math.min(totalPagesNum, startPage + 4);
+        
+        if (endPage - startPage < 4 && startPage > 1) {
+            startPage = Math.max(1, endPage - 4);
+        }
+        
+        // Page number buttons
+        for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = 'pagination-btn';
+            if (i === currentPageNum) pageBtn.classList.add('active');
+            pageBtn.textContent = i;
+            
+            // Use a closure to capture the correct page number
+            (function(pageNum) {
+                pageBtn.addEventListener('click', function() {
+                    window.fetchUsersData(pageNum, currentSearchTerm);
+                });
+            })(i);
+            
+            paginationContainer.appendChild(pageBtn);
+        }
+        
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'pagination-btn';
+        nextBtn.title = 'Next Page';
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextBtn.disabled = currentPageNum >= totalPagesNum;
+        if (nextBtn.disabled) nextBtn.classList.add('disabled-btn');
+        nextBtn.addEventListener('click', function() {
+            if (currentPageNum < totalPagesNum) {
+                window.fetchUsersData(currentPageNum + 1, currentSearchTerm);
+            }
+        });
+        paginationContainer.appendChild(nextBtn);
+    }
+
     // UI/Table management functions
-    function createUserRow(userId, fName, lName, email, role, status, isVerified, createdAt) {
+    function createUserRow(userId, username, email, role, status, isVerified, createdAt) {
         let icon = 'fa-check-circle verified-icon';
 
         if (!isVerified) {
@@ -182,7 +463,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return `
             <tr>
                 <td>USR-${userId}</td>
-                <td>${fName} ${lName}</td>
+                <td>${username}</td>
                 <td>${email}</td>
                 <td><span class="role-badge role-${role}">${role}</span></td>
                 <td><span class="status-badge status-${status}">${status}</span></td>
@@ -201,22 +482,36 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll('.view-user-btn').forEach(button => {
             button.addEventListener("click", function () {
                 const userId = this.getAttribute('data-user-id');
-                window.openUserModal(userId);
+                // Call openModal directly instead of window.openUserModal
+                openModal(userId);
             });
         });
     }
 
     // Modal and user actions functions
     function openModal(userId) {
+        // Clear any previous event listeners to avoid duplicates
+        const personalInfoForm = document.getElementById("personal-info-form");
+        const newPersonalInfoForm = personalInfoForm.cloneNode(true);
+        personalInfoForm.parentNode.replaceChild(newPersonalInfoForm, personalInfoForm);
+        
+        // Remove old event listeners from action buttons
+        const actionButtons = document.querySelectorAll('.btn[id$="-btn"]');
+        actionButtons.forEach(button => {
+            const newButton = button.cloneNode(true);
+            if (button.parentNode) {
+                button.parentNode.replaceChild(newButton, button);
+            }
+        });
+        
         fetchUserDetails(userId);
         fetchUserDocuments(userId);
         userDetailsModal.style.display = "block";
 
         // Event listener for the "Save Changes" button
-        const personalInfoForm = document.getElementById("personal-info-form");
-        personalInfoForm.addEventListener("submit", function (event) {
+        document.getElementById("personal-info-form").addEventListener("submit", function (event) {
             event.preventDefault();
-            const formData = new FormData(personalInfoForm);
+            const formData = new FormData(this);
             formData.append("user_id", userId);
             fetch(`php/admin/admin-manage-users/update-user.php`, {
                 method: "POST",
@@ -225,10 +520,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        alert("User information updated successfully!");
                         fetchUsersData();
                         fetchUserDetails(userId);
                     } else {
-                        alert("Failed to update user details.");
+                        alert("Failed to update user details: " + (data.message || "Unknown error"));
                     }
                 })
                 .catch(error => console.log("Error updating user details:", error));
@@ -269,8 +565,8 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Add visual indication for disabled buttons
             const buttons = [activateUserButton, suspendUserButton, verifyUserButton, 
-                             requestMoreInfoButton, rejectVerificationButton, 
-                             makeAdminButton, makeClientButton];
+                            requestMoreInfoButton, rejectVerificationButton, 
+                            makeAdminButton, makeClientButton];
             
             buttons.forEach(btn => {
                 if (btn.disabled) {
@@ -322,6 +618,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         return;
                     }
                     formData.append("message", rejectionReason);
+                    break;
+                
+                case "suspend":
+                    const suspensionReason = prompt("Please specify the reason for suspending the user:");
+                    if (suspensionReason === null) {
+                        return;
+                    }
+                    if (suspensionReason.trim() === "") {
+                        alert("You must provide a reason for suspending the user.");
+                        return;
+                    }
+                    formData.append("message", suspensionReason);
                     break;
 
                 case "reset-password":
@@ -398,30 +706,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         }
 
-        activateUserButton.addEventListener("click", function () {
-            handleAction("activate");
-        });
-        resetPasswordButton.addEventListener("click", function () {
-            handleAction("reset-password");
-        });
-        suspendUserButton.addEventListener("click", function () {
-            handleAction("suspend");
-        });
-        verifyUserButton.addEventListener("click", function () {
-            handleAction("verify");
-        });
-        requestMoreInfoButton.addEventListener("click", function () {
-            handleAction("request-more-info");
-        });
-        rejectVerificationButton.addEventListener("click", function () {
-            handleAction("reject-verification");
-        });
-        makeAdminButton.addEventListener("click", function () {
-            handleAction("make-admin");
-        });
-        makeClientButton.addEventListener("click", function () {
-            handleAction("make-client");
-        });
+        // Ensure event listeners are added only once by removing and re-adding them
+        activateUserButton.onclick = function() { handleAction("activate"); };
+        resetPasswordButton.onclick = function() { handleAction("reset-password"); };
+        suspendUserButton.onclick = function() { handleAction("suspend"); };
+        verifyUserButton.onclick = function() { handleAction("verify"); };
+        requestMoreInfoButton.onclick = function() { handleAction("request-more-info"); };
+        rejectVerificationButton.onclick = function() { handleAction("reject-verification"); };
+        makeAdminButton.onclick = function() { handleAction("make-admin"); };
+        makeClientButton.onclick = function() { handleAction("make-client"); };
     }
 
     // Document handling functions
@@ -564,6 +857,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Initialize data fetch
-    window.fetchUsersData();
-    setInterval(window.fetchUsersData, 60000);
+    window.fetchUsersData(1, "");
+    
+    // Use a longer interval for auto-refresh to avoid excessive API calls
+    setInterval(() => {
+        // Only auto-refresh if the search field is empty to avoid disrupting user searches
+        if (userSearchInput.value.trim() === "") {
+            window.fetchUsersData(currentPage, currentSearchTerm);
+        }
+    }, 60000);
 });
+
+// Make sure openUserModal is defined in global scope
+window.openUserModal = function(userId) {
+    // Use the internal openModal function if it exists in the current scope
+    if (typeof openModal === 'function') {
+        openModal(userId);
+    } else {
+        // Fallback implementation
+        document.getElementById("modal-overlay").style.display = "block";
+        window.fetchUserDetails(userId);
+        window.fetchUserDocuments(userId);
+    }
+};

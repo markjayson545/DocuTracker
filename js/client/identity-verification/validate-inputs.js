@@ -1,5 +1,3 @@
-
-
 // Basic backward compatibility layer
 document.addEventListener('DOMContentLoaded', function() {
     // Check if FormValidator is available
@@ -30,11 +28,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 event.preventDefault();
             }
         });
+
+        // Add real-time validation for all inputs
+        inputs.forEach(input => {
+            // Validate on blur (when user leaves the field)
+            input.addEventListener('blur', function() {
+                validateInput(this);
+            });
+            
+            // For text inputs, validate as user types with a small delay
+            if (input.tagName === 'INPUT' && input.type !== 'date') {
+                input.addEventListener('input', debounce(function() {
+                    validateInput(this);
+                }, 500));
+            }
+            
+            // For select and date inputs, validate on change
+            if (input.tagName === 'SELECT' || input.type === 'date') {
+                input.addEventListener('change', function() {
+                    validateInput(this);
+                });
+            }
+        });
+        
+        // Debounce function to prevent excessive validation during typing
+        function debounce(func, delay) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
         
         // Legacy validation functions
         function validateInput(input) {
             const value = input.value.trim();
             const id = input.id;
+            
+            // Remove any existing error for this input first
+            removeError(input);
             
             // Skip validation for optional fields if empty
             if (!input.required && value === '') {
@@ -46,6 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 case 'first-name':
                 case 'last-name':
                 case 'middle-name':
+                    return validateText(input, 2, 50, true); // true means no numbers allowed
+                    
                 case 'street':
                 case 'barangay':
                 case 'city':
@@ -60,10 +96,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     return validateDateOfBirth(input);
                     
                 case 'height':
-                    return validateMeasurement(input, 'cm');
-                    
                 case 'weight':
-                    return validateMeasurement(input, 'kg');
+                    return validateMeasurement(input, id === 'height' ? 'cm' : 'kg');
+                    
+                case 'phone-number':
+                    return validatePhoneNumber(input);
+                    
+                case 'postal-code':
+                    return validatePostalCode(input);
                     
                 // For select elements
                 case 'qualifier':
@@ -87,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        function validateText(input, minLength = 2, maxLength = 50) {
+        function validateText(input, minLength = 2, maxLength = 50, noNumbers = false) {
             const value = input.value.trim();
             
             if (input.required && value === '') {
@@ -102,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (value.length > maxLength) {
                 showError(input, `Cannot exceed ${maxLength} characters`);
+                return false;
+            }
+            
+            // Stricter validation for name fields - no numbers allowed
+            if (noNumbers && /[0-9]/.test(value)) {
+                showError(input, 'Numbers are not allowed in this field');
                 return false;
             }
             
@@ -158,6 +204,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     return false;
                 }
                 
+                // Check if person is at least 13 years old
+                const minAgeDate = new Date();
+                minAgeDate.setFullYear(now.getFullYear() - 10);
+                if (dob > minAgeDate) {
+                    showError(input, 'You must be at least 10 years old');
+                    return false;
+                }
+                
                 // Check if person is not too old (120 years max)
                 const maxAge = new Date();
                 maxAge.setFullYear(now.getFullYear() - 120);
@@ -178,9 +232,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
             
-            // Allow numbers with decimal points
+            // Allow ONLY numbers with decimal points - no letters or other characters
             if (value !== '' && !/^\d+(\.\d+)?$/.test(value)) {
-                showError(input, `Please enter a valid ${input.id} in ${unit}`);
+                showError(input, `Please enter a valid number for ${input.id} in ${unit}. No letters allowed.`);
                 return false;
             }
             
@@ -199,6 +253,41 @@ document.addEventListener('DOMContentLoaded', function() {
             return true;
         }
         
+        // Add new validation functions for numeric-only fields
+        function validatePhoneNumber(input) {
+            const value = input.value.trim();
+            
+            if (input.required && value === '') {
+                showError(input, 'Phone number is required');
+                return false;
+            }
+            
+            // Only allow digits and optional plus sign at beginning
+            if (value !== '' && !/^\+?\d+$/.test(value)) {
+                showError(input, 'Phone number can only contain digits and an optional + at the beginning');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function validatePostalCode(input) {
+            const value = input.value.trim();
+            
+            if (input.required && value === '') {
+                showError(input, 'Postal code is required');
+                return false;
+            }
+            
+            // Only allow digits for postal code
+            if (value !== '' && !/^\d+$/.test(value)) {
+                showError(input, 'Postal code can only contain numbers');
+                return false;
+            }
+            
+            return true;
+        }
+        
         function validateSelect(input) {
             if (input.required && (input.value === '' || input.selectedIndex === 0)) {
                 showError(input, 'Please select an option');
@@ -209,30 +298,76 @@ document.addEventListener('DOMContentLoaded', function() {
         
         function showError(input, message) {
             // Remove any existing error for this input
-            const existingError = document.getElementById(`${input.id}-error`);
-            if (existingError) {
-                existingError.remove();
-            }
+            removeError(input);
+            
+            // Get parent element (input-with-icon or form-group)
+            const parentEl = input.closest('.input-with-icon') || input.parentNode;
+            const formGroup = input.closest('.form-group');
             
             // Create and insert error message
-            const errorElement = document.createElement('p');
+            const errorElement = document.createElement('div');
             errorElement.id = `${input.id}-error`;
             errorElement.className = 'error-message';
             errorElement.textContent = message;
-            errorElement.style.color = 'red';
+            
+            // Apply styles to error message
+            errorElement.style.color = '#e74c3c';
             errorElement.style.fontSize = '0.8rem';
             errorElement.style.marginTop = '5px';
+            errorElement.style.transition = 'opacity 0.3s ease';
+            errorElement.style.opacity = '0';
             
-            input.parentNode.appendChild(errorElement);
-            input.classList.add('error');
+            // Insert error after the input or input container
+            if (parentEl.nextElementSibling) {
+                formGroup.insertBefore(errorElement, parentEl.nextElementSibling);
+            } else {
+                formGroup.appendChild(errorElement);
+            }
+            
+            // Add error class to input for styling
+            input.classList.add('error-input');
+            if (formGroup) formGroup.classList.add('has-error');
+            
+            // Trigger reflow and animate in
+            setTimeout(() => {
+                errorElement.style.opacity = '1';
+            }, 10);
+            
+            return errorElement;
+        }
+        
+        function removeError(input) {
+            // Find and remove error message
+            const errorElement = document.getElementById(`${input.id}-error`);
+            if (errorElement) {
+                // Fade out animation
+                errorElement.style.opacity = '0';
+                setTimeout(() => {
+                    errorElement.remove();
+                }, 300);
+            }
+            
+            // Remove error styling
+            input.classList.remove('error-input');
+            const formGroup = input.closest('.form-group');
+            if (formGroup) formGroup.classList.remove('has-error');
         }
         
         function clearAllErrors() {
             const errors = document.querySelectorAll('.error-message');
-            errors.forEach(error => error.remove());
+            errors.forEach(error => {
+                error.style.opacity = '0';
+                setTimeout(() => {
+                    error.remove();
+                }, 300);
+            });
             
-            const errorInputs = document.querySelectorAll('.error');
-            errorInputs.forEach(input => input.classList.remove('error'));
+            const errorInputs = document.querySelectorAll('.error-input');
+            errorInputs.forEach(input => {
+                input.classList.remove('error-input');
+                const formGroup = input.closest('.form-group');
+                if (formGroup) formGroup.classList.remove('has-error');
+            });
         }
     }
 });

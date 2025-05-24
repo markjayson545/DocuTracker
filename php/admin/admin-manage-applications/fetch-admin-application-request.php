@@ -25,16 +25,44 @@ try {
         throw new Exception("Unauthorized access");
     }
 
+    // Pagination parameters
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $limit = 10; // Fixed limit of 10 results per page
+    $offset = ($page - 1) * $limit;
+
+    // Search parameter
+    $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+    $hasSearch = !empty($search);
+
     $sqlGetTotalApplication = "SELECT COUNT(*) as total FROM Application";
     $sqlGetTotalPendingApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'pending'";
     $sqlGetTotalUnderReviewApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'under-review'";
     $sqlGetTotalApprovedApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'approved'";
     $sqlGetTotalRejectedApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'rejected'";
 
-    $sqlGetApplications = "SELECT application.*, client_profile.first_name, client_profile.last_name
+    // Base SQL for fetching applications with search parameters
+    $sqlGetApplications = "SELECT application.*, client_profile.first_name, client_profile.last_name, app_doc.document_type as document_type
                             FROM Application application
                             JOIN ClientProfile client_profile ON application.user_id = client_profile.user_id
-                            ORDER BY application.updated_at DESC LIMIT 5";
+                            JOIN ApplicationDocuments app_doc ON application.application_id = app_doc.application_id";
+    
+    // Count SQL for pagination with search parameters
+    $sqlCountApplications = "SELECT COUNT(*) as total
+                            FROM Application application
+                            JOIN ClientProfile client_profile ON application.user_id = client_profile.user_id";
+    
+    // Add search conditions if search term exists
+    if ($hasSearch) {
+        $searchCondition = " WHERE (client_profile.first_name LIKE ? OR 
+                                   client_profile.last_name LIKE ? OR 
+                                   CONCAT(client_profile.first_name, ' ', client_profile.last_name) LIKE ? OR
+                                   application.application_id LIKE ?)";
+        $sqlGetApplications .= $searchCondition;
+        $sqlCountApplications .= $searchCondition;
+    }
+    
+    // Add order by and pagination
+    $sqlGetApplications .= " ORDER BY application.updated_at DESC LIMIT ? OFFSET ?";
 
     // Fetch total application
     $stmt = mysqli_prepare($conn, $sqlGetTotalApplication);
@@ -43,7 +71,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalApplication = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total applications fetched: $totalApplication", "admin-application-request.log");
 
     // Fetch total pending application
     $stmt = mysqli_prepare($conn, $sqlGetTotalPendingApplication);
@@ -52,7 +79,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalPendingApplication = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total pending applications fetched: $totalPendingApplication", "admin-application-request.log");
 
     // Fetch total under review application
     $stmt = mysqli_prepare($conn, $sqlGetTotalUnderReviewApplication);
@@ -61,7 +87,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalUnderReviewApplication = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total under review applications fetched: $totalUnderReviewApplication", "admin-application-request.log");
 
     // Fetch total approved application
     $stmt = mysqli_prepare($conn, $sqlGetTotalApprovedApplication);
@@ -70,7 +95,6 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalApprovedApplication = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total approved applications fetched: $totalApprovedApplication", "admin-application-request.log");
 
     // Fetch total rejected application
     $stmt = mysqli_prepare($conn, $sqlGetTotalRejectedApplication);
@@ -79,10 +103,31 @@ try {
     $row = mysqli_fetch_assoc($result);
     $totalRejectedApplication = $row['total'];
     mysqli_stmt_close($stmt);
-    writeLog("Total rejected applications fetched: $totalRejectedApplication", "admin-application-request.log");
 
-    // Fetch applications
+    // Get total count of filtered applications for pagination
+    $stmtCount = mysqli_prepare($conn, $sqlCountApplications);
+    if ($hasSearch) {
+        $searchParam = "%$search%";
+        mysqli_stmt_bind_param($stmtCount, "ssss", $searchParam, $searchParam, $searchParam, $searchParam);
+    }
+    mysqli_stmt_execute($stmtCount);
+    $resultCount = mysqli_stmt_get_result($stmtCount);
+    $rowCount = mysqli_fetch_assoc($resultCount);
+    $totalFilteredApplications = $rowCount['total'];
+    mysqli_stmt_close($stmtCount);
+
+    // Calculate total pages for pagination
+    $totalPages = ceil($totalFilteredApplications / $limit);
+    
+    // Fetch applications with pagination and search
     $stmt = mysqli_prepare($conn, $sqlGetApplications);
+    if ($hasSearch) {
+        $searchParam = "%$search%";
+        mysqli_stmt_bind_param($stmt, "ssssii", $searchParam, $searchParam, $searchParam, $searchParam, $limit, $offset);
+    } else {
+        mysqli_stmt_bind_param($stmt, "ii", $limit, $offset);
+    }
+    
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     while ($row = mysqli_fetch_assoc($result)) {
@@ -98,7 +143,8 @@ try {
         ];
     }
     mysqli_stmt_close($stmt);
-    writeLog("Applications fetched: " . json_encode($applications), "admin-application-request.log");
+    
+    writeLog("Applications fetched: " . count($applications) . ", Page: $page, Search: $search", "admin-application-request.log");
 
     echo json_encode([
         'success' => true,
@@ -107,7 +153,13 @@ try {
         'total_under_review_application' => $totalUnderReviewApplication,
         'total_approved_application' => $totalApprovedApplication,
         'total_rejected_application' => $totalRejectedApplication,
-        'applications' => $applications
+        'applications' => $applications,
+        'pagination' => [
+            'current_page' => $page,
+            'total_pages' => $totalPages,
+            'total_results' => $totalFilteredApplications,
+            'limit' => $limit
+        ]
     ]);
 
 } catch (\Throwable $th) {
