@@ -27,7 +27,7 @@ function getAllNotification($userId)
 function getAllSystemNotification()
 {
     global $conn;
-    $sql = "SELECT system_notification_id, type, message, created_at FROM SystemNotification ORDER BY created_at DESC";
+    $sql = "SELECT system_notification_id, type, message, created_at FROM SystemNotification WHERE status = unread ORDER BY created_at DESC";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $fetched = $stmt->get_result();

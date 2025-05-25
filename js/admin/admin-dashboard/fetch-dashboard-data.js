@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const totalRequestCount = document.getElementById('total-requests-count');
     const totalPendingApprovalCount = document.getElementById('pending-approval-count');
-    const totalApprovedCount = document.getElementById('approved-count');
     const totalRevenueCount = document.getElementById('total-revenue-value');
     const totalUsersCount = document.getElementById('total-users-count');
     const totalPendingApplicationCount = document.getElementById('pending-applications-count');
@@ -11,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const recentRequestsContainer = document.getElementById('recent-requests-table-body');
 
-    function addRequestToTable(reqId, firstName, lastName, docType, status, updateDate, dateRequested) {
+    function addRequestToTable(reqId, firstName, lastName, docType, status, updateDate, dateRequested, userId) {
         // Helper function to safely capitalize a string
         const capitalize = (str) => {
             return str && typeof str === 'string' ? str.charAt(0).toUpperCase() + str.slice(1) : '';
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }) : 'N/A';
 
         let requestTemplate = `
-                <tr>
+                <tr onclick="redirectToRequestDetails(${reqId}, ${userId})" style="cursor: pointer;">
                 <td>REQ-${reqId || 'N/A'}</td>
                 <td>${capitalize(firstName)} ${capitalize(lastName)}</td>
                 <td>${docType}</td>
@@ -58,45 +57,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${formattedRequestDate}</td>
                 </tr>
         `;
-        recentRequestsContainer.innerHTML += requestTemplate;
+        recentRequestsContainer.insertAdjacentHTML('beforeend', requestTemplate);
+
     }
 
-    function addSystemNotification(title, message, type) {
-        console.log('Adding system notification:', title, message, type);
-        let icon = 'fa-info-circle';
 
-        switch (type) {
-            case 'success':
-                icon = 'fa-check-circle';
-                break;
-            case 'info':
-                icon = 'fa-info-circle';
-                break;
-            case 'warn':
-                icon = 'fa-exclamation-triangle';
-                break;
-            case 'urgent':
-                icon = 'fa-times-circle';
-                break;
-            default:
-                icon = 'fa-info-circle';
-                break;
-        }
-
-        let notificationTemplate =
-            `           <div class="notification ${type}-notif">
-                        <i class="fas ${icon}"></i>
-                        <div class="title-description">
-                            <h3>
-                                ${title}
-                            </h3>
-                            <p>
-                                ${message}
-                            </p>
-                        </div>
-                    </div>`;
-        systemNotificationContainer.innerHTML += notificationTemplate;
-    }
 
     function fetchDashboardData() {
         fetch('php/admin/admin-dashboard/fetch-admin-dashboard.php')
@@ -105,26 +70,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('Fetched dashboard data:', data);
                 if (data.success && data.isAdmin) {
                     totalRequestCount.innerText = data.data.totalRequest;
-                    totalApprovedCount.innerText = data.data.totalApprovedRequests;
                     totalPendingApprovalCount.innerText = data.data.totalPendingRequests;
                     totalRevenueCount.innerText = data.data.totalRevenue;
                     totalUsersCount.innerText = data.data.totalUsers;
                     totalPendingApplicationCount.innerText = data.data.totalPendingApplications;
                     totalVerifiedUserCount.innerText = data.data.totalVerifiedUsers;
 
-                    if (data.data.systemNotifications) {
-                        systemNotificationContainer.innerHTML = '';
-                        data.data.systemNotifications.forEach(notification => {
-                            if (notification.status === 'active') {
-                                addSystemNotification(notification.title, notification.message, notification.type);
-                            }
-                        });
-                    }
-
                     if (data.data.recentRequests) {
                         recentRequestsContainer.innerHTML = '';
                         data.data.recentRequests.forEach(request => {
-                            addRequestToTable(request.request_id, request.first_name, request.last_name, request.document_type_name, request.status, request.updated_at, request.created_at);
+                            addRequestToTable(request.request_id, request.first_name, request.last_name, request.document_type_name, request.status, request.updated_at, request.created_at, request.user_id);
                         });
                     }
                 } else {
@@ -140,3 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(fetchDashboardData, 60000); // Fetch data every 60 seconds
 
 });
+
+function redirectToRequestDetails(requestId, userId) {
+    window.location.href = `admin-manage-requests.html?id=${requestId}&userId=${userId}`;
+}

@@ -125,7 +125,7 @@ try {
     $stmt = mysqli_prepare($conn, $sqlGetUsers);
     if (!empty($searchTerm)) {
         $searchParam = "%$searchTerm%";
-        mysqli_stmt_bind_param($stmt, "isssii", $userId, $searchParam, $searchParam, $searchParam, $searchParam, $pageSize, $offset);
+        mysqli_stmt_bind_param($stmt, "issssii", $userId, $searchParam, $searchParam, $searchParam, $searchParam, $pageSize, $offset);
     } else {
         mysqli_stmt_bind_param($stmt, "iii", $userId, $pageSize, $offset);
     }
