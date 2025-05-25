@@ -68,6 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="notification-icon">
                         <i class="${getNotificationIcon(notification.type)}"></i>
                     </div>
+                    <div class="notification-title">
+                        <strong>${notification.title}</strong>
+                    </div>
                     <div class="notification-content">
                         <p>${notification.message}</p>
                         <span class="notification-time">${formatTimeAgo(notification.created_at)}</span>

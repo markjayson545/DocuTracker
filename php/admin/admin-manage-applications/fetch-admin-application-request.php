@@ -62,7 +62,7 @@ try {
     }
     
     // Add order by and pagination
-    $sqlGetApplications .= " ORDER BY application.updated_at DESC LIMIT ? OFFSET ?";
+    $sqlGetApplications .= " ORDER BY application.status DESC LIMIT ? OFFSET ?";
 
     // Fetch total application
     $stmt = mysqli_prepare($conn, $sqlGetTotalApplication);

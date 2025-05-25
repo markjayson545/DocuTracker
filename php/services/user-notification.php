@@ -6,7 +6,7 @@ session_start();
 function getAllNotification($userId)
 {
     global $conn;
-    $sql = "SELECT notification_id, user_id, type, message, created_at FROM Notification WHERE user_id = ? AND status != 'read' ORDER BY created_at DESC";
+    $sql = "SELECT notification_id, user_id, type, title, message, created_at FROM Notification WHERE user_id = ? AND status != 'read' ORDER BY created_at DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -17,6 +17,7 @@ function getAllNotification($userId)
             'id' => $row['notification_id'],
             'user_id' => $row['user_id'],
             'type' => $row['type'],
+            'title' => $row['title'],
             'message' => $row['message'],
             'created_at' => $row['created_at']
         ];
