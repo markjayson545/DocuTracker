@@ -29,6 +29,7 @@ try {
     $userSql = "SELECT 
         id as user_id,
         username,
+        profile_picture,
         email,
         phone,
         role,

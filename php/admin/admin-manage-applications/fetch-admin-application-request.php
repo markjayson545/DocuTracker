@@ -41,22 +41,22 @@ try {
     $sqlGetTotalRejectedApplication = "SELECT COUNT(*) as total FROM Application WHERE status = 'rejected'";
 
     // Base SQL for fetching applications with search parameters
-    $sqlGetApplications = "SELECT application.*, client_profile.first_name, client_profile.last_name, app_doc.document_type as document_type
-                            FROM Application application
-                            JOIN ClientProfile client_profile ON application.user_id = client_profile.user_id
-                            JOIN ApplicationDocuments app_doc ON application.application_id = app_doc.application_id";
+    $sqlGetApplications = "SELECT application.*, client_profile.first_name, client_profile.last_name, 
+                        (SELECT document_type FROM ApplicationDocuments WHERE application_id = application.application_id ORDER BY created_at DESC LIMIT 1) as document_type
+                        FROM Application application
+                        JOIN ClientProfile client_profile ON application.user_id = client_profile.user_id";
     
     // Count SQL for pagination with search parameters
-    $sqlCountApplications = "SELECT COUNT(*) as total
+    $sqlCountApplications = "SELECT COUNT(DISTINCT application.application_id) as total
                             FROM Application application
                             JOIN ClientProfile client_profile ON application.user_id = client_profile.user_id";
     
     // Add search conditions if search term exists
     if ($hasSearch) {
         $searchCondition = " WHERE (client_profile.first_name LIKE ? OR 
-                                   client_profile.last_name LIKE ? OR 
-                                   CONCAT(client_profile.first_name, ' ', client_profile.last_name) LIKE ? OR
-                                   application.application_id LIKE ?)";
+                                client_profile.last_name LIKE ? OR 
+                                CONCAT(client_profile.first_name, ' ', client_profile.last_name) LIKE ? OR
+                                application.application_id LIKE ?)";
         $sqlGetApplications .= $searchCondition;
         $sqlCountApplications .= $searchCondition;
     }

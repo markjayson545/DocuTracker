@@ -110,6 +110,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     closeModalBtn.addEventListener("click", function () {
         modalOverlay.style.display = "none";
+        document.getElementById("document-placeholder").innerHTML = `                            <i class="fas fa-id-card"></i>
+                            <p>No document selected. Click "View" to display a document.</p>
+`;
     });
 
     const documentUploadForm = document.getElementById("submit-document-request");

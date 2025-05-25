@@ -94,6 +94,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (documentControls) {
             documentControls.style.display = 'none';
         }
+        document.getElementById('document-placeholder').innerHTML = `                            <i class="fas fa-id-card"></i>
+                            <p>No document selected. Click "View" to display a document.</p>
+`;
     });
 
     // Debounce function to limit API calls
@@ -186,6 +189,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
 
+
+                    if (user.profile_picture) {
+                        getUserProfileImage(user.profile_picture);
+                    } else {
+                        // Set a default profile image if none exists
+                        document.getElementById("user-profile-img-modal").src = "https://www.w3schools.com/howto/img_avatar.png";
+                    }
+
                     document.getElementById("user-id-title").innerText = `USR-${user.user_id}`;
                     document.getElementById("registered-on-title").innerText = window.parseDate(user.created_at);
                     document.getElementById("verification-status").innerText = user.is_verified ? "Verified" : "Pending";
@@ -267,6 +278,23 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.log("Error fetching user details:", error));
     };
+
+    async function getUserProfileImage(path) {
+        const formData = new FormData();
+        formData.append('file_path', path);
+        await fetch('php/services/get-document.php', {
+            method: 'POST',
+            body: formData
+        }).then(response => response.blob())
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                console.log("Profile picture URL:", url);
+                document.getElementById("user-profile-img-modal").src = url;
+            }
+            ).catch(error => {
+                console.error('Error fetching profile picture:', error);
+            });
+    }
 
     // Helper function to safely set select input values
     function setSelectValueSafely(selectId, value, defaultValue) {

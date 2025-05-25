@@ -31,30 +31,31 @@ try {
         throw new Exception("Unauthorized access");
     }
 
-    $sqlTotalUsers = "SELECT COUNT(*) as total FROM User";
-    $sqlTotalActiveUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'active'";
-    $sqlTotalPendingVerificationUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'pending'";
-    $sqlTotalSuspendedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'suspended'";
-    $sqlTotalVerifiedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'active' AND is_verified = 1";
+    $sqlTotalUsers = "SELECT COUNT(*) as total FROM User WHERE id != ?";
+    $sqlTotalActiveUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'active' AND id != ?";
+    $sqlTotalPendingVerificationUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'pending' AND id != ?";
+    $sqlTotalSuspendedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'suspended' AND id != ?";
+    $sqlTotalVerifiedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'active' AND is_verified = 1 AND id != ?";
 
     // Base query for users
     $sqlGetUsers = "SELECT user.id AS user_id, user.profile_picture, user.email, user.username, user.role, user.is_verified, user.status, user.created_at
-                    FROM User user";
+                    FROM User user WHERE user.id != ?";
                     
     // Add search condition if search term is provided
     $searchCondition = "";
     if (!empty($searchTerm)) {
-        $searchCondition = " WHERE user.username LIKE ? OR user.email LIKE ? OR user.role LIKE ? OR user.status LIKE ?";
+        $searchCondition = " AND (user.username LIKE ? OR user.email LIKE ? OR user.role LIKE ? OR user.status LIKE ?)";
     }
     
     // Count total matching records for pagination
-    $sqlCountUsers = "SELECT COUNT(*) as total FROM User user" . $searchCondition;
+    $sqlCountUsers = "SELECT COUNT(*) as total FROM User user WHERE user.id != ?" . $searchCondition;
     
     // Complete the query with order by and pagination
     $sqlGetUsers .= $searchCondition . " ORDER BY user.created_at DESC LIMIT ? OFFSET ?";
 
     // Fetch total users
     $stmt = mysqli_prepare($conn, $sqlTotalUsers);
+    mysqli_stmt_bind_param($stmt, "i", $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
@@ -64,6 +65,7 @@ try {
 
     // Fetch total active users
     $stmt = mysqli_prepare($conn, $sqlTotalActiveUsers);
+    mysqli_stmt_bind_param($stmt, "i", $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
@@ -73,6 +75,7 @@ try {
 
     // Fetch total pending verification users
     $stmt = mysqli_prepare($conn, $sqlTotalPendingVerificationUsers);
+    mysqli_stmt_bind_param($stmt, "i", $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
@@ -82,6 +85,7 @@ try {
     
     // Fetch total suspended users
     $stmt = mysqli_prepare($conn, $sqlTotalSuspendedUsers);
+    mysqli_stmt_bind_param($stmt, "i", $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
@@ -91,6 +95,7 @@ try {
 
     // Fetch total verified users
     $stmt = mysqli_prepare($conn, $sqlTotalVerifiedUsers);
+    mysqli_stmt_bind_param($stmt, "i", $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
@@ -103,7 +108,9 @@ try {
     $stmt = mysqli_prepare($conn, $sqlCountUsers);
     if (!empty($searchTerm)) {
         $searchParam = "%$searchTerm%";
-        mysqli_stmt_bind_param($stmt, "ssss", $searchParam, $searchParam, $searchParam, $searchParam);
+        mysqli_stmt_bind_param($stmt, "issss", $userId, $searchParam, $searchParam, $searchParam, $searchParam);
+    } else {
+        mysqli_stmt_bind_param($stmt, "i", $userId);
     }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -118,9 +125,9 @@ try {
     $stmt = mysqli_prepare($conn, $sqlGetUsers);
     if (!empty($searchTerm)) {
         $searchParam = "%$searchTerm%";
-        mysqli_stmt_bind_param($stmt, "ssssii", $searchParam, $searchParam, $searchParam, $searchParam, $pageSize, $offset);
+        mysqli_stmt_bind_param($stmt, "isssii", $userId, $searchParam, $searchParam, $searchParam, $searchParam, $pageSize, $offset);
     } else {
-        mysqli_stmt_bind_param($stmt, "ii", $pageSize, $offset);
+        mysqli_stmt_bind_param($stmt, "iii", $userId, $pageSize, $offset);
     }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
