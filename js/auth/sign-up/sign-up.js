@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.success == true) {
                         showSystemMessage('User created successfully... \n Redirecting...', 'success');
                         setTimeout(() => {
-                            window.location.href = 'sign-ing.html';
+                            window.location.href = 'sign-in.html';
                         }, 2000);
                     }
                     else {

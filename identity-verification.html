@@ -265,8 +265,9 @@
                                         provinces.sort((a, b) => a.name.localeCompare(b.name));
                                         provinces.forEach(province => {
                                             const option = document.createElement('option');
-                                            option.value = province.code;
+                                            option.value = province.name; // Set value to name
                                             option.textContent = province.name;
+                                            option.dataset.code = province.code; // Store code in data-code attribute
                                             provinceSelect.appendChild(option);
                                         });
                                     })
@@ -274,41 +275,51 @@
 
                                 // Load cities when province is selected
                                 provinceSelect.addEventListener('change', function () {
-                                    const provinceCode = this.value;
+                                    const selectedOption = this.options[this.selectedIndex];
+                                    const provinceCode = selectedOption.dataset ? selectedOption.dataset.code : null; // Get code from data-code
+
                                     citySelect.innerHTML = '<option value="" selected disabled>Select City/Municipality</option>';
                                     barangaySelect.innerHTML = '<option value="" selected disabled>Select Barangay</option>';
 
-                                    fetch(`https://psgc.gitlab.io/api/provinces/${provinceCode}/cities-municipalities/`)
-                                        .then(response => response.json())
-                                        .then(cities => {
-                                            cities.sort((a, b) => a.name.localeCompare(b.name));
-                                            cities.forEach(city => {
-                                                const option = document.createElement('option');
-                                                option.value = city.code;
-                                                option.textContent = city.name;
-                                                citySelect.appendChild(option);
-                                            });
-                                        })
-                                        .catch(error => console.error('Error loading cities:', error));
+                                    if (provinceCode) { // Only fetch if a valid province code is available
+                                        fetch(`https://psgc.gitlab.io/api/provinces/${provinceCode}/cities-municipalities/`)
+                                            .then(response => response.json())
+                                            .then(cities => {
+                                                cities.sort((a, b) => a.name.localeCompare(b.name));
+                                                cities.forEach(city => {
+                                                    const option = document.createElement('option');
+                                                    option.value = city.name; // Set value to name
+                                                    option.textContent = city.name;
+                                                    option.dataset.code = city.code; // Store code in data-code attribute
+                                                    citySelect.appendChild(option);
+                                                });
+                                            })
+                                            .catch(error => console.error('Error loading cities:', error));
+                                    }
                                 });
 
                                 // Load barangays when city is selected
                                 citySelect.addEventListener('change', function () {
-                                    const cityCode = this.value;
+                                    const selectedOption = this.options[this.selectedIndex];
+                                    const cityCode = selectedOption.dataset ? selectedOption.dataset.code : null; // Get code from data-code
+
                                     barangaySelect.innerHTML = '<option value="" selected disabled>Select Barangay</option>';
 
-                                    fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`)
-                                        .then(response => response.json())
-                                        .then(barangays => {
-                                            barangays.sort((a, b) => a.name.localeCompare(b.name));
-                                            barangays.forEach(barangay => {
-                                                const option = document.createElement('option');
-                                                option.value = barangay.code;
-                                                option.textContent = barangay.name;
-                                                barangaySelect.appendChild(option);
-                                            });
-                                        })
-                                        .catch(error => console.error('Error loading barangays:', error));
+                                    if (cityCode) { // Only fetch if a valid city code is available
+                                        fetch(`https://psgc.gitlab.io/api/cities-municipalities/${cityCode}/barangays/`)
+                                            .then(response => response.json())
+                                            .then(barangays => {
+                                                barangays.sort((a, b) => a.name.localeCompare(b.name));
+                                                barangays.forEach(barangay => {
+                                                    const option = document.createElement('option');
+                                                    option.value = barangay.name; // Set value to name
+                                                    option.textContent = barangay.name;
+                                                    // No data-code needed for barangay options as they are the last in this chain
+                                                    barangaySelect.appendChild(option);
+                                                });
+                                            })
+                                            .catch(error => console.error('Error loading barangays:', error));
+                                    }
                                 });
                             });
                         </script>
