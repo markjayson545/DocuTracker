@@ -38,7 +38,7 @@ try {
     $sqlTotalVerifiedUsers = "SELECT COUNT(*) as total FROM User WHERE status = 'active' AND is_verified = 1";
 
     // Base query for users
-    $sqlGetUsers = "SELECT user.id AS user_id, user.email, user.username, user.role, user.is_verified, user.status, user.created_at
+    $sqlGetUsers = "SELECT user.id AS user_id, user.profile_picture, user.email, user.username, user.role, user.is_verified, user.status, user.created_at
                     FROM User user";
                     
     // Add search condition if search term is provided
@@ -129,6 +129,7 @@ try {
             'user_id' => $row['user_id'],
             'email' => $row['email'],
             'username' => $row['username'],
+            'profile_picture' => $row['profile_picture'],
             'role' => $row['role'],
             'is_verified' => $row['is_verified'],
             'status' => $row['status'],

@@ -10,6 +10,7 @@
     <script src="js/services/sidebar.js"></script>
     <script src="js/services/logout.js"></script>
     <script src="js/services/handle-user-notification.js"></script>
+        <script src="js/services/upload-user-profile.js"></script>
     <!-- Global CSS First -->
     <!-- Then Page-specific CSS -->
 
@@ -132,28 +133,28 @@
 
             <div class="user-info" id="user-info">
                 <div class="user-icon">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="user-details">
+                    <img src="https://placehold.co/100" alt="User Profile Picture" id="user-profile-picture">
+                </div>                <div class="user-details">
                     <p class="user-name" id="user-name">John Doe</p>
                     <p class="user-email" id="user-email">example@email.com</p>
                 </div>
                 <div class="user-dropdown" id="user-dropdown">
                     <div class="user-info-dropdown">
                         <div class="user-icon">
-                            <i class="fas fa-user-circle"></i>
+                            <label for="user-profile-picture-input" class="change-profile-picture">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                            <input type="file" name="profile-picture" id="user-profile-picture-input" accept="image/*"
+                                style="display: none;">
+
+                            <img src="https://placehold.co/100" alt="User Profile Picture"
+                                id="dropdown-user-profile-picture">
                         </div>
                         <div class="user-details">
                             <p class="user-name" id="user-name">John Doe</p>
                             <p class="user-email" id="user-email">example@email.com</p>
                         </div>
                     </div>
-                    <hr>
-                    <!-- <ul class="dropdown-menu">
-
-                    </ul> -->
-                    </ul>
-                    <hr>
                     <button id="logout-button" class="logout-button">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout

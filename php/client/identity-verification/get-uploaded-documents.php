@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/../../services/open-db.php';
+include __DIR__ . '/../../services/logger.php';
 session_start();
 
 try {
@@ -19,8 +20,9 @@ try {
     }
     $applicationId = $result->fetch_assoc()['application_id'];
     $stmt->close();
+    
     // Fetch all documents for this application
-    $stmt = $conn->prepare("SELECT document_id, document_type, document_path, created_at FROM ApplicationDocuments WHERE application_id = ? ORDER BY created_at DESC");
+    $stmt = $conn->prepare("SELECT * FROM ApplicationDocuments WHERE application_id = ? ORDER BY created_at DESC");
     $stmt->bind_param("i", $applicationId);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -31,5 +33,6 @@ try {
     $stmt->close();
     echo json_encode(['status' => 'success', 'documents' => $documents]);
 } catch (Throwable $th) {
+    writeLog('Error fetching uploaded documents: ' . $th->getMessage(), 'get-uploaded-documents.log');
     echo json_encode(['status' => 'error', 'message' => $th->getMessage()]);
 }

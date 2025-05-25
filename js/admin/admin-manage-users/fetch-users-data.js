@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let searchTimeout = null;
     let lastSearchTime = 0;
     const minSearchInterval = 300; // Minimum time between API calls in milliseconds
-    
+
     // Add styles for search feedback
     document.head.insertAdjacentHTML('beforeend', `
     <style>
@@ -65,6 +65,19 @@ document.addEventListener("DOMContentLoaded", function () {
         padding: 20px;
         color: #6c757d;
       }
+      
+      .user-info-wrapper {
+        display: flex;
+        align-items: center;
+      }
+      
+      .username-text {
+        margin-left: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px; /* Adjust based on your layout */
+      }
     </style>
     `);
 
@@ -85,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Debounce function to limit API calls
     function debounce(func, delay) {
-        return function() {
+        return function () {
             const context = this;
             const args = arguments;
             clearTimeout(searchTimeout);
@@ -116,20 +129,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // Setup search event listeners with debouncing
     userSearchInput.addEventListener("input", debounce(rateLimitedSearch, 500));
 
-    userSearchButton.addEventListener("click", function(e) {
+    userSearchButton.addEventListener("click", function (e) {
         e.preventDefault();
         rateLimitedSearch();
     });
 
     // User data functions
-    window.fetchUserDetails = function(userId) {
+    window.fetchUserDetails = function (userId) {
         const formData = new FormData();
         formData.append("user_id", userId);
-        
+
         // Show loading indicators in modal
         document.getElementById("full-name-title").innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
         document.getElementById("user-id-title").innerText = `USR-${userId}`;
-        
+
         fetch(`php/admin/admin-manage-users/fetch-admin-user-details.php`, {
             method: "POST",
             body: formData,
@@ -140,22 +153,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.success) {
                     const user = data.user;
                     const hasClientProfile = data.hasClientProfile;
-                    
+
                     // Always display basic user information
                     const displayName = user.username || "N/A";
                     const fullNameTitle = document.getElementById("full-name-title");
-                    
+
                     // Set name based on available data
                     if (user.first_name && user.last_name) {
                         fullNameTitle.innerText = `${user.first_name} ${user.last_name}`;
                     } else {
                         fullNameTitle.innerText = displayName;
                     }
-                    
+
                     // Add a visual indicator if profile is incomplete
                     if (!hasClientProfile) {
                         fullNameTitle.innerHTML += ' <span class="profile-incomplete-badge" title="Profile Incomplete"><i class="fas fa-exclamation-triangle"></i></span>';
-                        
+
                         // Add an inline style for the badge if it doesn't exist in CSS
                         if (!document.querySelector('style#profile-incomplete-style')) {
                             const style = document.createElement('style');
@@ -172,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             document.head.appendChild(style);
                         }
                     }
-                    
+
                     document.getElementById("user-id-title").innerText = `USR-${user.user_id}`;
                     document.getElementById("registered-on-title").innerText = window.parseDate(user.created_at);
                     document.getElementById("verification-status").innerText = user.is_verified ? "Verified" : "Pending";
@@ -197,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("province").value = user.province || "";
                     document.getElementById("dob").value = user.date_of_birth || "";
                     document.getElementById("birth-place").value = user.birth_place || "";
-                    
+
                     // For select inputs, make sure the value exists or use default
                     setSelectValueSafely("sex", user.sex, "prefer-not-to-say");
                     setSelectValueSafely("civil-status", user.civil_status, "single");
@@ -207,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     setSelectValueSafely("religion", user.religion, "other");
                     setSelectValueSafely("education", user.education, "high-school");
                     setSelectValueSafely("occupation", user.occupation, "unemployed");
-                    
+
                     // If no profile, display a friendly message to the admin
                     if (!hasClientProfile) {
                         const profileForm = document.getElementById("personal-info-form");
@@ -221,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             </div>
                         `;
                         profileForm.insertBefore(warningMsg, profileForm.firstChild);
-                        
+
                         // Add styling for the warning
                         if (!document.querySelector('style#warning-style')) {
                             const style = document.createElement('style');
@@ -254,15 +267,15 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.log("Error fetching user details:", error));
     };
-    
+
     // Helper function to safely set select input values
     function setSelectValueSafely(selectId, value, defaultValue) {
         const selectElement = document.getElementById(selectId);
         if (!selectElement) return;
-        
+
         // Check if the value exists in the options
         const optionExists = Array.from(selectElement.options).some(option => option.value === value);
-        
+
         if (value && optionExists) {
             selectElement.value = value;
         } else {
@@ -270,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    window.fetchUserDocuments = function(userId) {
+    window.fetchUserDocuments = function (userId) {
         const formData = new FormData();
         formData.append("user_id", userId);
         fetch(`php/admin/admin-manage-users/fetch-admin-user-application-doc.php`, {
@@ -328,27 +341,28 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.log("Error fetching user documents:", error));
     };
 
-    window.fetchUsersData = function(page = 1, searchTerm = "") {
+    window.fetchUsersData = function (page = 1, searchTerm = "") {
         // Store the current page and search term in global variables to maintain state
         currentPage = page;
         currentSearchTerm = searchTerm;
-        
+
         // Show searching indicator
         searchingIndicator.style.display = 'block';
-        
+
         // Build URL with query parameters
         let url = `php/admin/admin-manage-users/fetch-admin-user-manage.php?page=${page}`;
         if (searchTerm) {
             url += `&search=${encodeURIComponent(searchTerm)}`;
         }
-        
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
                 // Hide searching indicator
                 searchingIndicator.style.display = 'none';
-                
+
                 console.log(data);
+                console.log("Current Page:", currentPage);
                 if (data.success) {
                     // Update summary cards
                     totalUsersValue.innerText = data.totalUsers;
@@ -363,21 +377,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         tableContent = '<tr style="color: red; text-align: center;"><td colspan="8" class="no-results">No users found matching your search criteria.</td></tr>';
                     } else {
                         data.users.forEach(user => {
-                            const userId = user.user_id;
-                            const username = user.username;
-                            const email = user.email;
-                            const role = user.role;
-                            const status = user.status;
-                            const isVerified = user.is_verified;
-                            const createdAt = user.created_at;
-
-                            tableContent += createUserRow(userId, username, email, role, status, isVerified, createdAt);
+                            tableContent += createUserRow(user.user_id, user.username, user.profile_picture, user.email, user.role, user.status, user.is_verified, user.created_at);
                         });
                     }
 
                     userTableBody.innerHTML = tableContent;
+
+                    // Load profile images after rendering the table
+                    loadProfileImages();
+
                     attachViewEventListeners();
-                    
+
                     // Update pagination
                     totalPages = data.pagination.totalPages;
                     updatePagination(currentPage, totalPages);
@@ -398,7 +408,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updatePagination(currentPageNum, totalPagesNum) {
         // Clear existing pagination
         paginationContainer.innerHTML = '';
-        
+
         // Previous button
         const prevBtn = document.createElement('button');
         prevBtn.className = 'pagination-btn';
@@ -406,38 +416,38 @@ document.addEventListener("DOMContentLoaded", function () {
         prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
         prevBtn.disabled = currentPageNum <= 1;
         if (prevBtn.disabled) prevBtn.classList.add('disabled-btn');
-        prevBtn.addEventListener('click', function() {
+        prevBtn.addEventListener('click', function () {
             if (currentPageNum > 1) {
                 window.fetchUsersData(currentPageNum - 1, currentSearchTerm);
             }
         });
         paginationContainer.appendChild(prevBtn);
-        
+
         // Determine which page numbers to show
         let startPage = Math.max(1, currentPageNum - 2);
         let endPage = Math.min(totalPagesNum, startPage + 4);
-        
+
         if (endPage - startPage < 4 && startPage > 1) {
             startPage = Math.max(1, endPage - 4);
         }
-        
+
         // Page number buttons
         for (let i = startPage; i <= endPage; i++) {
             const pageBtn = document.createElement('button');
             pageBtn.className = 'pagination-btn';
             if (i === currentPageNum) pageBtn.classList.add('active');
             pageBtn.textContent = i;
-            
+
             // Use a closure to capture the correct page number
-            (function(pageNum) {
-                pageBtn.addEventListener('click', function() {
+            (function (pageNum) {
+                pageBtn.addEventListener('click', function () {
                     window.fetchUsersData(pageNum, currentSearchTerm);
                 });
             })(i);
-            
+
             paginationContainer.appendChild(pageBtn);
         }
-        
+
         // Next button
         const nextBtn = document.createElement('button');
         nextBtn.className = 'pagination-btn';
@@ -445,7 +455,7 @@ document.addEventListener("DOMContentLoaded", function () {
         nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
         nextBtn.disabled = currentPageNum >= totalPagesNum;
         if (nextBtn.disabled) nextBtn.classList.add('disabled-btn');
-        nextBtn.addEventListener('click', function() {
+        nextBtn.addEventListener('click', function () {
             if (currentPageNum < totalPagesNum) {
                 window.fetchUsersData(currentPageNum + 1, currentSearchTerm);
             }
@@ -454,28 +464,69 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // UI/Table management functions
-    function createUserRow(userId, username, email, role, status, isVerified, createdAt) {
-        let icon = 'fa-check-circle verified-icon';
+    function createUserRow(userId, username, profile_picture, email, role, status, isVerified, createdAt) {
+        console.log("Creating row for user:", userId, username, email, profile_picture, role, status, isVerified, createdAt);
 
+        // Use default image initially and add data attribute for profile path
+        const defaultImg = "https://www.w3schools.com/howto/img_avatar.png";
+
+        let icon = 'fa-check-circle verified-icon';
         if (!isVerified) {
             icon = 'fa-clock pending-icon';
         }
+
         return `
             <tr>
-                <td>USR-${userId}</td>
-                <td>${username}</td>
-                <td>${email}</td>
-                <td><span class="role-badge role-${role}">${role}</span></td>
-                <td><span class="status-badge status-${status}">${status}</span></td>
-                <td><i class="fas ${icon}"></i></td>
-                <td>${window.parseDate(createdAt)}</td>
-                <td class="actions-cell">
-                    <button class="action-icon-btn view-user-btn" data-user-id="${userId}" title="View">
-                        <i class="fas fa-eye"></i>View
-                    </button>
-                </td>
+            <td>USR-${userId}</td>
+            <td class="username-cell">
+                <div class="user-info-wrapper">
+                    <img src="${defaultImg}" alt="Profile Picture" class="user-profile-img user-${userId}" 
+                        data-profile-path="${profile_picture || ''}" 
+                        style="width: 30px; height: 30px; border-radius: 50%;">
+                    <span class="username-text">${username}</span>
+                </div>
+            </td>
+            <td>${email}</td>
+            <td><span class="role-badge role-${role}">${role}</span></td>
+            <td><span class="status-badge status-${status}">${status}</span></td>
+            <td><i class="fas ${icon}"></i></td>
+            <td>${window.parseDate(createdAt)}</td>
+            <td class="actions-cell">
+                <button class="action-icon-btn view-user-btn" data-user-id="${userId}" title="View">
+                <i class="fas fa-eye"></i>View
+                </button>
+            </td>
             </tr>
         `;
+    }
+
+    // New function to load profile images after the table is rendered
+    function loadProfileImages() {
+        const profileImgs = document.querySelectorAll('.user-profile-img[data-profile-path]');
+        profileImgs.forEach(img => {
+            const profilePath = img.getAttribute('data-profile-path');
+            if (profilePath && profilePath !== '') {
+                const formData = new FormData();
+                formData.append('file_path', profilePath);
+
+                fetch('php/services/get-document.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) return response.blob();
+                        throw new Error('Failed to load image');
+                    })
+                    .then(blob => {
+                        const url = URL.createObjectURL(blob);
+                        img.src = url;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching profile picture:', error);
+                        // Keep the default image that's already there
+                    });
+            }
+        });
     }
 
     function attachViewEventListeners() {
@@ -494,7 +545,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const personalInfoForm = document.getElementById("personal-info-form");
         const newPersonalInfoForm = personalInfoForm.cloneNode(true);
         personalInfoForm.parentNode.replaceChild(newPersonalInfoForm, personalInfoForm);
-        
+
         // Remove old event listeners from action buttons
         const actionButtons = document.querySelectorAll('.btn[id$="-btn"]');
         actionButtons.forEach(button => {
@@ -503,7 +554,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 button.parentNode.replaceChild(newButton, button);
             }
         });
-        
+
         fetchUserDetails(userId);
         fetchUserDocuments(userId);
         userDetailsModal.style.display = "block";
@@ -549,25 +600,25 @@ document.addEventListener("DOMContentLoaded", function () {
         function updateButtonStates(user) {
             const isVerified = user.is_verified === 1 || user.is_verified === true;
             const status = user.status;
-            
+
             // Manage activation/suspension buttons
             activateUserButton.disabled = !isVerified || status === 'active';
             suspendUserButton.disabled = !isVerified || status === 'suspended';
-            
+
             // Manage verification buttons
             verifyUserButton.disabled = isVerified;
             requestMoreInfoButton.disabled = isVerified;
             rejectVerificationButton.disabled = isVerified;
-            
+
             // Manage role buttons
             makeAdminButton.disabled = !isVerified;
             makeClientButton.disabled = !isVerified;
-            
+
             // Add visual indication for disabled buttons
-            const buttons = [activateUserButton, suspendUserButton, verifyUserButton, 
-                            requestMoreInfoButton, rejectVerificationButton, 
-                            makeAdminButton, makeClientButton];
-            
+            const buttons = [activateUserButton, suspendUserButton, verifyUserButton,
+                requestMoreInfoButton, rejectVerificationButton,
+                makeAdminButton, makeClientButton];
+
             buttons.forEach(btn => {
                 if (btn.disabled) {
                     btn.classList.add('disabled-btn');
@@ -619,7 +670,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     formData.append("message", rejectionReason);
                     break;
-                
+
                 case "suspend":
                     const suspensionReason = prompt("Please specify the reason for suspending the user:");
                     if (suspensionReason === null) {
@@ -656,13 +707,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!roleConfirmation) {
                         return;
                     }
-                    
+
                     const adminPassword = prompt("Please enter your admin password to confirm this action:");
                     if (!adminPassword) {
                         alert("Admin password is required for role changes.");
                         return;
                     }
-                    
+
                     formData.append("admin_password", adminPassword);
                     break;
 
@@ -684,7 +735,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         alert(`User ${action} successfully!`);
                         fetchUsersData();
                         fetchUserDetails(userId);
-                        
+
                         // Refresh button states after action
                         fetch(`php/admin/admin-manage-users/fetch-admin-user-details.php`, {
                             method: "POST",
@@ -707,14 +758,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Ensure event listeners are added only once by removing and re-adding them
-        activateUserButton.onclick = function() { handleAction("activate"); };
-        resetPasswordButton.onclick = function() { handleAction("reset-password"); };
-        suspendUserButton.onclick = function() { handleAction("suspend"); };
-        verifyUserButton.onclick = function() { handleAction("verify"); };
-        requestMoreInfoButton.onclick = function() { handleAction("request-more-info"); };
-        rejectVerificationButton.onclick = function() { handleAction("reject-verification"); };
-        makeAdminButton.onclick = function() { handleAction("make-admin"); };
-        makeClientButton.onclick = function() { handleAction("make-client"); };
+        activateUserButton.onclick = function () { handleAction("activate"); };
+        resetPasswordButton.onclick = function () { handleAction("reset-password"); };
+        suspendUserButton.onclick = function () { handleAction("suspend"); };
+        verifyUserButton.onclick = function () { handleAction("verify"); };
+        requestMoreInfoButton.onclick = function () { handleAction("request-more-info"); };
+        rejectVerificationButton.onclick = function () { handleAction("reject-verification"); };
+        makeAdminButton.onclick = function () { handleAction("make-admin"); };
+        makeClientButton.onclick = function () { handleAction("make-client"); };
     }
 
     // Document handling functions
@@ -858,7 +909,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initialize data fetch
     window.fetchUsersData(1, "");
-    
+
     // Use a longer interval for auto-refresh to avoid excessive API calls
     setInterval(() => {
         // Only auto-refresh if the search field is empty to avoid disrupting user searches
@@ -869,7 +920,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Make sure openUserModal is defined in global scope
-window.openUserModal = function(userId) {
+window.openUserModal = function (userId) {
     // Use the internal openModal function if it exists in the current scope
     if (typeof openModal === 'function') {
         openModal(userId);

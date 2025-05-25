@@ -71,6 +71,18 @@ function getUserIdFromApplication($applicationId)
     return null;
 }
 
+function getUserProfilePath($userId)
+{
+    global $conn;
+    $sql = "SELECT profile_picture FROM User WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row ? $row['profile_picture'] : null;
+}
+
 
 
 try {
@@ -125,6 +137,20 @@ try {
                 ]);
             }
             break;
+        case 'getUserProfile':
+            $profilePath = getUserProfilePath($userId);
+            if ($profilePath) {
+                echo json_encode([
+                    'success' => true,
+                    'profile_path' => $profilePath
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Profile picture not found'
+                ]);
+            }
+            break;
         case 'getApplication':
             $applicationId = $_POST['application_id'] ?? null;
             if (!$applicationId) {
@@ -169,9 +195,6 @@ try {
                 ]);
             }
             break;
-
-
-
         default:
             throw new Exception('Invalid action');
             break;

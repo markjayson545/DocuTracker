@@ -4,15 +4,11 @@ include 'logger.php';
 session_start();
 
 try {
-    $userId = $_SESSION['user_id'] ?? null;
-
-    if (!isset($_SESSION['user_id'])) {
-        throw new Exception('User not logged in');
+    $userId = $_POST['user_id'] ?? $_SESSION['user_id'] ?? null;
+    if (!$userId) {
+        throw new Exception('User ID is required');
     }
-
-    $userId = $_POST['user_id'];
     $applicationId = $_POST['application_id'] ?? null;
-
 
     // Validate application ID
     if (!$applicationId) {

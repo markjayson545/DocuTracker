@@ -17,6 +17,8 @@
     <script src="js/services/handle-user-notification.js"></script>
     <script src="js/client/user-settings/fetch-user-settings.js"></script>
     <script src="js/client/search-handler.js"></script>
+    <script src="js/client/user-settings/identity-verification-handler.js"></script>
+    <script src="js/services/upload-user-profile.js"></script>
 
     <!-- Global CSS First -->
     <!-- Then Page-specific CSS -->
@@ -32,6 +34,66 @@
     <!-- External Libraries -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+    <style>
+        .document-preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .pdf-preview,
+        .file-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .pdf-preview i,
+        .file-preview i {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: #e74c3c;
+        }
+
+        .pdf-preview p,
+        .file-preview p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .uploaded-file i {
+            margin-right: 8px;
+            color: #4285f4;
+        }
+
+        .file-size {
+            margin-left: auto;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -141,7 +203,7 @@
 
             <div class="user-info" id="user-info">
                 <div class="user-icon">
-                    <i class="fas fa-user-circle"></i>
+                    <img src="https://placehold.co/100" alt="User Profile Picture" id="user-profile-picture">
                 </div>
                 <div class="user-details">
                     <p class="user-name" id="user-name">John Doe</p>
@@ -150,36 +212,20 @@
                 <div class="user-dropdown" id="user-dropdown">
                     <div class="user-info-dropdown">
                         <div class="user-icon">
-                            <i class="fas fa-user-circle"></i>
+                            <label for="user-profile-picture-input" class="change-profile-picture">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                            <input type="file" name="profile-picture" id="user-profile-picture-input" accept="image/*"
+                                style="display: none;">
+
+                            <img src="https://placehold.co/100" alt="User Profile Picture"
+                                id="dropdown-user-profile-picture">
                         </div>
                         <div class="user-details">
                             <p class="user-name" id="user-name">John Doe</p>
                             <p class="user-email" id="user-email">example@email.com</p>
                         </div>
                     </div>
-                    <hr>
-                    <!-- <ul class="dropdown-menu">
-
-                    </ul> --> <!-- <li id="identity-verification-btn">
-                            <a href="identity-verification.html">
-                                <i class="fas fa-id-card"></i>
-                                Identity Verification
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-user"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a href="user-settings.html">
-                                <i class="fas fa-cog"></i>
-                                Settings
-                            </a>
-                        </li> -->
-                    </ul>
-                    <hr>
                     <button id="logout-button" class="logout-button">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
@@ -240,9 +286,9 @@
                     <button class="tab-button" data-tab="security">
                         <i class="fas fa-shield-alt"></i> Security
                     </button>
-                    <button class="tab-button" data-tab="privacy">
+                    <!-- <button class="tab-button" data-tab="privacy">
                         <i class="fas fa-user-shield"></i> Privacy & Data
-                    </button>
+                    </button> -->
                 </div>
 
                 <!-- Profile & Identity Panel -->
@@ -274,23 +320,55 @@
 
                     <div class="settings-card">
                         <h3><i class="fas fa-id-card"></i> Identity Verification</h3>
-                        <div class="verification-status verified">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h4>Verification Status: Verified</h4>
-                                <p>Your identity has been successfully verified. Last verified on July 12, 2023.</p>
-                            </div>
-                        </div>
                         <div class="form-group">
-                            <label>Verified Documents</label>
-                            <ul class="verification-documents">
-                                <li>National ID (Uploaded on: July 10, 2023)</li>
-                                <li>Utility Bill (Uploaded on: July 10, 2023)</li>
+                            <label>Documents Uploaded</label>
+                            <ul class="verification-documents" id="verification-documents">
+                                <li>
+                                    <div class="document-info">
+                                        <div class="document-icon">
+                                            <i class="fas fa-id-card"></i>
+                                        </div>
+                                        <div class="document-details">
+                                            <h4>Government ID</h4>
+                                            <p>Date Uploaded: 2024-12-02</p>
+                                        </div>
+                                    </div>
+                                    <div class="document-status verified">
+                                        <i class="fas fa-check-circle"></i>
+                                        Verified
+                                    </div>
+                                    <div class="document-actions">
+                                        <button class="btn btn-primary btn-sm" onclick="viewDocument('gov-id')">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="document-info">
+                                        <div class="document-icon">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <div class="document-details">
+                                            <h4>Proof of Address</h4>
+                                            <p>Date Uploaded: 2024-11-28</p>
+                                        </div>
+                                    </div>
+                                    <div class="document-status pending">
+                                        <i class="fas fa-clock"></i>
+                                        Pending
+                                    </div>
+                                    <div class="document-actions">
+                                        <button class="btn btn-primary btn-sm" onclick="viewDocument('address-proof')">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary">
-                                <i class="fas fa-sync"></i> Re-upload Documents
+                            <button type="button" class="btn btn-secondary" onclick="openAddDocumentModal()">
+                                <i class="fas fa-plus"></i> Add Document
                             </button>
                         </div>
                     </div>
@@ -329,6 +407,7 @@
                     </div>
 
                     <!-- 2FA Not yet Supported -->
+
                     <!-- <div class="settings-card">
                         <h3><i class="fas fa-user-shield"></i> Two-Factor Authentication</h3>
                         <div class="toggle-option">
@@ -354,7 +433,9 @@
                         </div>
                     </div> -->
 
-                    <div class="settings-card">
+                    <!-- Implement Session Management -->
+
+                    <!-- <div class="settings-card">
                         <h3><i class="fas fa-laptop"></i> Active Sessions</h3>
                         <div class="session-item current-session">
                             <div class="session-info">
@@ -385,7 +466,7 @@
                                 <i class="fas fa-sign-out-alt"></i> Sign Out All Other Devices
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Notifications Panel -->
@@ -680,6 +761,118 @@
             });
         });
     </script>
+
+    <!-- Document View Modal -->
+    <div class="modal-overlay" id="documentViewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-alt"></i> Document Details</h3>
+                <button class="modal-close" onclick="closeModal('documentViewModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="document-preview">
+                    <img id="documentImage" src="" alt="Document Preview" style="display: none;">
+                    <div class="document-placeholder" id="documentPlaceholder">
+                        <i class="fas fa-file-alt"></i>
+                        <p>Document preview will appear here</p>
+                    </div>
+                </div>
+                <div class="document-metadata">
+                    <div class="metadata-item">
+                        <span class="metadata-label">Document Type:</span>
+                        <span class="metadata-value" id="modalDocumentType">-</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Upload Date:</span>
+                        <span class="metadata-value" id="modalUploadDate">-</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">File Size:</span>
+                        <span class="metadata-value" id="modalFileSize">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="downloadDocument()">
+                    <i class="fas fa-download"></i> Download
+                </button>
+                <button class="btn btn-primary" onclick="closeModal('documentViewModal')">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Document Modal -->
+    <div class="modal-overlay" id="addDocumentModal">
+        <form id="addDocumentForm" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-plus"></i> Add New Document</h3>
+                    <button type="button" class="modal-close" onclick="closeModal('addDocumentModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="documentType">Document Type</label>
+                        <select id="documentType" name="documentType" required>
+                            <option value="" selected disabled>Select document type</option>
+                            <option value="government-id">Government ID</option>
+                            <option value="passport">Passport</option>
+                            <option value="drivers-license">Driver's License</option>
+                            <option value="birth-certificate">Birth Certificate</option>
+                            <option value="proof-of-address">Proof of Address</option>
+                            <option value="utility-bill">Utility Bill</option>
+                            <option value="bank-statement">Bank Statement</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="otherDocumentTypeGroup" style="display: none;">
+                        <label for="otherDocumentType">Specify Document Type</label>
+                        <input type="text" id="otherDocumentType" name="otherDocumentType"
+                            placeholder="Enter document type">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Document</label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">Click to upload or drag and drop</div>
+                            <div class="upload-hint">Supported formats: PDF, JPG, PNG (Max 20MB)</div>
+                        </div>
+                        <input type="file" id="verification-document" name="verification-document" class="file-input"
+                            accept=".pdf,.jpg,.jpeg,.png" required style="display: none;">
+
+                        <!-- Add preview section -->
+                        <div id="uploadedFiles" style="display: none; margin-top: 15px;">
+                            <div class="uploaded-file">
+                                <i class="fas fa-file"></i>
+                                <span id="fileName">filename.jpg</span>
+                                <span class="file-size" id="fileSize">123 KB</span>
+                                <button type="button" class="remove-file" onclick="removeFile()">×</button>
+                            </div>
+                        </div>
+
+                        <!-- Document preview section -->
+                        <div id="documentPreview" style="display: none; margin-top: 15px; text-align: center;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addDocumentModal')">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Upload Document
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
 </body>
 
 </html>
