@@ -148,6 +148,7 @@ $notificationSql = "CREATE TABLE IF NOT EXISTS Notification(
             FOREIGN KEY (user_id) REFERENCES User(id),
             title VARCHAR(255) NOT NULL,
             message TEXT NOT NULL,
+            type VARCHAR(15) NOT NULL,
             status VARCHAR(50) DEFAULT 'unread',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )";
