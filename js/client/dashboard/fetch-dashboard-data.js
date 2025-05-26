@@ -73,7 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
+            console.log(
+                "Dashboard data fetched successfully:", data
+            );
 
             // Set user name on greeting 
             userNameLiteral.innerText =

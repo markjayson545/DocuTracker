@@ -76,7 +76,7 @@ try {
     }
 
     // Fetch completed document requests of the user
-    $completedRequestSql = "SELECT COUNT(user_id) AS completed_requests FROM Request WHERE user_id = ? AND status = 'completed'";
+    $completedRequestSql = "SELECT COUNT(user_id) AS completed_requests FROM Request WHERE user_id = ? AND status = 'approved'";
     $stmt = $conn->prepare($completedRequestSql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();

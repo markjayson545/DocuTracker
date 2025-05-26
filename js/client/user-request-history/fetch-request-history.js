@@ -341,7 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     <td>REQ-${reqId}</td>
                                     <td>${docType}</td>
                                     <td>${parseDate(dRequested)}</td>
-                                    <td><span class="status-badge status-pending">${status}</span></td>
+                                    <td><span class="status-badge status-${status}">${status}</span></td>
                                     <td>₱${payment} <span class="payment-status paid">${pStatus}</span></td>
                                     <td>${parseDate(lastUpdated)}</td>
                                     <td>

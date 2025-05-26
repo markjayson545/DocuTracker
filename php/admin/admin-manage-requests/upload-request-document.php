@@ -218,6 +218,7 @@ function handleRequestDocumentUpload()
         updateDatabase($conn, $filePath, $data['request_id']);
 
         // Notify user
+        // FIXME: NEED user_id  and request_id to notify user
         if (!checkFileExists($data['request_id'])) {
             notifyUser($data['user_id'], $data['request_id']);
         }
