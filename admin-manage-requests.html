@@ -730,6 +730,41 @@
 
         </section>
 
+        <!-- Add More Info Modal -->
+        <div class="more-info-modal-overlay" id="more-info-modal-overlay" style="display: none;">
+            <div class="more-info-modal">
+                <div class="more-info-modal-header">
+                    <h3><i class="fas fa-question-circle"></i> Request Additional Information</h3>
+                    <button class="close-more-info-modal" id="close-more-info-modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="more-info-modal-body">
+                    <form id="more-info-form">
+                        <div class="form-group">
+                            <label for="additional-info-message">
+                                <i class="fas fa-comment"></i> Message to User
+                            </label>
+                            <textarea 
+                                id="additional-info-message" 
+                                name="message" 
+                                rows="5" 
+                                placeholder="Please provide details about what additional information is needed..."
+                                required
+                            ></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancel-more-info">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-paper-plane"></i> Send Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
     </main>
 

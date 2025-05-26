@@ -79,10 +79,48 @@ function sendNotification($userId, $title, $message, $type)
 function sendSystemNotification($title, $message, $type)
 {
     global $conn;
-    $sql = "INSERT INTO SystemNotification (title, message, type) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $title, $message, $type);
-    return $stmt->execute();
+    // First, get all user IDs
+    $sqlUsers = "SELECT id FROM User";
+    $stmtUsers = $conn->prepare($sqlUsers);
+    if (!$stmtUsers) {
+        writeLog("SQL Prepare Error (get users for system notification): " . $conn->error, 'handle-notifications.log');
+        return false;
+    }
+    if (!$stmtUsers->execute()) {
+        writeLog("SQL Execute Error (get users for system notification): " . $stmtUsers->error, 'handle-notifications.log');
+        return false;
+    }
+    $fetchedUsers = $stmtUsers->get_result();
+    $userIds = [];
+    while ($row = $fetchedUsers->fetch_assoc()) {
+        $userIds[] = $row['id'];
+    }
+    $stmtUsers->close();
+
+    if (empty($userIds)) {
+        writeLog("No users found to send system notification.", 'handle-notifications.log');
+        return true; // No users, so technically successful in not failing
+    }
+
+    // Prepare the insert statement for Notification table
+    $sqlInsert = "INSERT INTO Notification (user_id, title, message, type) VALUES (?, ?, ?, ?)";
+    $stmtInsert = $conn->prepare($sqlInsert);
+    if (!$stmtInsert) {
+        writeLog("SQL Prepare Error (insert system notification): " . $conn->error, 'handle-notifications.log');
+        return false;
+    }
+
+    $allSuccessful = true;
+    foreach ($userIds as $userId) {
+        $stmtInsert->bind_param("isss", $userId, $title, $message, $type);
+        if (!$stmtInsert->execute()) {
+            writeLog("SQL Execute Error (insert system notification for user $userId): " . $stmtInsert->error, 'handle-notifications.log');
+            $allSuccessful = false;
+            // Optionally, decide if you want to stop on first error or continue
+        }
+    }
+    $stmtInsert->close();
+    return $allSuccessful;
 }
 
 function deleteNotification($notificationId)

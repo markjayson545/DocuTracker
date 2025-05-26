@@ -227,4 +227,91 @@ document.addEventListener("DOMContentLoaded", function () {
     setInterval(() => {
         fetchRequestData(currentPage, currentSearch);
     }, refreshInterval);
+
+    // Add event handlers for request status actions
+    const requestInfoBtn = document.getElementById("request-additional-info-btn");
+    const rejectBtn = document.getElementById("reject-btn");
+
+    // Request additional information button
+    if (requestInfoBtn) {
+        requestInfoBtn.addEventListener("click", function() {
+            if (!currentUserId || !currentReqId) {
+                alert("No request selected. Please select a request first.");
+                return;
+            }
+            
+            const message = prompt("Please enter the additional information required from the user:");
+            if (message && message.trim()) {
+                handleRequestStatus('more_info', message.trim());
+            } else if (message === "") {
+                alert("Please enter a message for requesting additional information.");
+            }
+            // If user cancels (message === null), do nothing
+        });
+    }
+
+    // Reject button
+    if (rejectBtn) {
+        rejectBtn.addEventListener("click", function() {
+            if (!currentUserId || !currentReqId) {
+                alert("No request selected. Please select a request first.");
+                return;
+            }
+
+            if (confirm(`Are you sure you want to reject request REQ-${currentReqId}?`)) {
+                const reason = prompt("Please enter the reason for rejection (optional):");
+                // Allow empty reason, but trim whitespace
+                const rejectionReason = reason ? reason.trim() : "Request rejected by admin";
+                handleRequestStatus('reject', rejectionReason);
+            }
+        });
+    }
+
+    // Function to handle request status changes
+    function handleRequestStatus(action, message = '') {
+        const formData = new FormData();
+        formData.append('user_id', currentUserId);
+        formData.append('req_id', currentReqId);
+        formData.append('action', action);
+        if (message) {
+            formData.append('message', message);
+        }
+
+        // Show loading state
+        const loadingBtn = action === 'more_info' ? requestInfoBtn : rejectBtn;
+        const originalText = loadingBtn.innerHTML;
+        loadingBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        loadingBtn.disabled = true;
+
+        fetch('php/admin/admin-manage-requests/handle-request-status.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.status === 'success') {
+                alert(data.message);
+                
+                // Refresh the request details and table
+                AdminRequestUtils.getRequestDetails(currentReqId, (userId, reqId) => {
+                    currentUserId = userId;
+                    currentReqId = reqId;
+                });
+                fetchRequestData(currentPage, currentSearch);
+                
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while processing the request. Please try again.');
+        })
+        .finally(() => {
+            // Restore button state
+            loadingBtn.innerHTML = originalText;
+            loadingBtn.disabled = false;
+        });
+    }
 });

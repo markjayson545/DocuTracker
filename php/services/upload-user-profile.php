@@ -63,6 +63,26 @@ try {
         $fileNameNew = date('YmdHis') . '_' . uniqid() . '.' . $fileExt;
         $fileDestination = $directory . $fileNameNew;
         
+        // Check if user already has a profile picture and delete it
+        $checkSql = "SELECT profile_picture FROM User WHERE id = ?";
+        $checkStmt = $conn->prepare($checkSql);
+        $checkStmt->bind_param("i", $userId);
+        $checkStmt->execute();
+        $result = $checkStmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $existingProfilePicture = $row['profile_picture'];
+            
+            // If there's an existing profile picture, delete the old file
+            if (!empty($existingProfilePicture) && file_exists($existingProfilePicture)) {
+                if (!unlink($existingProfilePicture)) {
+                    writeLog("Failed to delete existing profile picture: $existingProfilePicture", "profile-picture-upload.log");
+                }
+            }
+        }
+        $checkStmt->close();
+        
         // Move the uploaded file to the destination
         if (!move_uploaded_file($fileTmpName, $fileDestination)) {
             writeLog("Failed to move uploaded profile picture to $fileDestination", "profile-picture-upload.log");
