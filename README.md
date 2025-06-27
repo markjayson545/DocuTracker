@@ -1,8 +1,11 @@
 # DocuTracker
 
 > **Secure Document Request and Tracking System**
+> **Academic Project - Web Development Course**
 
 DocuTracker is a comprehensive web-based application designed to streamline the process of requesting, managing, and tracking official documents. Built with modern web technologies, it provides a secure platform for users to submit document requests and for administrators to efficiently process them.
+
+**📚 Academic Context**: This project was developed as part of a web development course to demonstrate proficiency in full-stack development, database design, security implementation, and modern web technologies.
 
 ## 🚀 Features
 
@@ -114,6 +117,7 @@ DocuTracker/
    $dbname = "docutracker";
    $servername = "localhost";
    ```
+   - Open `php/services/create-tables.php` to create database schema.
 
 3. **Configure File Permissions**
    ```bash
