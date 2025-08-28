@@ -62,29 +62,30 @@ DocuTracker is a comprehensive web-based application designed to streamline the 
 
 ```
 DocuTracker/
-├── css/                    # Stylesheets
-│   ├── global/            # Global CSS components
-│   │   ├── master.css     # Main CSS import file
-│   │   ├── variables.css  # CSS custom properties
-│   │   ├── buttons.css    # Button components
-│   │   ├── forms.css      # Form elements
-│   │   ├── cards.css      # Card components
-│   │   └── ...
-│   └── [page-specific].css # Individual page styles
-├── js/                    # JavaScript files
-│   ├── admin/            # Admin-specific functionality
-│   ├── client/           # User-facing features
-│   ├── auth/             # Authentication logic
-│   └── services/         # Shared services and utilities
-├── php/                  # Backend PHP files
-│   ├── admin/            # Admin API endpoints
-│   ├── auth/             # Authentication handlers
-│   ├── client/           # User API endpoints
-│   └── services/         # Database and utility services
-├── assets/               # Images and static files
-├── userfiles/            # User-uploaded documents
-├── logs/                 # Application logs
-└── [pages].html          # HTML pages
+├── frontend/               # Frontend application files
+│   ├── css/               # Stylesheets
+│   │   ├── global/        # Global CSS components
+│   │   │   ├── master.css     # Main CSS import file
+│   │   │   ├── variables.css  # CSS custom properties
+│   │   │   ├── buttons.css    # Button components
+│   │   │   ├── forms.css      # Form elements
+│   │   │   ├── cards.css      # Card components
+│   │   │   └── ...
+│   │   └── [page-specific].css # Individual page styles
+│   ├── js/                # JavaScript files
+│   │   ├── admin/         # Admin-specific functionality
+│   │   ├── client/        # User-facing features
+│   │   ├── auth/          # Authentication logic
+│   │   └── services/      # Shared services and utilities
+│   ├── assets/            # Images and static files
+│   └── [pages].html       # HTML pages
+├── backend/               # Backend application files
+│   ├── admin/             # Admin API endpoints
+│   ├── auth/              # Authentication handlers
+│   ├── client/            # User API endpoints
+│   └── services/          # Database and utility services
+├── documents/             # User-uploaded documents
+└── logs/                  # Application logs
 ```
 
 ## 🚀 Getting Started
